@@ -1,0 +1,13 @@
+<div class="navbar-container">
+  <img src="assets/logo.svg" alt="logo">
+  <div class="nav-links">
+    <div class="nav-link">Pricing</div>
+    <div class="nav-link">Register</div>
+    <div class="nav-link">Login</div>
+    @if (lightMode()) {
+      <img class="moon-icon" src="assets/icons/moon-icon.svg" alt="dark mode" (click)="lightMode.set(false)">
+    } @else {
+      <img class="sun-icon" src="assets/icons/sun-warm-icon.svg" alt="light mode" (click)="lightMode.set(true)">
+    }
+  </div>
+</div>

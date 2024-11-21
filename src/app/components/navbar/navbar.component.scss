@@ -1,0 +1,54 @@
+@import '../../../variables.scss';
+
+.navbar-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  padding: 20px 5px 5px;
+}
+
+.nav-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  font-family: "Outfit", sans-serif;
+}
+
+.nav-link {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: black;
+
+  &:hover {
+    color: $theme-color-main;
+    cursor: pointer;
+  }
+}
+
+.moon-icon {
+  max-width: 22px;
+  background-color: rgb(35, 35, 35);
+  color: yellow;
+  padding: 10px;
+  border-radius: 50%;
+  animation: fadeInAndSlideInBottom 0.2s linear;
+  transition: 0.1s linear;
+}
+
+.sun-icon {
+  max-width: 22px;
+  background-color: yellow;
+  color: yellow;
+  padding: 10px;
+  border-radius: 50%;
+  animation: fadeInAndSlideInBottom 0.2s linear;
+  transition: 0.1s linear;
+}
+
+.moon-icon:hover,
+.sun-icon:hover {
+  cursor: pointer;
+  transform: translateY(-3px);
+}

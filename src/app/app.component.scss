@@ -1,0 +1,17 @@
+@import '../variables.scss';
+
+main {
+  position: relative;
+  max-width: 1920px;
+  height: 100vh;
+  margin: auto;
+  overflow-x: hidden;
+  transition: 0.1s linear;
+}
+
+.main-background {
+  background-color: #f8f9fa;
+  background: rgb(255, 255, 255);
+  background: linear-gradient(0deg, #f8f9fa 0%, rgb(225, 244, 254) 50%);
+
+}

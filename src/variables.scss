@@ -1,4 +1,10 @@
 $theme-color-main: #004aad;
+$theme-color-main-light: #9bdeff;
+
+.standard-dark {
+  color: white;
+  background-color: rgb(30, 30, 30);
+}
 
 @keyframes fadeInAndSlideInBottom {
   0% { opacity: 0; transform: translateY(30px); }

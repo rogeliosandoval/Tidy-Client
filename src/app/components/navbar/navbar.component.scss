@@ -5,7 +5,11 @@
   justify-content: space-around;
   align-items: center;
   width: 100%;
-  padding: 20px 5px 5px;
+  padding: 35px 5px 5px;
+}
+
+.logo {
+  max-width: 250px;
 }
 
 .nav-links {
@@ -19,10 +23,19 @@
 .nav-link {
   font-size: 1.2rem;
   font-weight: 400;
-  color: black;
 
   &:hover {
     color: $theme-color-main;
+    cursor: pointer;
+  }
+}
+
+.nav-link-dark {
+  font-size: 1.2rem;
+  font-weight: 400;
+
+  &:hover {
+    color: $theme-color-main-light;
     cursor: pointer;
   }
 }

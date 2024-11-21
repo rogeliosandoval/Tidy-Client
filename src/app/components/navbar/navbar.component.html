@@ -1,13 +1,18 @@
 <div class="navbar-container">
-  <img src="assets/logo.svg" alt="logo">
+  @if (sharedService.darkMode()) {
+    <img class="logo" src="assets/logo-light.svg" alt="logo">
+  } @else {
+    <img class="logo" src="assets/logo.svg" alt="logo">
+  }
   <div class="nav-links">
-    <div class="nav-link">Pricing</div>
-    <div class="nav-link">Register</div>
-    <div class="nav-link">Login</div>
-    @if (lightMode()) {
-      <img class="moon-icon" src="assets/icons/moon-icon.svg" alt="dark mode" (click)="lightMode.set(false)">
+    <div [ngClass]="sharedService.darkMode() ? 'nav-link-dark' : 'nav-link'" routerLink="/home">Home</div>
+    <div [ngClass]="sharedService.darkMode() ? 'nav-link-dark' : 'nav-link'">Pricing</div>
+    <div [ngClass]="sharedService.darkMode() ? 'nav-link-dark' : 'nav-link'" routerLink="/signup">Register</div>
+    <div [ngClass]="sharedService.darkMode() ? 'nav-link-dark' : 'nav-link'" routerLink="/login">Login</div>
+    @if (sharedService.darkMode() === false) {
+      <img class="moon-icon" src="assets/icons/moon-icon.svg" alt="dark mode" (click)="sharedService.darkMode.set(true)" width="22">
     } @else {
-      <img class="sun-icon" src="assets/icons/sun-warm-icon.svg" alt="light mode" (click)="lightMode.set(true)">
+      <img class="sun-icon" src="assets/icons/sun-warm-icon.svg" alt="light mode" (click)="sharedService.darkMode.set(false)" width="22">
     }
   </div>
 </div>

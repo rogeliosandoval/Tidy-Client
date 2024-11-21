@@ -1,0 +1,19 @@
+<div class="cta">
+  <h1>The <span [style.color]="sharedService.darkMode() ? '#9bdeff' : '#004aad'">Simple</span> CRM, Built for Small Businesses</h1>
+  <p>Effortless Customer Management, Simplified for Small Businesses.</p>
+  <div class="button-container">
+    <button class="sub-button">Register</button>
+    <button class="main-button">Watch Demo</button>
+  </div>
+</div>
+
+<div class="image-container">
+  <img src="assets/orders.webp" alt="taking orders">
+  <div class="features"
+    [style.box-shadow]="sharedService.darkMode() ? '0 0 50px rgba(0, 183, 255, 0.616)' : 'none'" 
+    [style.border]="sharedService.darkMode() ? '2px solid white' : '2px solid black'">
+    <div class="feature">✅ Easy To Use</div>
+    <div class="feature">✅ Fast & Secure</div>
+    <div class="feature">✅ Extremely Affordable</div>
+  </div>
+</div>

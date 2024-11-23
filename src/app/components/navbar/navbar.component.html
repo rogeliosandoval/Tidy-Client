@@ -10,9 +10,9 @@
     <div [ngClass]="sharedService.darkMode() ? 'nav-link-dark' : 'nav-link'" routerLink="/signup">Register</div>
     <div [ngClass]="sharedService.darkMode() ? 'nav-link-dark' : 'nav-link'" routerLink="/login">Login</div>
     @if (sharedService.darkMode() === false) {
-      <img class="moon-icon" src="assets/icons/moon-icon.svg" alt="dark mode" (click)="sharedService.darkMode.set(true)" width="22">
+      <i class="pi pi-moon" (click)="sharedService.darkMode.set(true)"></i>
     } @else {
-      <img class="sun-icon" src="assets/icons/sun-warm-icon.svg" alt="light mode" (click)="sharedService.darkMode.set(false)" width="22">
+      <i class="pi pi-sun" (click)="sharedService.darkMode.set(false)"></i>
     }
   </div>
 </div>

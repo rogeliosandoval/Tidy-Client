@@ -1,1 +1,26 @@
-<p>signup works!</p>
+<div class="signup-container">
+  <div class="form-container">
+    <img src="assets/logo.svg" alt="logo" routerLink="/">
+    <form id="entry-form">
+      <div class="input-container">
+        <label for="name">Your Name:</label>
+        <input type="text" pInputText variant="filled"/>
+      </div>
+      <div class="input-container">
+        <label for="name">Your Email:</label>
+        <input type="text" pInputText variant="filled"/>
+      </div>
+      <div class="input-container">
+        <label for="name">Create Password:</label>
+        <input type="password" pInputText variant="filled"/>
+      </div>
+      <p-button label="Register"></p-button>
+    </form>
+    <div class="divider">Or:</div>
+    <div class="google-button">
+      <img src="assets/google-icon.png" alt="google icon" width="20" height="20">
+      <span>Register with Google</span>
+    </div>
+    <span class="already">Already registered?</span>
+  </div>
+</div>

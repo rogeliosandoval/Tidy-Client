@@ -134,9 +134,13 @@
 
 .files {
   position: absolute;
-  left: 0;
-  top: -100px;
-  max-width: 150px;
+  right: -10px;
+  top: -30px;
+  max-width: 80px;
+
+  @include media('<phone') {
+    top: -15px;
+  }
 }
 
 .features {

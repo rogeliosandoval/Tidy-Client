@@ -13,6 +13,20 @@ $theme-color-main-light: #c9edff;
   background-color: rgb(30, 30, 30);
 }
 
+.float {
+  animation: float 2s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
 @keyframes fadeInAndSlideInBottom {
   0% { opacity: 0; transform: translateY(30px); }
   100% { opacity: 1; transform: translateY(0); }

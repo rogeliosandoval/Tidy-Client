@@ -7,10 +7,14 @@ $breakpoints: (
 $theme-color-main: #004aad;
 $theme-color-main-light: #c9edff;
 
+.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
 
 .standard-dark {
   color: white;
-  background-color: rgb(30, 30, 30);
+  background-color: rgb(24, 24, 24);
 }
 
 .float {

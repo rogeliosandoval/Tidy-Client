@@ -1,6 +1,6 @@
-@import "primeng/resources/themes/lara-light-blue/theme.css";
-@import "primeng/resources/primeng.css";
-@import "primeicons/primeicons.css";
+@import "primeicons/primeicons.css"; /* PrimeIcons should be first */
+@import "primeng/resources/primeng.css"; /* PrimeNG component styles */
+@import "primeng/resources/themes/lara-light-blue/theme.css"; /* Theme styles */
 
 body {
   margin: 0;
@@ -8,6 +8,15 @@ body {
   background-color: #f9f9f9;
 }
 
-p-button .p-button {
-  transition: none;
+#entry-form {
+  p-button .p-button {
+    transition: none;
+    min-width: 110px;
+  }
+}
+
+p-password .p-password, p-password input {
+  margin: auto;
+  width: 100%;
+  font-family: "Outfit", sans-serif;
 }

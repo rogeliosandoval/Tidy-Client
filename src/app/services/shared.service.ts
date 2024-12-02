@@ -6,4 +6,5 @@ import { Injectable, signal } from '@angular/core'
 
 export class SharedService {
   darkMode = signal<boolean>(false)
+  loading = signal<boolean>(false)
 }

@@ -1,26 +1,35 @@
 <div class="signup-container">
   <div class="form-container">
     <img src="assets/logo.svg" alt="logo" routerLink="/">
-    <form id="entry-form">
-      <div class="input-container">
+    <form id="entry-form" [formGroup]="registerForm" (ngSubmit)="register()">
+      <div class="input-container" [class.disabled]="sharedService.loading()">
         <label for="name">Your Name:</label>
-        <input type="text" pInputText variant="filled"/>
+        <input type="text" pInputText variant="filled" placeholder="Name" formControlName="name"/>
       </div>
-      <div class="input-container">
-        <label for="name">Your Email:</label>
-        <input type="text" pInputText variant="filled"/>
+      <div class="input-container" [class.disabled]="sharedService.loading()">
+        <label for="email">Your Email:</label>
+        <input type="text" pInputText variant="filled" placeholder="Email" formControlName="email"/>
       </div>
-      <div class="input-container">
-        <label for="name">Create Password:</label>
-        <input type="password" pInputText variant="filled"/>
+      <div class="input-container" [class.disabled]="sharedService.loading()">
+        <label for="password">Create Password:</label>
+        <p-password [toggleMask]="true" variant="filled" placeholder="Password" feedback="false" formControlName="password" minlength="4"/>
       </div>
-      <p-button label="Register"></p-button>
+      <p-button label="Register" type="submit" [disabled]="registerForm.invalid || sharedService.loading()"></p-button>
+      @if (sharedService.loading()) {
+        <p-progressSpinner ariaLabel="loading" strokeWidth="3"/>
+      }
+      @if (errorMessage() !== '') {
+        <div class="error">
+          {{ errorMessage() }}
+        </div>
+      }
     </form>
     <div class="divider">Or:</div>
-    <div class="google-button">
+    <div class="google-button" [class.disabled]="sharedService.loading()">
       <img src="assets/google-icon.png" alt="google icon" width="20" height="20">
       <span>Register with Google</span>
     </div>
-    <span class="already">Already registered?</span>
+    <span class="action" routerLink="/login" [class.disabled]="sharedService.loading()">Already registered?</span>
   </div>
+  <tc-footer/>
 </div>

@@ -1,8 +1,14 @@
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, OnInit, inject, signal } from '@angular/core'
 import { InputTextModule } from 'primeng/inputtext'
 import { ButtonModule } from 'primeng/button'
 import { PrimeNGConfig } from 'primeng/api'
-import { RouterLink } from '@angular/router'
+import { RouterLink, Router } from '@angular/router'
+import { PasswordModule } from 'primeng/password'
+import { ProgressSpinnerModule } from 'primeng/progressspinner'
+import { SharedService } from '../../services/shared.service'
+import { FormsModule, ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms'
+import { AuthService } from '../../services/auth.service'
+import { Footer } from '../../components/footer/footer.component'
 
 @Component({
   selector: 'tc-signup',
@@ -10,15 +16,50 @@ import { RouterLink } from '@angular/router'
   imports: [
     InputTextModule,
     ButtonModule,
-    RouterLink
+    RouterLink,
+    ProgressSpinnerModule,
+    PasswordModule,
+    FormsModule,
+    ReactiveFormsModule,
+    Footer
   ],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.scss'
 })
+
 export class Signup implements OnInit {
+  private authService = inject(AuthService)
+  private router = inject(Router)
+  public sharedService = inject(SharedService)
   public primengConfig = inject(PrimeNGConfig)
+  public errorMessage = signal<string>('')
+  public registerForm = new FormGroup({
+    name: new FormControl('', Validators.required),
+    email: new FormControl('', [Validators.email, Validators.required]),
+    password: new FormControl('', Validators.required)
+  })
 
   ngOnInit(): void {
     this.primengConfig.ripple = true
+  }
+
+  public register(): void {
+    const formData = this.registerForm.value
+    this.sharedService.loading.set(true)
+
+    setTimeout(() => {
+      this.authService.register(formData.email!, formData.name!, formData.password!).subscribe({
+        next: () => {
+          this.sharedService.loading.set(false)
+        },
+        error: err => {
+          this.errorMessage.set(err.message)
+          this.sharedService.loading.set(false)
+        },
+        complete: () => {
+          this.router.navigateByUrl('/dashboard')
+        }
+      })
+    }, 2000)
   }
 }

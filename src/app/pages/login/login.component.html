@@ -1,1 +1,56 @@
-<p>login works!</p>
+<div class="login-container">
+  <div class="form-container">
+    <img src="assets/logo.svg" alt="logo" routerLink="/">
+    @if (forgotPassword()) {
+      <form id="entry-form" [formGroup]="resetPasswordForm">
+        @if (resetLinkSent()) {
+          <p style="margin: 0;">A link has been sent. Please check your email for further instruction. Thank you!</p>
+          <span class="no-receive" aria-label="resend link" (click)="resetLinkSent.set(false)">Didn't receive it? Try resending it.</span>
+        } @else {
+          <p [class.disabled]="sharedService.loading()">Enter the email you registerd with and a password reset link will be sent to you.</p>
+          <div class="input-container" [class.disabled]="sharedService.loading()">
+            <label for="email">Your Email:</label>
+            <input type="text" pInputText variant="filled" placeholder="Email" aria-label="your email" formControlName="email"/>
+          </div>
+          <p-button label="Send Reset Link" ariaLabel="send reset link" (onClick)="sendResetLink()" [disabled]="resetPasswordForm.invalid || sharedService.loading()"></p-button>
+          @if (sharedService.loading()) {
+            <p-progressSpinner ariaLabel="loading" strokeWidth="3"/>
+          }
+        }
+      </form>
+      <div class="form-actions" [class.disabled]="sharedService.loading()">
+        <span class="action" (click)="forgotPassword.set(false)" aria-label="back to login">Back to Login</span>
+      </div>
+    } @else {
+      <form id="entry-form" [formGroup]="loginForm" (ngSubmit)="login()">
+        <div class="input-container" [class.disabled]="sharedService.loading()">
+          <label for="email">Your Email:</label>
+          <input type="text" pInputText variant="filled" placeholder="Email" aria-label="your email" formControlName="email"/>
+        </div>
+        <div class="input-container" [class.disabled]="sharedService.loading()">
+          <label for="password">Password:</label>
+          <p-password [toggleMask]="true" variant="filled" placeholder="Password" feedback="false" ariaLabel="your password" formControlName="password" minlength="4"/>
+        </div>
+        <p-button label="Login" ariaLabel="login" type="submit" [disabled]="loginForm.invalid || sharedService.loading()"></p-button>
+        @if (sharedService.loading()) {
+          <p-progressSpinner ariaLabel="loading" strokeWidth="3"/>
+        }
+        @if (errorMessage() !== '') {
+          <div class="error">
+            {{ errorMessage() }}
+          </div>
+        }
+      </form>
+      <div class="divider">Or:</div>
+      <div class="google-button" [class.disabled]="sharedService.loading()" aria-label="login with google">
+        <img src="assets/google-icon.png" alt="google icon" width="20" height="20">
+        <span>Login with Google</span>
+      </div>
+      <div class="form-actions" [class.disabled]="sharedService.loading()">
+        <span class="action" (click)="forgotPassword.set(true)" aria-label="forgot your password">Forgot your password?</span>
+        <span class="action" routerLink="/signup" aria-label="go to register page">Not registered?</span>
+      </div>
+    }
+  </div>
+  <tc-footer/>
+</div>

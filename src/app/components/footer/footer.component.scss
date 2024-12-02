@@ -1,0 +1,42 @@
+@import 'include-media';
+@import '../../../variables.scss';
+
+.footer-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 5px;
+  font-family: "Outfit", sans-serif;
+  padding: 20px;
+}
+
+.author {
+  font-size: 0.6rem;
+
+  a {
+    font-size: 0.8rem;
+    text-decoration: none;
+    color: inherit;
+    font-weight: 600;
+  }
+
+  span {
+    font-size: 0.8rem;
+  }
+}
+
+.main {
+  font-size: 0.8rem;
+
+  span {
+    color: $theme-color-main;
+    cursor: pointer;
+  }
+}
+
+.span-dark {
+  color: $theme-color-main-light !important;
+  cursor: pointer;
+}

@@ -1,6 +1,12 @@
 @import "primeicons/primeicons.css"; /* PrimeIcons should be first */
 @import "primeng/resources/primeng.css"; /* PrimeNG component styles */
 @import "primeng/resources/themes/lara-light-blue/theme.css"; /* Theme styles */
+@import 'include-media';
+$breakpoints: (
+  'phone': 460px,
+  'tablet': 768px,
+  'desktop': 1024px
+);
 
 body {
   margin: 0;
@@ -19,4 +25,29 @@ p-password .p-password, p-password input {
   margin: auto;
   width: 100%;
   font-family: "Outfit", sans-serif;
+}
+
+.top-nav-search {
+  p-iconField input {
+    width: 100%;
+    font-family: "Outfit", sans-serif;
+  }
+}
+
+.top-nav-search-dark {
+  p-iconField input {
+    width: 100%;
+    font-family: "Outfit", sans-serif;
+    background: transparent;
+    color: white;
+  }
+}
+
+.p-menu .p-menuitem > .p-menuitem-content .p-menuitem-link {
+  font-family: "Outfit", sans-serif;
+}
+
+.p-sidebar-dark .p-sidebar {
+  color: white;
+  background: rgb(42, 42, 42);
 }

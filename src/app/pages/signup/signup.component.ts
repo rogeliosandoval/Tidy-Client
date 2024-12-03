@@ -9,6 +9,9 @@ import { SharedService } from '../../services/shared.service'
 import { FormsModule, ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms'
 import { AuthService } from '../../services/auth.service'
 import { Footer } from '../../components/footer/footer.component'
+import { lastValueFrom } from 'rxjs'
+import { Firestore, collection, doc, setDoc } from '@angular/fire/firestore'
+import { UserCredential } from '@angular/fire/auth'
 
 @Component({
   selector: 'tc-signup',
@@ -28,6 +31,7 @@ import { Footer } from '../../components/footer/footer.component'
 })
 
 export class Signup implements OnInit {
+  private firestore = inject(Firestore)
   private authService = inject(AuthService)
   private router = inject(Router)
   public sharedService = inject(SharedService)
@@ -44,21 +48,33 @@ export class Signup implements OnInit {
   }
 
   public register(): void {
-    const formData = this.registerForm.value
     this.sharedService.loading.set(true)
+    const formData = this.registerForm.value
+    // Creates a collection under 'users'
 
     setTimeout(() => {
-      this.authService.register(formData.email!, formData.name!, formData.password!).subscribe({
-        next: () => {
-          this.sharedService.loading.set(false)
-        },
-        error: err => {
+      lastValueFrom(this.authService.register(formData.email!, formData.name!, formData.password!))
+      .then(async (userInfo: UserCredential) => {
+        const uid = userInfo.user.uid
+        const userRef = doc(this.firestore, `users/${uid}`)
+        await setDoc(userRef, {
+          name: formData.name?.toLowerCase(),
+          email: formData.email
+        })
+      })
+      .then(() => {
+        this.sharedService.loading.set(false)
+      })
+      .then(() => {
+        this.router.navigateByUrl('/dashboard/overview')
+      })
+      .catch(err => {
+        if (err.message == 'Firebase: Error (auth/email-already-in-use).') {
+          this.errorMessage.set('This email is already in use. Use a different one.')
+        } else {
           this.errorMessage.set(err.message)
-          this.sharedService.loading.set(false)
-        },
-        complete: () => {
-          this.router.navigateByUrl('/dashboard')
         }
+        this.sharedService.loading.set(false)
       })
     }, 2000)
   }

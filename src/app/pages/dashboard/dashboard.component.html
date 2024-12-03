@@ -1,3 +1,185 @@
-<p>dashboard works!</p>
-<button routerLink="/">HOME</button>
-<button (click)="logout()">LOGOUT</button>
+<div class="dashboard-container" [style.background-color]="sharedService.darkMode() ? '' : '#f1f1f1'">
+  @if (fetchingData()) {
+    <p-progressSpinner ariaLabel="loading" strokeWidth="3"/>
+  } @else {
+    <!-- Top Navbar -->
+    <div class="top-nav" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()">
+      <div class="top-nav-logo">
+        @if (sharedService.darkMode()) {
+          <img class="logo" src="assets/logo-light.svg" alt="logo">
+        } @else {
+          <img class="logo" src="assets/logo.svg" alt="logo">
+        }
+      </div>
+      @if (sharedService.darkMode()) {
+        <div class="top-nav-search-dark">
+          <p-iconField iconPosition="left">
+            <p-inputIcon styleClass="pi pi-search" />
+            <input type="text" pInputText placeholder="Search" />
+          </p-iconField>
+        </div>
+      } @else {
+        <div class="top-nav-search">
+          <p-iconField iconPosition="left">
+            <p-inputIcon styleClass="pi pi-search" />
+            <input type="text" pInputText placeholder="Search" />
+          </p-iconField>
+        </div>
+      }
+      <div class="top-nav-avatar">
+        @if (sharedService.darkMode() === false) {
+          <i class="pi pi-moon" (click)="sharedService.darkMode.set(true)"></i>
+        } @else {
+          <i class="pi pi-sun" (click)="sharedService.darkMode.set(false)"></i>
+        }
+        <div class="top-nav-avatar__dropdown" (click)="menu.toggle($event)">
+          <img class="avatar" src="assets/avatars/default-avatar.png" alt="avatar" [class.avatar-hover-dark]="sharedService.darkMode()" width="40" height="40" loading="lazy">
+          <!-- <img class="avatar" src="assets/avatars/personal-avatar.jpeg" alt="avatar" [class.avatar-hover-dark]="sharedService.darkMode()" width="40" height="40" loading="lazy"> -->
+          <div class="name-arrow" [class.name-arrow-hover-dark]="sharedService.darkMode()">
+            <span>{{ userData().name }}</span>
+            <i class="pi pi-chevron-down"></i>
+          </div>
+        </div>
+        @if (sidebarVisible()) {
+          <i class="pi pi-times close-icon" [style.background-color]="sharedService.darkMode() ? '#37b6ff' : '#023c8b'"></i>
+        } @else {
+          <i class="pi pi-bars hamburger-icon" [style.background-color]="sharedService.darkMode() ? '#37b6ff' : '#023c8b'" (click)="sidebarVisible.set(true)"></i>
+        }
+      </div>
+      <p-menu #menu [model]="items" [popup]="true"/>
+    </div>
+    @if (sharedService.loading()) {
+      <p-progressSpinner ariaLabel="loading" strokeWidth="3"/>
+    }
+  
+    <!-- Side Navbar & Router Outlet -->
+     <div class="main-container" [class.p-sidebar-dark]="sharedService.darkMode()">
+      <div class="side-nav" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()">
+        <div class="side-nav-head">
+          <span [style.color]="sharedService.darkMode() ? 'white' : 'black'">Chubby Designs</span>
+          <button class="add-client-button" (click)="showStartupModal = true">Add client <i class="pi pi-plus"></i></button>
+        </div>
+        <div class="side-nav-main">
+          <div class="side-nav-links">
+            <div class="side-nav-link"
+              routerLink="/dashboard/overview"
+              [class.nav-active]="grabRoute() === '/dashboard/overview'"
+              [class.nav-active-dark]="sharedService.darkMode() && grabRoute() === '/dashboard/overview'">
+              <i class="pi pi-chart-pie"
+                [class.pi-active]="grabRoute() === '/dashboard/overview'"
+                [class.pi-active-dark]="sharedService.darkMode() && grabRoute() === '/dashboard/overview'"></i>
+              <span>Overview</span>
+            </div>
+            <div class="side-nav-link"
+              routerLink="/dashboard/clients"
+              [class.nav-active]="grabRoute() === '/dashboard/clients'"
+              [class.nav-active-dark]="sharedService.darkMode() && grabRoute() === '/dashboard/clients'">
+              <i class="pi pi-users"
+                [class.pi-active]="grabRoute() === '/dashboard/clients'"
+                [class.pi-active-dark]="sharedService.darkMode() && grabRoute() === '/dashboard/clients'"></i>
+              <span>Clients</span>
+            </div>
+            <div class="side-nav-link"
+              routerLink="/dashboard/team-members"
+              [class.nav-active]="grabRoute() === '/dashboard/team-members'"
+              [class.nav-active-dark]="sharedService.darkMode() && grabRoute() === '/dashboard/team-members'">
+              <i class="pi pi-face-smile"
+                [class.pi-active]="grabRoute() === '/dashboard/team-members'"
+                [class.pi-active-dark]="sharedService.darkMode() && grabRoute() === '/dashboard/team-members'"></i>
+              <span>Team Members</span>
+            </div>
+            <div class="side-nav-link"
+              routerLink="/dashboard/profits"
+              [class.nav-active]="grabRoute() === '/dashboard/profits'"
+              [class.nav-active-dark]="sharedService.darkMode() && grabRoute() === '/dashboard/profits'">
+              <i class="pi pi-money-bill"
+                [class.pi-active]="grabRoute() === '/dashboard/profits'"
+                [class.pi-active-dark]="sharedService.darkMode() && grabRoute() === '/dashboard/profits'"></i>
+              <span>Profits</span>
+            </div>
+            <div class="side-nav-link"
+              routerLink="/dashboard/task-manager"
+              [class.nav-active]="grabRoute() === '/dashboard/task-manager'"
+              [class.nav-active-dark]="sharedService.darkMode() && grabRoute() === '/dashboard/task-manager'">
+              <i class="pi pi-list-check"
+                [class.pi-active]="grabRoute() === '/dashboard/task-manager'"
+                [class.pi-active-dark]="sharedService.darkMode() && grabRoute() === '/dashboard/task-manager'"></i>
+              <span>Task Manager</span>
+            </div>
+            <div class="side-nav-link"
+              routerLink="/dashboard/notifications"
+              [class.nav-active]="grabRoute() === '/dashboard/notifications'"
+              [class.nav-active-dark]="sharedService.darkMode() && grabRoute() === '/dashboard/notifications'" >
+              <i class="pi pi-bell"
+                [class.pi-active]="grabRoute() === '/dashboard/notifications'"
+                [class.pi-active-dark]="sharedService.darkMode() && grabRoute() === '/dashboard/notifications'"></i>
+              <span>Notifications</span>
+            </div>
+          </div>
+        </div>
+        <div class="side-nav-logo">
+          <img src="assets/avatars/business-avatar.png" alt="business logo">
+        </div>
+      </div>
+      <p-sidebar [(visible)]="sidebarVisible">
+        <div class="side-nav-mobile-container" [class.p-sidebar-dark]="sharedService.darkMode()">
+          <h3>Chubby Designs</h3>
+          <div class="mobile-side-nav-links">
+            <div class="mobile-side-nav-link"
+              routerLink="/dashboard/overview"
+              (click)="sidebarVisible.set(false)"
+              [class.mobile-active]="grabRoute() === '/dashboard/overview'"
+              [class.mobile-active-dark]="grabRoute() === '/dashboard/overview' && sharedService.darkMode()">
+              <i class="pi pi-chart-pie"></i>
+              <span>Overview</span>
+            </div>
+            <div class="mobile-side-nav-link"
+              routerLink="/dashboard/clients"
+              (click)="sidebarVisible.set(false)"
+              [class.mobile-active]="grabRoute() === '/dashboard/clients'"
+              [class.mobile-active-dark]="grabRoute() === '/dashboard/clients' && sharedService.darkMode()">
+              <i class="pi pi-users"></i>
+              <span>Clients</span>
+            </div>
+            <div class="mobile-side-nav-link"
+              routerLink="/dashboard/team-members"
+              (click)="sidebarVisible.set(false)"
+              [class.mobile-active]="grabRoute() === '/dashboard/team-members'"
+              [class.mobile-active-dark]="grabRoute() === '/dashboard/team-members' && sharedService.darkMode()">
+              <i class="pi pi-face-smile"></i>
+              <span>Team Members</span>
+            </div>
+            <div class="mobile-side-nav-link"
+              routerLink="/dashboard/profits"
+              (click)="sidebarVisible.set(false)"
+              [class.mobile-active]="grabRoute() === '/dashboard/profits'"
+              [class.mobile-active-dark]="grabRoute() === '/dashboard/profits' && sharedService.darkMode()">
+              <i class="pi pi-money-bill"></i>
+              <span>Profits</span>
+            </div>
+            <div class="mobile-side-nav-link"
+              routerLink="/dashboard/task-manager"
+              (click)="sidebarVisible.set(false)"
+              [class.mobile-active]="grabRoute() === '/dashboard/task-manager'"
+              [class.mobile-active-dark]="grabRoute() === '/dashboard/task-manager' && sharedService.darkMode()">
+              <i class="pi pi-list-check"></i>
+              <span>Task Manager</span>
+            </div>
+            <div class="mobile-side-nav-link"
+              routerLink="/dashboard/notifications"
+              (click)="sidebarVisible.set(false)"
+              [class.mobile-active]="grabRoute() === '/dashboard/notifications'"
+              [class.mobile-active-dark]="grabRoute() === '/dashboard/notifications' && sharedService.darkMode()">
+              <i class="pi pi-bell"></i>
+              <span>Notifications</span>
+            </div>
+          </div>
+        </div>
+      </p-sidebar>
+      <router-outlet/>
+    </div>
+    <p-dialog header="Edit Profile" [modal]="true" [(visible)]="showStartupModal" [style]="{ width: '25rem' }">
+      <span class="p-text-secondary block mb-5">Update your information.</span>
+    </p-dialog>
+  }
+</div>

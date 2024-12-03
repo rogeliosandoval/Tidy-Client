@@ -1,84 +1,89 @@
-<tc-navbar/>
-
-<section class="cta">
-  <h1>The <span [style.color]="sharedService.darkMode() ? '#9bdeff' : '#004aad'">Simple</span> CRM, Built for Small Businesses</h1>
-  <p>Effortless Customer Management, Simplified for Small Businesses.</p>
-  <div class="button-container">
-    <button class="sub-button">Register</button>
-    <button class="main-button">Watch Demo</button>
+<div class="home-container">
+  <div class="skewed"></div>
+  <tc-navbar/>
+  
+  <section class="cta">
+    <h1>The <span [style.color]="sharedService.darkMode() ? '#9bdeff' : '#004aad'">Simple</span> CRM, Built for Small Businesses</h1>
+    <p>Effortless Customer Management, Simplified for Small Businesses.</p>
+    <div class="button-container">
+      <button class="sub-button" routerLink="/signup">Register</button>
+      <button class="main-button">Watch Demo</button>
+    </div>
+  </section>
+  
+  <div class="image-container">
+    <img class="counting" src="assets/orders.webp" alt="taking orders">
+    <div class="features"
+      [style.box-shadow]="sharedService.darkMode() ? '0 0 100px 20px rgba(0, 183, 255, 0.616)' : 'none'" 
+      [style.border]="sharedService.darkMode() ? '2px solid white' : '2px solid black'">
+      <div class="feature">✅ Easy To Use</div>
+      <div class="feature">✅ Fast & Secure</div>
+      <div class="feature">✅ Extremely Affordable</div>
+      <img class="files float" src="assets/files.webp" alt="files">
+    </div>
   </div>
-</section>
+  
+  <section class="testimonials">
+    <!-- <h2 class="testimonials-title">What Our Users Say</h2> -->
+    <div class="testimonials-container">
+      <div class="testimonial-box" [class.dark-testimonial-box]="sharedService.darkMode()">
+        <p class="review">"This CRM has completely transformed the way I manage my clients. It's simple yet powerful!"</p>
+        <div class="reviewer">
+          <span class="name">Sawako Yamaoka</span>
+          <div class="stars">★★★★★</div>
+        </div>
+      </div>
+      <div class="testimonial-box" [class.dark-testimonial-box]="sharedService.darkMode()">
+        <p class="review">"The interface is so intuitive. I didn't need a tutorial to get started!"</p>
+        <div class="reviewer">
+          <span class="name">John Doe</span>
+          <div class="stars">★★★★★</div>
+        </div>
+      </div>
+      <div class="testimonial-box" [class.dark-testimonial-box]="sharedService.darkMode()">
+        <p class="review">"Affordable and packed with features. Perfect for small businesses like mine."</p>
+        <div class="reviewer">
+          <span class="name">Emma Johnson</span>
+          <div class="stars">★★★★★</div>
+        </div>
+      </div>
+      <div class="testimonial-box" [class.dark-testimonial-box]="sharedService.darkMode()">
+        <p class="review">"I love the simplicity of this CRM. It's exactly what I needed."</p>
+        <div class="reviewer">
+          <span class="name">JungWoo Park</span>
+          <div class="stars">★★★★★</div>
+        </div>
+      </div>
+      <div class="testimonial-box" [class.dark-testimonial-box]="sharedService.darkMode()">
+        <p class="review">"This CRM keeps everything organized, and the team loves it too!"</p>
+        <div class="reviewer">
+          <span class="name">Sarah Wilson</span>
+          <div class="stars">★★★★★</div>
+        </div>
+      </div>
+      <div class="testimonial-box" [class.dark-testimonial-box]="sharedService.darkMode()">
+        <p class="review">"Highly recommend this CRM for anyone looking for simplicity and reliability."</p>
+        <div class="reviewer">
+          <span class="name">David Clark</span>
+          <div class="stars">★★★★★</div>
+        </div>
+      </div>
+      <div class="testimonial-box" [class.dark-testimonial-box]="sharedService.darkMode()">
+        <p class="review">"I just needed a simple way to track my clients for my small business. This one ended up being PERFECT!"</p>
+        <div class="reviewer">
+          <span class="name">Anthony Smith</span>
+          <div class="stars">★★★★★</div>
+        </div>
+      </div>
+      <div class="testimonial-box" [class.dark-testimonial-box]="sharedService.darkMode()">
+        <p class="review">"Other CRMs were way too complex. TidyClient was just right for me and my business."</p>
+        <div class="reviewer">
+          <span class="name">David Trang</span>
+          <div class="stars">★★★★★</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<div class="image-container">
-  <img class="counting" src="assets/orders.webp" alt="taking orders">
-  <div class="features"
-    [style.box-shadow]="sharedService.darkMode() ? '0 0 100px 20px rgba(0, 183, 255, 0.616)' : 'none'" 
-    [style.border]="sharedService.darkMode() ? '2px solid white' : '2px solid black'">
-    <div class="feature">✅ Easy To Use</div>
-    <div class="feature">✅ Fast & Secure</div>
-    <div class="feature">✅ Extremely Affordable</div>
-    <img class="files float" src="assets/files.webp" alt="files">
-  </div>
+  <tc-footer/>
 </div>
-
-<section class="testimonials">
-  <!-- <h2 class="testimonials-title">What Our Users Say</h2> -->
-  <div class="testimonials-container">
-    <div class="testimonial-box" [class.dark-testimonial-box]="sharedService.darkMode()">
-      <p class="review">"This CRM has completely transformed the way I manage my clients. It's simple yet powerful!"</p>
-      <div class="reviewer">
-        <span class="name">Sawako Yamaoka</span>
-        <div class="stars">★★★★★</div>
-      </div>
-    </div>
-    <div class="testimonial-box" [class.dark-testimonial-box]="sharedService.darkMode()">
-      <p class="review">"The interface is so intuitive. I didn't need a tutorial to get started!"</p>
-      <div class="reviewer">
-        <span class="name">John Doe</span>
-        <div class="stars">★★★★★</div>
-      </div>
-    </div>
-    <div class="testimonial-box" [class.dark-testimonial-box]="sharedService.darkMode()">
-      <p class="review">"Affordable and packed with features. Perfect for small businesses like mine."</p>
-      <div class="reviewer">
-        <span class="name">Emma Johnson</span>
-        <div class="stars">★★★★★</div>
-      </div>
-    </div>
-    <div class="testimonial-box" [class.dark-testimonial-box]="sharedService.darkMode()">
-      <p class="review">"I love the simplicity of this CRM. It's exactly what I needed."</p>
-      <div class="reviewer">
-        <span class="name">JungWoo Park</span>
-        <div class="stars">★★★★★</div>
-      </div>
-    </div>
-    <div class="testimonial-box" [class.dark-testimonial-box]="sharedService.darkMode()">
-      <p class="review">"This CRM keeps everything organized, and the team loves it too!"</p>
-      <div class="reviewer">
-        <span class="name">Sarah Wilson</span>
-        <div class="stars">★★★★★</div>
-      </div>
-    </div>
-    <div class="testimonial-box" [class.dark-testimonial-box]="sharedService.darkMode()">
-      <p class="review">"Highly recommend this CRM for anyone looking for simplicity and reliability."</p>
-      <div class="reviewer">
-        <span class="name">David Clark</span>
-        <div class="stars">★★★★★</div>
-      </div>
-    </div>
-    <div class="testimonial-box" [class.dark-testimonial-box]="sharedService.darkMode()">
-      <p class="review">"I just needed a simple way to track my clients for my small business. This one ended up being PERFECT!"</p>
-      <div class="reviewer">
-        <span class="name">Anthony Smith</span>
-        <div class="stars">★★★★★</div>
-      </div>
-    </div>
-    <div class="testimonial-box" [class.dark-testimonial-box]="sharedService.darkMode()">
-      <p class="review">"Other CRMs were way too complex. TidyClient was just right for me and my business."</p>
-      <div class="reviewer">
-        <span class="name">David Trang</span>
-        <div class="stars">★★★★★</div>
-      </div>
-    </div>
-  </div>
-</section>

@@ -12,6 +12,12 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 30px;
+
+  @media screen and (max-width: 1000px) {
+    justify-content: center;
+  }
 }
 
 .small-widget {

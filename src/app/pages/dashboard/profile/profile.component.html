@@ -1,0 +1,18 @@
+<div class="route-container">
+  <div class="profile-container" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()">
+    <div class="main">
+      <img src="assets/avatars/default-avatar.png" alt="avatar">
+      <div class="main-info">
+        <div class="name">Roger Sandoval</div>
+        <div class="role" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">Founder | Lead Developer</div>
+        <div class="phone"><i class="pi pi-phone"></i> (210) 540-6838</div>
+        <div class="email"><i class="pi pi-envelope"></i> rogelio.g.sandoval&#64;gmail.com</div>
+        <div class="location"><i class="pi pi-map-marker"></i> San Antonio, TX</div>
+      </div>
+    </div>
+    <i class="pi pi-user-edit"></i>
+    <div class="public-note">
+      <span class="note">"Hello, this is a message I wan't people to see. When I say people, I mean my fellow teammates!"</span>
+    </div>
+  </div>
+</div>

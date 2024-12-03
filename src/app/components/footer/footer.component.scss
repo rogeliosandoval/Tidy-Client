@@ -10,6 +10,10 @@
   gap: 5px;
   font-family: "Outfit", sans-serif;
   padding: 20px;
+
+  @include media('<tablet') {
+    margin-top: 20px;
+  }
 }
 
 .author {

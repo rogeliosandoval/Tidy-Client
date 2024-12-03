@@ -21,6 +21,17 @@ $theme-color-main-light: #37b6ff;
   animation: float 2s ease-in-out infinite;
 }
 
+.route-container {
+  width: calc(100vw - 280px);
+  height: 100%;
+  padding: 25px;
+  animation: fadeIn 0.3s linear;
+
+  @media screen and (max-width: 1000px) {
+    width: 100%;
+  }
+}
+
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-7px); }

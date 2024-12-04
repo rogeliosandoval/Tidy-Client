@@ -19,7 +19,7 @@
         <p-progressSpinner ariaLabel="loading" strokeWidth="3"/>
       }
       @if (errorMessage() !== '') {
-        <div class="error">
+        <div class="error" [class.disabled]="sharedService.loading()">
           {{ errorMessage() }}
         </div>
       }

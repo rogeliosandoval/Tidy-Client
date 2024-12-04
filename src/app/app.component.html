@@ -1,3 +1,5 @@
-<main [class.standard-dark]="sharedService.darkMode()">
-  <router-outlet/>
-</main>
+@if (loadApp()) {
+  <main [class.standard-dark]="sharedService.darkMode()">
+    <router-outlet/>
+  </main>
+}

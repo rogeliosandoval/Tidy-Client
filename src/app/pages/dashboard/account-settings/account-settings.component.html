@@ -1,0 +1,43 @@
+<div class="route-container">
+  <div class="title">Account Settings</div>
+  <div class="form-container" [class.form-container-dark]="sharedService.darkMode()" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'">
+    <form>
+      @if (showUploadAvatarButton()) {
+        <div class="custom-id-input">
+          <input type="file" id="guardCard" accept="image/*">
+          <label style="font-size: 0.9rem;" for="guardCard" [style.border]="sharedService.darkMode() ? '2px dashed white' : '2px dashed black'">Upload Guard Card</label>
+        </div>
+      } @else {
+        <div class="avatar-container">
+          <img class="avatar" src="assets/avatars/default-avatar.png" alt="avatar">
+          <i class="pi pi-trash" (click)="showUploadAvatarButton.set(true)"></i>
+        </div>
+      }
+      <div class="input-container" [class.disabled]="sharedService.loading()">
+        <label for="name">Your Name:</label>
+        <input type="text" pInputText variant="filled" placeholder="Name" formControlName="name"/>
+      </div>
+      <div class="input-container" [class.disabled]="sharedService.loading()">
+        <label for="email">Email:</label>
+        <input type="text" pInputText variant="filled" placeholder="Email" formControlName="email"/>
+      </div>
+      <div class="input-container" [class.disabled]="sharedService.loading()">
+        <label for="position">Position:</label>
+        <input type="text" pInputText variant="filled" placeholder="Position" formControlName="position"/>
+      </div>
+      <div class="input-container" [class.disabled]="sharedService.loading()">
+        <label for="phone">Phone:</label>
+        <input type="tel" pInputText variant="filled" placeholder="(xxx) xxx-xxxx" formControlName="phone" phoneNumber minlength="10"/>
+      </div>
+      <div class="input-container" [class.disabled]="sharedService.loading()">
+        <label for="location">Location:</label>
+        <input type="text" pInputText variant="filled" placeholder="Location" formControlName="location"/>
+      </div>
+      <div class="input-container" [class.disabled]="sharedService.loading()">
+        <label for="message">Message:</label>
+        <textarea rows="3" cols="30" pInputTextarea variant="filled" formControlName="message"  placeholder="Message to display on your profile" style="resize: none;"></textarea>
+      </div>
+      <p-button label="Save Changes" type="submit"></p-button>
+    </form>
+  </div>
+</div>

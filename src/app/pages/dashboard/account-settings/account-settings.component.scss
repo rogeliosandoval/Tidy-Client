@@ -1,0 +1,133 @@
+@import 'include-media';
+@import '../../../../variables.scss';
+
+.title {
+  font-size: 2rem;
+  font-family: "Outfit", sans-serif;
+  font-weight: 500;
+  margin-bottom: 20px;
+
+  @include media('<phone') {
+    font-size: 1.5rem;
+  }
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 35px;
+  border-radius: 15px;
+  -webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.1);
+  -moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.1);
+  box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.1);
+
+  form {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 50%;
+
+    p-progressSpinner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    p-button {
+      margin-top: 10px;
+    }
+
+    @media screen and (max-width: 1230px) {
+      width: 100%;
+    }
+  }
+
+  @include media('<phone') {
+    padding: 35px 20px;
+  }
+}
+
+.input-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+
+  label {
+    font-size: 1rem;
+    font-family: "Outfit", sans-serif;
+  }
+
+  input, textarea {
+    margin: auto;
+    width: 100%;
+    font-family: "Outfit", sans-serif;
+  }
+}
+
+.avatar-container {
+  position: relative;
+
+  .pi {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    border: 2px solid black;
+    padding: 10px;
+    border-radius: 50%;
+    color: white;
+    background-color: rgb(255, 52, 52);
+
+    &:hover {
+      cursor: pointer;
+      background-color: rgb(214, 0, 0);
+    }
+  }
+}
+
+.avatar {
+  max-width: 150px;
+  margin-bottom: 10px;
+}
+
+.custom-id-input {
+  position: relative;
+  display: inline-block;
+  margin-top: 10px;
+  margin-bottom: 20px;
+
+  input[type="file"] {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    z-index: -1;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    flex-direction: column;
+    font-weight: bold;
+    height: 125px;
+    width: 200px;
+    border-radius: 4px;
+    font-size: 16px;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}

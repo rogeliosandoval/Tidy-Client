@@ -36,6 +36,10 @@
   img {
     max-width: 200px;
     border-radius: 10px;
+
+    @include media('<phone') {
+      max-width: 140px;
+    }
   }
 }
 
@@ -58,6 +62,7 @@
   gap: 10px;
   font-size: 2rem;
   font-weight: 500;
+  text-transform: capitalize;
 
   @include media('<phone') {
     font-size: 1.7rem;
@@ -109,7 +114,6 @@
 .note {
   padding: 15px;
   font-size: 1rem;
-  background-color: rgb(245, 245, 245);
   border-radius: 10px;
 
   @include media('<phone') {

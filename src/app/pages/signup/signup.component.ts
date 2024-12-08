@@ -59,7 +59,7 @@ export class Signup implements OnInit {
         const userRef = doc(this.firestore, `users/${uid}`)
         await setDoc(userRef, {
           uid: uid,
-          name: formData.name?.toLowerCase(),
+          name: formData.name,
           email: formData.email
         })
       })

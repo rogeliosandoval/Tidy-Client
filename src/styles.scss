@@ -14,11 +14,9 @@ body {
   background-color: #f9f9f9;
 }
 
-#entry-form {
-  p-button .p-button {
-    transition: none;
-    min-width: 110px;
-  }
+p-button .p-button {
+  transition: none;
+  min-width: 110px;
 }
 
 p-password .p-password, p-password input {
@@ -50,4 +48,39 @@ p-password .p-password, p-password input {
 .p-sidebar-dark .p-sidebar {
   color: white;
   background: rgb(42, 42, 42);
+}
+
+.p-dialog .p-dialog-header .p-dialog-title {
+  font-family: "Outfit", sans-serif;
+}
+
+.p-text-secondary {
+  font-family: "Outfit", sans-serif;
+}
+
+.dashboard-container-dark {
+  .p-dialog .p-dialog-content:last-of-type,
+  .p-dialog-draggable .p-dialog-header {
+    background: rgb(42, 42, 42);
+    color: white;
+  }
+
+  .p-text-secondary {
+    color: white;
+  }
+
+  .startup-form {
+    input {
+      background: black;
+      color: white;
+    }
+  }
+}
+
+.form-container-dark {
+  input, textarea {
+    background: rgb(28, 28, 28);
+    color: white;
+    transition: none;
+  }
 }

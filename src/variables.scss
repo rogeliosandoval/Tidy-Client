@@ -26,9 +26,11 @@ $theme-color-main-light: #37b6ff;
   height: 100%;
   padding: 25px;
   animation: fadeIn 0.3s linear;
+  overflow: auto;
 
   @media screen and (max-width: 1000px) {
     width: 100%;
+    padding: 25px 15px;
   }
 }
 

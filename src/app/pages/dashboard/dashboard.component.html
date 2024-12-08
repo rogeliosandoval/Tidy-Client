@@ -1,14 +1,14 @@
-<div class="dashboard-container" [style.background-color]="sharedService.darkMode() ? '' : '#f1f1f1'">
-  @if (fetchingData()) {
+<div class="dashboard-container" [class.dashboard-container-dark]="sharedService.darkMode()" [style.background-color]="sharedService.darkMode() ? '' : '#f1f1f1'">
+  @if (authService.coreUserData() === undefined || authService.coreBusinessData() === undefined) {
     <p-progressSpinner ariaLabel="loading" strokeWidth="3"/>
   } @else {
     <!-- Top Navbar -->
     <div class="top-nav" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()">
       <div class="top-nav-logo">
         @if (sharedService.darkMode()) {
-          <img class="logo" src="assets/logo-light.svg" alt="logo">
+          <img class="logo" src="assets/logo-light.svg" alt="logo" [draggable]="false">
         } @else {
-          <img class="logo" src="assets/logo.svg" alt="logo">
+          <img class="logo" src="assets/logo.svg" alt="logo" [draggable]="false">
         }
       </div>
       @if (sharedService.darkMode()) {
@@ -33,10 +33,13 @@
           <i class="pi pi-sun" (click)="sharedService.darkMode.set(false)"></i>
         }
         <div class="top-nav-avatar__dropdown" (click)="menu.toggle($event)">
-          <img class="avatar" src="assets/avatars/default-avatar.png" alt="avatar" [class.avatar-hover-dark]="sharedService.darkMode()" width="40" height="40" loading="lazy">
-          <!-- <img class="avatar" src="assets/avatars/personal-avatar.jpeg" alt="avatar" [class.avatar-hover-dark]="sharedService.darkMode()" width="40" height="40" loading="lazy"> -->
+          @if (authService.userAvatar() !== null) {
+            <img class="avatar" [src]="authService.userAvatar()" alt="avatar" [class.avatar-hover-dark]="sharedService.darkMode()" width="40" height="40" loading="lazy">
+          } @else {
+            <img class="avatar" src="assets/avatars/default-avatar.png" alt="avatar" [class.avatar-hover-dark]="sharedService.darkMode()" width="40" height="40" loading="lazy">
+          }
           <div class="name-arrow" [class.name-arrow-hover-dark]="sharedService.darkMode()">
-            <span>{{ userData().name }}</span>
+            <span>{{ authService.coreUserData()?.name }}</span>
             <i class="pi pi-chevron-down"></i>
           </div>
         </div>
@@ -48,6 +51,7 @@
       </div>
       <p-menu #menu [model]="items" [popup]="true"/>
     </div>
+
     @if (sharedService.loading()) {
       <p-progressSpinner ariaLabel="loading" strokeWidth="3"/>
     }
@@ -56,11 +60,11 @@
      <div class="main-container" [class.p-sidebar-dark]="sharedService.darkMode()">
       <div class="side-nav" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()">
         <div class="side-nav-head">
-          <span [style.color]="sharedService.darkMode() ? 'white' : 'black'">Chubby Designs</span>
+          <span [style.color]="sharedService.darkMode() ? 'white' : 'black'"><i class="pi pi-briefcase"></i>{{ authService.coreUserData().business_id ? authService.coreBusinessData()?.name : 'Your Business Name' }}</span>
           <button class="add-client-button" (click)="showStartupModal = true">Add client <i class="pi pi-plus"></i></button>
         </div>
         <div class="side-nav-main">
-          <div class="side-nav-links">
+          <div class="side-nav-links" [class.side-nav-links-dark]="sharedService.darkMode()">
             <div class="side-nav-link"
               routerLink="/dashboard/overview"
               [class.nav-active]="grabRoute() === '/dashboard/overview'"
@@ -118,12 +122,16 @@
           </div>
         </div>
         <div class="side-nav-logo">
-          <img src="assets/avatars/business-avatar.png" alt="business logo">
+          @if (authService.businessAvatar() !== null) {
+            <img [src]="authService.businessAvatar()" alt="business logo">
+          } @else {
+            <img src="assets/avatars/default-business-avatar.png" alt="business logo">
+          }
         </div>
       </div>
       <p-sidebar [(visible)]="sidebarVisible">
         <div class="side-nav-mobile-container" [class.p-sidebar-dark]="sharedService.darkMode()">
-          <h3>Chubby Designs</h3>
+          <h3>{{ authService.coreBusinessData()?.name }}</h3>
           <div class="mobile-side-nav-links">
             <div class="mobile-side-nav-link"
               routerLink="/dashboard/overview"
@@ -178,8 +186,16 @@
       </p-sidebar>
       <router-outlet/>
     </div>
-    <p-dialog header="Edit Profile" [modal]="true" [(visible)]="showStartupModal" [style]="{ width: '25rem' }">
-      <span class="p-text-secondary block mb-5">Update your information.</span>
+    <p-toast position="bottom-right" key="br" [breakpoints]="{ '920px': { width: '100%', right: '0', left: '0' } }"/>
+    <p-dialog header="Welcome!" [modal]="true" [(visible)]="showStartupModal" [style]="{ width: '25rem' }">
+      <span class="p-text-secondary block mb-5">What is the name of your business?</span>
+      <form [formGroup]="startupForm" class="startup-form" (ngSubmit)="saveBusinessName()">
+        <input type="text" pInputText variant="filled" placeholder="Business Name" formControlName="business_name" [class.disabled]="modalLoading()"/>
+        <p-button label="Submit" type="submit" [class.disabled]="modalLoading() || startupForm.invalid" [disabled]="modalLoading() || startupForm.invalid"></p-button>
+        @if (modalLoading()) {
+          <p-progressSpinner ariaLabel="loading" strokeWidth="3"/>
+        }
+      </form>
     </p-dialog>
   }
 </div>

@@ -1,43 +1,103 @@
-<div class="route-container">
-  <div class="title">Account Settings</div>
-  <div class="form-container" [class.form-container-dark]="sharedService.darkMode()" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'">
-    <form>
-      @if (showUploadAvatarButton()) {
-        <div class="custom-id-input">
-          <input type="file" id="guardCard" accept="image/*">
-          <label style="font-size: 0.9rem;" for="guardCard" [style.border]="sharedService.darkMode() ? '2px dashed white' : '2px dashed black'">Upload Guard Card</label>
+@if(authService.coreUserData() === undefined || authService.coreBusinessData() === undefined) {
+  Loading...
+} @else {
+  <div class="route-container">
+    <div class="title">Account Settings</div>
+    <div class="form-container" [class.form-container-dark]="sharedService.darkMode()" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'">
+      <div class="form-label">Profile Info</div>
+      <form [formGroup]="profileForm" [class.disabled]="sharedService.loading() || savingChanges()" (ngSubmit)="saveProfileChanges()">
+        @if (showUploadAvatarButton()) {
+          @if (avatarUrl) {
+            <div class="avatar-container">
+              <img class="avatar-preview" [src]="avatarUrl" alt="avatar image preview">
+              <i class="pi pi-trash" (click)="avatarUrl = null; "></i>
+            </div>
+          } @else {
+            <div class="custom-id-input">
+              <input type="file" id="avatar" accept="image/*" (change)="avatarUpload($event)">
+              <label style="font-size: 0.9rem;" for="avatar" [style.border]="sharedService.darkMode() ? '2px dashed white' : '2px dashed black'"><i class="pi pi-upload"></i>Upload Avatar</label>
+            </div>
+          }
+        } @else {
+          @if (authService.userAvatar() !== null) {
+            <div class="avatar-container">
+              <img class="avatar" [src]="authService.userAvatar()" alt="avatar">
+              <i class="pi pi-trash" (click)="showUploadAvatarButton.set(true)"></i>
+            </div>
+          } @else {
+            <div class="avatar-container">
+              <img class="avatar" src="assets/avatars/default-avatar.png" alt="avatar">
+              <i class="pi pi-trash" (click)="showUploadAvatarButton.set(true)"></i>
+            </div>
+          }
+        }
+        <div class="input-container" [class.disabled]="sharedService.loading()">
+          <label for="name">Your Name:</label>
+          <input type="text" pInputText variant="filled" placeholder="Name" formControlName="name"/>
         </div>
-      } @else {
-        <div class="avatar-container">
-          <img class="avatar" src="assets/avatars/default-avatar.png" alt="avatar">
-          <i class="pi pi-trash" (click)="showUploadAvatarButton.set(true)"></i>
+        <div class="input-container" [class.disabled]="sharedService.loading()">
+          <label for="email">Email:</label>
+          <input type="text" pInputText variant="filled" placeholder="Email" formControlName="email"/>
         </div>
+        <div class="input-container" [class.disabled]="sharedService.loading()">
+          <label for="position">Position:</label>
+          <input type="text" pInputText variant="filled" placeholder="Position" formControlName="position"/>
+        </div>
+        <div class="input-container" [class.disabled]="sharedService.loading()">
+          <label for="phone">Phone:</label>
+          <input type="tel" pInputText variant="filled" placeholder="(xxx) xxx-xxxx" formControlName="phone" phoneNumber minlength="10"/>
+        </div>
+        <div class="input-container" [class.disabled]="sharedService.loading()">
+          <label for="location">Location:</label>
+          <input type="text" pInputText variant="filled" placeholder="Location" formControlName="location"/>
+        </div>
+        <div class="input-container" [class.disabled]="sharedService.loading()">
+          <label for="message">Message:</label>
+          <textarea rows="3" cols="30" pInputTextarea variant="filled" formControlName="message"  placeholder="Message to display on your profile" style="resize: none;"></textarea>
+        </div>
+        <div class="button-container">
+          <p-button label="Save Changes" type="submit" [disabled]="!profileForm.dirty || savingChanges()"></p-button>
+          <p-button label="Cancel" severity="secondary" (onClick)="cancelChanges()" [disabled]="!profileForm.dirty || savingChanges()"></p-button>
+        </div>
+      </form>
+      @if (savingChanges()) {
+        <p-progressSpinner ariaLabel="loading" strokeWidth="3"/>
       }
-      <div class="input-container" [class.disabled]="sharedService.loading()">
-        <label for="name">Your Name:</label>
-        <input type="text" pInputText variant="filled" placeholder="Name" formControlName="name"/>
-      </div>
-      <div class="input-container" [class.disabled]="sharedService.loading()">
-        <label for="email">Email:</label>
-        <input type="text" pInputText variant="filled" placeholder="Email" formControlName="email"/>
-      </div>
-      <div class="input-container" [class.disabled]="sharedService.loading()">
-        <label for="position">Position:</label>
-        <input type="text" pInputText variant="filled" placeholder="Position" formControlName="position"/>
-      </div>
-      <div class="input-container" [class.disabled]="sharedService.loading()">
-        <label for="phone">Phone:</label>
-        <input type="tel" pInputText variant="filled" placeholder="(xxx) xxx-xxxx" formControlName="phone" phoneNumber minlength="10"/>
-      </div>
-      <div class="input-container" [class.disabled]="sharedService.loading()">
-        <label for="location">Location:</label>
-        <input type="text" pInputText variant="filled" placeholder="Location" formControlName="location"/>
-      </div>
-      <div class="input-container" [class.disabled]="sharedService.loading()">
-        <label for="message">Message:</label>
-        <textarea rows="3" cols="30" pInputTextarea variant="filled" formControlName="message"  placeholder="Message to display on your profile" style="resize: none;"></textarea>
-      </div>
-      <p-button label="Save Changes" type="submit"></p-button>
-    </form>
+      <div class="form-label">Business Info</div>
+      <form [formGroup]="businessForm" [class.disabled]="sharedService.loading() || savingChanges()" (ngSubmit)="saveBusinessChanges()">
+        @if (showUploadBusinessAvatarButton()) {
+          @if (businessAvatarUrl) {
+            <div class="avatar-container">
+              <img class="avatar-preview" [src]="businessAvatarUrl" alt="business avatar image preview">
+              <i class="pi pi-trash" (click)="businessAvatarUrl = null"></i>
+            </div>
+          } @else {
+            <div class="custom-id-input">
+              <input type="file" id="business_avatar" accept="image/*" (change)="businessAvatarUpload($event)">
+              <label style="font-size: 0.9rem;" for="business_avatar" [style.border]="sharedService.darkMode() ? '2px dashed white' : '2px dashed black'"><i class="pi pi-upload"></i>Upload Business Logo</label>
+            </div>
+          }
+        } @else {
+          @if (authService.businessAvatar() !== null) {
+            <div class="avatar-container">
+              <img class="avatar" [src]="authService.businessAvatar()" alt="avatar">
+              <i class="pi pi-trash" (click)="showUploadBusinessAvatarButton.set(true)"></i>
+            </div>
+          } @else {
+            <div class="avatar-container">
+              <img class="avatar" src="assets/avatars/default-business-avatar.png" alt="avatar">
+              <i class="pi pi-trash" (click)="showUploadBusinessAvatarButton.set(true)"></i>
+            </div>
+          }
+        }
+        <div class="input-container" [class.disabled]="sharedService.loading()">
+          <label for="name">Business Name:</label>
+          <input type="text" pInputText variant="filled" placeholder="Business Name" formControlName="name"/>
+        </div>
+        <div class="button-container">
+          <p-button label="Save Changes" type="submit" [disabled]="!businessForm.dirty || savingChanges()"></p-button>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
+}

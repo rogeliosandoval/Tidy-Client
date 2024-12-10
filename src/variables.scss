@@ -25,8 +25,8 @@ $theme-color-main-light: #37b6ff;
   width: calc(100vw - 280px);
   height: 100%;
   padding: 25px;
-  animation: fadeIn 0.3s linear;
   overflow: auto;
+  animation: fadeIn 0.2s linear;
 
   @media screen and (max-width: 1000px) {
     width: 100%;
@@ -46,5 +46,10 @@ $theme-color-main-light: #37b6ff;
 
 @keyframes fadeInAndSlideInBottom {
   0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInAndSlideInTop {
+  0% { opacity: 0; transform: translateY(-30px); }
   100% { opacity: 1; transform: translateY(0); }
 }

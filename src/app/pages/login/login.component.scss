@@ -7,6 +7,7 @@
   align-items: center;
   flex-direction: column;
   min-height: 100vh;
+  animation: fadeIn 0.2s linear;
 
   @include media('<phone') {
     justify-content: flex-start;

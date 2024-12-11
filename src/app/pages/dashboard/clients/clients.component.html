@@ -1,50 +1,16 @@
 <div class="route-container">
-  <div class="custom-fields" [class.disabled]="sharedService.loading()">
-    <div class="custom-field">
-      <i class="pi pi-circle-fill" style="color: rgb(224, 97, 0);"></i>
-      <span>Package Plan</span>
+  <div class="clients">
+    <div class="client" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'">
+      <div class="client-header">
+        <img class="client-logo" src="assets/avatars/default-business-avatar.png" alt="client logo" [draggable]="false">
+        <div class="menu">
+          <i class="pi pi-ellipsis-h" (click)="menu.toggle($event)"></i>
+          <p-menu #menu [model]="clientOptions" [popup]="true"/>
+        </div>
+      </div>
+      <div class="client-name">Citali Healthcare Solutions</div>
+      <div class="client-email"><i class="pi pi-envelope"></i>info&#64;citalihcs.com</div>
+      <div class="client-phone"><i class="pi pi-phone"></i>(210) 540-6838</div>
+      <div class="client-contacts"><i class="pi pi-address-book"></i>2 Contacts</div>
     </div>
-    <div class="custom-field">
-      <i class="pi pi-circle-fill" style="color: rgb(0, 209, 209);"></i>
-      <span>Email Password</span>
-    </div>
-    <div class="custom-field">
-      <i class="pi pi-circle-fill" style="color: rgb(209, 0, 136);"></i>
-      <span>Reached By</span>
-    </div>
-    <div class="custom-field">
-      <i class="pi pi-circle-fill" style="color: rgb(0, 209, 73);"></i>
-      <span>TidyCal Password</span>
-    </div>
-  </div>
-  <div class="client-list">
-    <div class="client-list-item" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()">
-      <div class="client-list-item__main">
-        <div class="client-name">PVD Solutions</div>
-        <div class="client-email"><i class="pi pi-envelope"></i>pvdsolutions&#64;gmail.com</div>
-        <div class="client-phone"><i class="pi pi-phone"></i>(210) 549-6838</div>
-        <div class="client-subs"><i class="pi pi-address-book"></i>2 Contacts</div>
-      </div>
-      <div class="custom-field-one">
-        <i class="pi pi-circle-fill" style="color: rgb(224, 97, 0);"></i>
-        <span>Business</span>
-      </div>
-      <div class="custom-field-two">
-        <i class="pi pi-circle-fill" style="color: rgb(0, 209, 209);"></i>
-        <span>Chubby1996*</span>
-      </div>
-      <div class="custom-field-three">
-        <i class="pi pi-circle-fill" style="color: rgb(209, 0, 136);"></i>
-        <span>Instagram Message</span>
-      </div>
-      <div class="custom-field-four">
-        <i class="pi pi-circle-fill" style="color: rgb(0, 209, 73);"></i>
-        <span>N/A</span>
-      </div>
-      <div class="menu">
-        <i class="pi pi-ellipsis-v" (click)="menu.toggle($event)"></i>
-        <p-menu #menu [model]="clientOptions" [popup]="true"/>
-      </div>
-    </div>
-  </div>
 </div>

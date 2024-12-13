@@ -277,7 +277,6 @@
   font-family: "Outfit", sans-serif;
   color: white;
   font-size: 1.1rem;
-  // transition: 0.1s linear;
 
   &:hover {
     background-color: #003c89;
@@ -292,14 +291,14 @@
 
 .side-nav-links-dark {
   .side-nav-link {
-    span {
-      &:hover {
+    &:hover {
+      .pi {
+        color: $theme-color-main-light;
+      }
+  
+      span {
         color: white;
       }
-    }
-  
-    &:hover .pi {
-      color: $theme-color-main-light;
     }
   }
 }
@@ -324,25 +323,18 @@
   .pi {
     font-size: 1.5rem;
     font-weight: bold;
-
-    &:hover {
-      cursor: pointer;
-    }
-
-    &:hover ~ span {
-      text-decoration: underline;
-    }
   }
 
-  span {
-    &:hover {
-      cursor: pointer;
+  &:hover {
+    cursor: pointer;
+    
+    .pi {
+      color: $theme-color-main;
+    }
+
+    span {
       color: black;
     }
-  }
-
-  &:hover .pi {
-    color: $theme-color-main;
   }
 }
 

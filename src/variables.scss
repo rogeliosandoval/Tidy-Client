@@ -26,7 +26,7 @@ $theme-color-main-light: #37b6ff;
   height: 100%;
   padding: 25px;
   overflow: auto;
-  animation: fadeIn 0.2s linear;
+  animation: routeAnimation 0.2s linear;
 
   @media screen and (max-width: 1000px) {
     width: 100%;
@@ -52,4 +52,9 @@ $theme-color-main-light: #37b6ff;
 @keyframes fadeInAndSlideInTop {
   0% { opacity: 0; transform: translateY(-30px); }
   100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes routeAnimation {
+  0% { opacity: 0; transform: scale(0.8) }
+  100% { opacity: 1; transform:scale(1) }
 }

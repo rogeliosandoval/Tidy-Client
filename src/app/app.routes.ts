@@ -36,43 +36,15 @@ export const routes: Routes = [
     component: Dashboard,
     canActivate: [AuthUserGuard],
     children: [
-      {
-        path: 'overview',
-        component: Overview
-      },
-      {
-        path: 'clients',
-        component: Clients
-      },
-      {
-        path: 'team-members',
-        component: TeamMembers
-      },
-      {
-        path: 'profits',
-        component: Profits
-      },
-      {
-        path: 'task-manager',
-        component: TaskManager
-      },
-      {
-        path: 'notifications',
-        component: Notifications
-      },
-      {
-        path: 'profile',
-        component: Profile
-      },
-      {
-        path: 'account-settings',
-        component: AccountSettings
-      },
-      {
-        path: '**',
-        redirectTo: 'overview',
-        pathMatch: 'full'
-      }
+      { path: 'overview', component: Overview },
+      { path: 'clients', component: Clients },
+      { path: 'team-members', component: TeamMembers },
+      { path: 'profits', component: Profits },
+      { path: 'task-manager', component: TaskManager },
+      { path: 'notifications', component: Notifications },
+      { path: 'profile', component: Profile },
+      { path: 'account-settings', component: AccountSettings },
+      { path: '**', redirectTo: 'overview', pathMatch: 'full' }
     ]
   },
   {

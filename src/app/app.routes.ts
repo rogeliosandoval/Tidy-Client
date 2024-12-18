@@ -12,6 +12,7 @@ import { Profits } from './pages/dashboard/profits/profits.component'
 import { TaskManager } from './pages/dashboard/task-manager/task-manager.component'
 import { Notifications } from './pages/dashboard/notifications/notifications.component'
 import { Profile } from './pages/dashboard/profile/profile.component'
+import { Inbox } from './pages/dashboard/inbox/inbox.component'
 import { AccountSettings } from './pages/dashboard/account-settings/account-settings.component'
 
 export const routes: Routes = [
@@ -43,6 +44,7 @@ export const routes: Routes = [
       { path: 'task-manager', component: TaskManager },
       { path: 'notifications', component: Notifications },
       { path: 'profile', component: Profile },
+      { path: 'inbox', component: Inbox },
       { path: 'account-settings', component: AccountSettings },
       { path: '**', redirectTo: 'overview', pathMatch: 'full' }
     ]

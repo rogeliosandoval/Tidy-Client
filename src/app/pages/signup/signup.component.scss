@@ -1,4 +1,5 @@
-@use '../../../variables.scss' as *;
+@use '../../../variables.scss' as variables;
+$breakpoints: variables.$breakpoints;
 @import 'include-media';
 
 .signup-container {
@@ -116,7 +117,7 @@
   justify-content: center;
   width: 100%;
   padding: 10px;
-  border: 1px solid $theme-color-main;
+  border: 1px solid variables.$theme-color-main;
   border-radius: 5px;
   color: black;
 
@@ -137,7 +138,7 @@
 .action {
   font-size: 0.9rem;
   font-family: "Outfit", sans-serif;
-  color: $theme-color-main;
+  color: variables.$theme-color-main;
 
   &:hover {
     cursor: pointer;

@@ -1,4 +1,5 @@
-@use '../../../../variables.scss' as *;
+@use '../../../../variables.scss' as variables;
+$breakpoints: variables.$breakpoints;
 @import 'include-media';
 
 .clients {
@@ -75,6 +76,6 @@
   justify-content: center;
   align-items: center;
   gap: 10px;
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-family: "Outfit", sans-serif;
 }

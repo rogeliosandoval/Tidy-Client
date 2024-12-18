@@ -1,4 +1,5 @@
-@use '../../../variables.scss' as *;
+@use '../../../variables.scss' as variables;
+$breakpoints: variables.$breakpoints;
 @import 'include-media';
 
 .dashboard-container {
@@ -11,16 +12,6 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-  }
-}
-
-.startup-form {
-  position: relative;
-
-  input {
-    margin: 15px auto;
-    width: 100%;
-    font-family: "Outfit", sans-serif;
   }
 }
 
@@ -91,13 +82,13 @@
   }
 
   &:hover ~ .name-arrow {
-    color: $theme-color-main;
+    color: variables.$theme-color-main;
   }
 }
 
 .avatar-hover-dark {
   &:hover ~ .name-arrow {
-    color: $theme-color-main-light;
+    color: variables.$theme-color-main-light;
   }
 }
 
@@ -139,14 +130,14 @@
 
   &:hover {
     cursor: pointer;
-    color: $theme-color-main;
+    color: variables.$theme-color-main;
   }
 }
 
 .name-arrow-hover-dark {
   &:hover {
     cursor: pointer;
-    color: $theme-color-main-light;
+    color: variables.$theme-color-main-light;
   }
 }
 
@@ -256,11 +247,11 @@
 }
 
 .pi-active {
-  color: $theme-color-main;
+  color: variables.$theme-color-main;
 }
 
 .pi-active-dark {
-  color: $theme-color-main-light;
+  color: variables.$theme-color-main-light;
 }
 
 .add-client-button {
@@ -293,7 +284,7 @@
   .side-nav-link {
     &:hover {
       .pi {
-        color: $theme-color-main-light;
+        color: variables.$theme-color-main-light;
       }
   
       span {
@@ -329,7 +320,7 @@
     cursor: pointer;
     
     .pi {
-      color: $theme-color-main;
+      color: variables.$theme-color-main;
     }
 
     span {
@@ -392,10 +383,10 @@
 }
 
 .mobile-active {
-  color: $theme-color-main;
+  color: variables.$theme-color-main;
 }
 
 .mobile-active-dark {
-  color: $theme-color-main-light;
+  color: variables.$theme-color-main-light;
 }
 // #endregion

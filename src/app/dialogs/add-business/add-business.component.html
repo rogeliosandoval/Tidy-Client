@@ -1,0 +1,10 @@
+<p-dialog header="Welcome!" [modal]="true" (onHide)="closeModal()" [(visible)]="showStartupModal" [style]="{ width: '25rem' }">
+  <span class="p-text-secondary block mb-5">What is the name of your business?</span>
+  <form [formGroup]="startupForm" class="startup-form" (ngSubmit)="submitModal()">
+    <input type="text" pInputText variant="filled" placeholder="Business Name" formControlName="business_name" [class.disabled]="modalLoading()"/>
+    <p-button label="Submit" type="submit" [class.disabled]="modalLoading() || startupForm.invalid" [disabled]="modalLoading() || startupForm.invalid"></p-button>
+    @if (modalLoading()) {
+      <p-progressSpinner ariaLabel="loading" strokeWidth="3"/>
+    }
+  </form>
+</p-dialog>

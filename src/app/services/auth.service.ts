@@ -1,5 +1,5 @@
 import { Injectable, inject, signal } from '@angular/core'
-import { Auth, UserCredential, browserSessionPersistence, createUserWithEmailAndPassword, setPersistence, signInWithEmailAndPassword, signOut, updateProfile, user } from '@angular/fire/auth'
+import { Auth, UserCredential, browserLocalPersistence, browserSessionPersistence, createUserWithEmailAndPassword, setPersistence, signInWithEmailAndPassword, signOut, updateProfile, user } from '@angular/fire/auth'
 import { Observable, from } from 'rxjs'
 import { UserInterface } from '../interfaces/user.interface'
 import { doc, Firestore, getDoc } from '@angular/fire/firestore'
@@ -33,17 +33,23 @@ export class AuthService {
     return from(promise)
   }
 
-  login(email: string, password: string): Observable<void> {
+  loginWithSessionPersistence(email: string, password: string): Observable<void> {
     const promise = this.firebaseAuth.setPersistence(browserSessionPersistence)
       .then(() => {
-        return signInWithEmailAndPassword(
-          this.firebaseAuth,
-          email,
-          password
-        )
+        return signInWithEmailAndPassword(this.firebaseAuth, email, password)
       })
       .then(() => {})
-  
+    
+    return from(promise)
+  }
+
+  loginWithLocalPersistence(email: string, password: string): Observable<void> {
+    const promise = this.firebaseAuth.setPersistence(browserLocalPersistence)
+      .then(() => {
+        return signInWithEmailAndPassword(this.firebaseAuth, email, password)
+      })
+      .then(() => {})
+    
     return from(promise)
   }
 

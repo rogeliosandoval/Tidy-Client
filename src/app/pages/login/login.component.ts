@@ -9,6 +9,7 @@ import { SharedService } from '../../services/shared.service'
 import { FormsModule, ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms'
 import { AuthService } from '../../services/auth.service'
 import { Footer } from '../../components/footer/footer.component'
+import { CheckboxModule } from 'primeng/checkbox';
 
 @Component({
   selector: 'tc-login',
@@ -21,7 +22,8 @@ import { Footer } from '../../components/footer/footer.component'
     ProgressSpinnerModule,
     FormsModule,
     ReactiveFormsModule,
-    Footer
+    Footer,
+    CheckboxModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
@@ -37,7 +39,8 @@ export class Login {
   public errorMessage = signal<string>('')
   public loginForm = new FormGroup({
     email: new FormControl('', [Validators.email, Validators.required]),
-    password: new FormControl('', Validators.required)
+    password: new FormControl('', Validators.required),
+    checked: new FormControl('')
   })
   public resetPasswordForm = new FormGroup({
     email: new FormControl('', [Validators.email, Validators.required])
@@ -52,22 +55,41 @@ export class Login {
     this.sharedService.loading.set(true)
 
     setTimeout(() => {
-      this.authService.login(formData.email!, formData.password!).subscribe({
-        next: () => {
-          this.sharedService.loading.set(false)
-        },
-        error: err => {
-          if (err.message == 'Firebase: Error (auth/invalid-credential).') {
-            this.errorMessage.set('Wrong email or password. Please try again.')
-          } else {
-            this.errorMessage.set(err.message)
+      if (formData.checked?.includes('yes')) {
+        this.authService.loginWithLocalPersistence(formData.email!, formData.password!).subscribe({
+          next: () => {
+            this.sharedService.loading.set(false)
+          },
+          error: err => {
+            if (err.message == 'Firebase: Error (auth/invalid-credential).') {
+              this.errorMessage.set('Wrong email or password. Please try again.')
+            } else {
+              this.errorMessage.set(err.message)
+            }
+            this.sharedService.loading.set(false)
+          },
+          complete: () => {
+            this.router.navigateByUrl('/dashboard')
           }
-          this.sharedService.loading.set(false)
-        },
-        complete: () => {
-          this.router.navigateByUrl('/dashboard')
-        }
-      })
+        })
+      } else {
+        this.authService.loginWithSessionPersistence(formData.email!, formData.password!).subscribe({
+          next: () => {
+            this.sharedService.loading.set(false)
+          },
+          error: err => {
+            if (err.message == 'Firebase: Error (auth/invalid-credential).') {
+              this.errorMessage.set('Wrong email or password. Please try again.')
+            } else {
+              this.errorMessage.set(err.message)
+            }
+            this.sharedService.loading.set(false)
+          },
+          complete: () => {
+            this.router.navigateByUrl('/dashboard')
+          }
+        })
+      }
     }, 2000)
   }
 

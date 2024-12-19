@@ -92,6 +92,16 @@ $breakpoints: variables.$breakpoints;
   }
 }
 
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: "Outfit", sans-serif;
+  font-size: 0.9rem;
+  margin: 5px 0 0;
+  color: rgb(68, 68, 68);
+}
+
 .divider {
   position: relative;
   display: flex;

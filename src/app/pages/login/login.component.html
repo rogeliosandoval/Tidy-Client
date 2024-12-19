@@ -31,6 +31,10 @@
           <label for="password">Password:</label>
           <p-password [toggleMask]="true" variant="filled" placeholder="Password" feedback="false" ariaLabel="your password" formControlName="password" minlength="4"/>
         </div>
+        <div class="checkbox-container" [class.disabled]="sharedService.loading()">
+          <p-checkbox formControlName="checked" value="yes" inputId="checked" variant="filled"/>
+          <label for="checked">Remember me</label>
+        </div>
         <p-button label="Login" ariaLabel="login" type="submit" [disabled]="loginForm.invalid || sharedService.loading()"></p-button>
         @if (sharedService.loading()) {
           <p-progressSpinner ariaLabel="loading" strokeWidth="3"/>

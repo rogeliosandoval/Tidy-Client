@@ -27,7 +27,7 @@ $breakpoints: variables.$breakpoints;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 30px;
+  gap: 27px;
   font-family: "Outfit", sans-serif;
 
   @include media('<phone') {
@@ -39,7 +39,7 @@ $breakpoints: variables.$breakpoints;
 }
 
 .nav-link, .nav-link-dark {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 400;
   opacity: 0.4;
   transition: 0.2s linear;

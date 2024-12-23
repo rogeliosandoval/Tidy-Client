@@ -61,10 +61,6 @@ export class AccountSettings implements OnInit {
     this.defaultForm = this.profileForm.value
   }
 
-  public test(): void {
-    console.log(this.authService.coreBusinessData())
-  }
-
   public avatarUpload(event: any): void {
     const file: File = event.target.files[0]
     if (file) {
@@ -140,6 +136,7 @@ export class AccountSettings implements OnInit {
               })
             })
             .then(() => {
+              this.profileForm.markAsPristine()
               this.savingChanges.set(false)
             })
           }
@@ -147,6 +144,13 @@ export class AccountSettings implements OnInit {
         error: (err: any) => {
           console.log(err)
           this.savingChanges.set(false)
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'There was an error updating your profile.',
+            key: 'br',
+            life: 4000,
+          })
         }
       })
     }, 1000)
@@ -186,6 +190,7 @@ export class AccountSettings implements OnInit {
               })
             })
             .then(() => {
+              this.businessForm.markAsPristine()
               this.savingChanges.set(false)
             })
           }

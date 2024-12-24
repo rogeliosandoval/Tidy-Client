@@ -2,7 +2,7 @@ import { Injectable, inject, signal } from '@angular/core'
 import { Auth, UserCredential, browserLocalPersistence, browserSessionPersistence, createUserWithEmailAndPassword, setPersistence, signInWithEmailAndPassword, signOut, updateProfile, user } from '@angular/fire/auth'
 import { Observable, from } from 'rxjs'
 import { UserInterface } from '../interfaces/user.interface'
-import { doc, Firestore, getDoc } from '@angular/fire/firestore'
+import { collection, doc, Firestore, getDoc, getDocs } from '@angular/fire/firestore'
 import { Storage, getDownloadURL, ref } from '@angular/fire/storage'
 
 @Injectable({
@@ -79,23 +79,44 @@ export class AuthService {
 
   async fetchCoreBusinessData(): Promise<void> {
     const auth = this.firebaseAuth.currentUser
-
+  
     if (auth) {
       const uid = auth.uid
       const userRef = doc(this.firestore, `users/${uid}`)
       const userDocSnap = await getDoc(userRef)
-
+  
       if (userDocSnap.exists()) {
         const userData = userDocSnap.data()
-
+  
         if (userData['business_id']) {
           const businessId = userData['business_id']
           const businessRef = doc(this.firestore, `businesses/${businessId}`)
           const businessDocSnap = await getDoc(businessRef)
-
+  
           if (businessDocSnap.exists()) {
             const businessData = businessDocSnap.data()
-            this.coreBusinessData.set(businessData)
+  
+            // Fetch clients subcollection
+            const clientsRef = collection(this.firestore, `businesses/${businessId}/clients`)
+            try {
+              const clientsSnap = await getDocs(clientsRef)
+              const clients = clientsSnap.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data(),
+              }))
+  
+              // Add clients data to the business data object
+              this.coreBusinessData.set({
+                ...businessData,
+                clients, // Include clients in the business data
+              })
+            } catch (error) {
+              console.error('Error fetching clients data:', error)
+              this.coreBusinessData.set({
+                ...businessData,
+                clients: [], // Default to an empty array if error
+              })
+            }
           } else {
             this.coreBusinessData.set(null)
           }
@@ -108,7 +129,7 @@ export class AuthService {
     } else {
       this.coreBusinessData.set(null)
     }
-  }
+  }  
 
   async fetchProfileAvatar(): Promise<void> {
     const filePath = `users/${this.coreUserData()?.uid}/avatar`

@@ -61,7 +61,7 @@
       <div class="side-nav" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()">
         <div class="side-nav-head">
           <span [style.color]="sharedService.darkMode() ? 'white' : 'black'"><i class="pi pi-briefcase"></i>{{ authService.coreUserData().business_id ? authService.coreBusinessData()?.name : 'Your Business Name' }}</span>
-          <button class="add-client-button" (click)="showStartupModal = true">Add client <i class="pi pi-plus"></i></button>
+          <button class="add-client-button" (click)="showAddClientModal.set(true)">Add Client <i class="pi pi-plus"></i></button>
         </div>
         <div class="side-nav-main">
           <div class="side-nav-links" [class.side-nav-links-dark]="sharedService.darkMode()">
@@ -187,15 +187,7 @@
       <router-outlet/>
     </div>
     <p-toast position="bottom-right" key="br" [breakpoints]="{ '920px': { width: '100%', right: '0', left: '0' } }"/>
-    <p-dialog header="Welcome!" [modal]="true" [(visible)]="showStartupModal" [style]="{ width: '25rem' }">
-      <span class="p-text-secondary block mb-5">What is the name of your business?</span>
-      <form [formGroup]="startupForm" class="startup-form" (ngSubmit)="saveBusinessName()">
-        <input type="text" pInputText variant="filled" placeholder="Business Name" formControlName="business_name" [class.disabled]="modalLoading()"/>
-        <p-button label="Submit" type="submit" [class.disabled]="modalLoading() || startupForm.invalid" [disabled]="modalLoading() || startupForm.invalid"></p-button>
-        @if (modalLoading()) {
-          <p-progressSpinner ariaLabel="loading" strokeWidth="3"/>
-        }
-      </form>
-    </p-dialog>
+    <tcd-add-business #addBusinessDialog [showStartupModal]="showStartupModal()" [modalLoading]="modalLoading()" (onSubmit)="saveBusinessName($event)" (onClose)="onModalClose($event)"/>
+    <tcd-add-client [showAddClientModal]="showAddClientModal()" [modalLoading]="modalLoading()" (onSubmit)="addClient($event)" (onClose)="onModalClose($event)" />
   }
 </div>

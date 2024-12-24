@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core'
+import { Component, OnInit, ViewChild, inject, signal } from '@angular/core'
 import { Router, RouterOutlet } from '@angular/router'
 import { AuthService } from '../../services/auth.service'
 import { SharedService } from '../../services/shared.service'
@@ -18,6 +18,8 @@ import { ToastModule } from 'primeng/toast'
 import { MessageService } from 'primeng/api'
 import { take } from 'rxjs'
 import { v4 as uuidv4 } from 'uuid'
+import { AddBusinessDialog } from '../../dialogs/add-business/add-business.component'
+import { AddClientDialog } from '../../dialogs/add-client/add.client.component'
 
 @Component({
   selector: 'tc-dashboard',
@@ -34,7 +36,9 @@ import { v4 as uuidv4 } from 'uuid'
     DialogModule,
     FormsModule,
     ReactiveFormsModule,
-    ToastModule
+    ToastModule,
+    AddBusinessDialog,
+    AddClientDialog
   ],
   providers: [
     MessageService
@@ -43,6 +47,7 @@ import { v4 as uuidv4 } from 'uuid'
   styleUrl: './dashboard.component.scss'
 })
 export class Dashboard implements OnInit {
+  @ViewChild('addBusinessDialog') addBusinessDialog!: AddBusinessDialog
   private messageService = inject(MessageService)
   private firestore = inject(Firestore)
   private router = inject(Router)
@@ -53,11 +58,9 @@ export class Dashboard implements OnInit {
   public items: MenuItem[] | undefined
   public currentRoute = signal<string>('')
   public sidebarVisible = signal<boolean>(false)
-  public showStartupModal: boolean = false
   public modalLoading = signal<boolean>(false)
-  public startupForm = new FormGroup({
-    business_name: new FormControl('', Validators.required)
-  })
+  public showStartupModal = signal<boolean>(false)
+  public showAddClientModal = signal<boolean>(false)
 
   ngOnInit(): void {
     this.primengConfig.ripple = true
@@ -73,7 +76,10 @@ export class Dashboard implements OnInit {
       },
       {
         label: 'Inbox',
-        icon: 'pi pi-inbox'
+        icon: 'pi pi-inbox',
+        command: () => {
+          this.router.navigateByUrl('/dashboard/inbox')
+        }
       },
       {
         label: 'Account Settings',
@@ -100,7 +106,7 @@ export class Dashboard implements OnInit {
     await this.authService.fetchCoreBusinessData()
     .then(() => {
       if (!this.authService.coreUserData().business_id) {
-        this.showStartupModal = true
+        this.showStartupModal.set(true)
       }
     })
     .then(() => {
@@ -112,9 +118,30 @@ export class Dashboard implements OnInit {
     return this.router.url
   }
 
-  public async saveBusinessName() {
+  public onModalClose(newState: boolean) {
+    this.showStartupModal.set(newState)
+    this.showAddClientModal.set(newState)
+    this.addBusinessDialog.resetForm()
+  }
+
+  public async addClient(data: any) {
     this.modalLoading.set(true)
-    const businessName = this.startupForm.get('business_name')?.value
+    const clientId = uuidv4() 
+    const clientRef = doc(this.firestore, `businesses/${this.authService.coreBusinessData().id}/clients/${clientId}`)
+
+    await setDoc(clientRef, {
+      id: clientId,
+      name: data.formData.client_name,
+      createdAt: new Date().toISOString()
+    }, { merge: true })
+    .then(() => {
+      this.modalLoading.set(false)
+      this.showAddClientModal.set(false)
+    })
+  }
+
+  public async saveBusinessName(businessName: string | null) {
+    this.modalLoading.set(true)
     this.authService.user$
     .pipe(take(1))
     .subscribe({
@@ -133,16 +160,16 @@ export class Dashboard implements OnInit {
             owner: uid, // Reference the owner
           })
 
-          await setDoc(userRef, { business_id: businessId }, { merge: true })
+          await setDoc(userRef, { businessId: businessId }, { merge: true })
 
           await this.authService.fetchCoreUserData()
 
           await this.authService.fetchCoreBusinessData()
           .then(() => {
-            this.showStartupModal = false
+            this.showStartupModal.set(false)
           })
           .then(() => {
-            this.startupForm.reset()
+            this.addBusinessDialog.resetForm()
             this.modalLoading.set(false)
             this.messageService.add({
               severity: 'success',

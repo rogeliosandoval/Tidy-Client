@@ -188,6 +188,6 @@
     </div>
     <p-toast position="bottom-right" key="br" [breakpoints]="{ '920px': { width: '100%', right: '0', left: '0' } }"/>
     <tcd-add-business #addBusinessDialog [showStartupModal]="showStartupModal()" [modalLoading]="modalLoading()" (onSubmit)="saveBusinessName($event)" (onClose)="onModalClose($event)"/>
-    <tcd-add-client [showAddClientModal]="showAddClientModal()" [modalLoading]="modalLoading()" (onSubmit)="addClient($event)" (onClose)="onModalClose($event)" />
+    <tcd-add-client #addClientDialog [showAddClientModal]="showAddClientModal()" [modalLoading]="modalLoading()" (onSubmit)="addClient($event)" (onClose)="onModalClose($event)" />
   }
 </div>

@@ -120,3 +120,16 @@ textarea,
     padding: 10px;
   }
 }
+
+.dialogactions {
+  .p-button {
+    font-size: 0.9rem;
+    min-width: 70px;
+  }
+}
+
+.p-tooltip {
+  text-align: center;
+  font-size: 0.8rem;
+  max-width: 250px;
+}

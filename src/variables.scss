@@ -7,6 +7,14 @@ $breakpoints: (
 $theme-color-main: #004aad;
 $theme-color-main-light: #37b6ff;
 
+.phone-break {
+  display: none;
+
+  @include media('<phone') {
+    display: block;
+  }
+}
+
 .disabled {
   opacity: 0.4;
   pointer-events: none;

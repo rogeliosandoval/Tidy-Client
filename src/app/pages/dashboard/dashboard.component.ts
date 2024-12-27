@@ -20,6 +20,7 @@ import { take } from 'rxjs'
 import { v4 as uuidv4 } from 'uuid'
 import { AddBusinessDialog } from '../../dialogs/add-business/add-business.component'
 import { AddClientDialog } from '../../dialogs/add-client/add.client.component'
+import { Storage, ref, uploadBytesResumable } from '@angular/fire/storage'
 
 @Component({
   selector: 'tc-dashboard',
@@ -47,7 +48,9 @@ import { AddClientDialog } from '../../dialogs/add-client/add.client.component'
   styleUrl: './dashboard.component.scss'
 })
 export class Dashboard implements OnInit {
+  private storage = inject(Storage)
   @ViewChild('addBusinessDialog') addBusinessDialog!: AddBusinessDialog
+  @ViewChild('addClientDialog') addClientDialog!: AddClientDialog
   private messageService = inject(MessageService)
   private firestore = inject(Firestore)
   private router = inject(Router)
@@ -60,7 +63,6 @@ export class Dashboard implements OnInit {
   public sidebarVisible = signal<boolean>(false)
   public modalLoading = signal<boolean>(false)
   public showStartupModal = signal<boolean>(false)
-  public showAddClientModal = signal<boolean>(false)
 
   ngOnInit(): void {
     this.primengConfig.ripple = true
@@ -120,24 +122,37 @@ export class Dashboard implements OnInit {
 
   public onModalClose(newState: boolean) {
     this.showStartupModal.set(newState)
-    this.showAddClientModal.set(newState)
+    this.sharedService.showAddClientModal.set(newState)
     this.addBusinessDialog.resetForm()
+    this.addClientDialog.resetForm()
   }
 
   public async addClient(data: any) {
     this.modalLoading.set(true)
-    const clientId = uuidv4() 
+    const clientId = uuidv4()
     const clientRef = doc(this.firestore, `businesses/${this.authService.coreBusinessData().id}/clients/${clientId}`)
+
+    if (data.file) {
+      const file = data.file
+      const filePath = `businesses/${this.authService.coreUserData().business_id}/clients/${clientId}/avatar`
+      const storageRef = ref(this.storage, filePath)
+      await uploadBytesResumable(storageRef, file)
+    }
 
     await setDoc(clientRef, {
       id: clientId,
       name: data.formData.client_name,
+      email: data.formData.client_email,
+      phone: data.formData.client_phone,
       createdAt: new Date().toISOString()
     }, { merge: true })
-    .then(() => {
-      this.modalLoading.set(false)
-      this.showAddClientModal.set(false)
-    })
+
+    await this.authService.fetchCoreBusinessData()
+
+    this.addClientDialog.resetForm()
+    this.modalLoading.set(false)
+    this.sharedService.showAddClientModal.set(false)
+    this.router.navigateByUrl('/dashboard/clients')
   }
 
   public async saveBusinessName(businessName: string | null) {

@@ -1,0 +1,7 @@
+<p-dialog header="Confirmation" [modal]="true" (onHide)="closeModal()" [(visible)]="showConfirmModal" [style]="{ width: '23rem' }">
+  <span class="p-text-secondary block mb-5">{{ message }}</span>
+  <div class="dialogactions">
+    <p-button label="Cancel" severity="secondary"/>
+    <p-button label="Confirm" severity="danger"/>
+  </div>
+</p-dialog>

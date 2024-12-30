@@ -11,7 +11,7 @@ import { DropdownModule } from 'primeng/dropdown'
 import { PhoneNumberDirective } from '../../directives/phone-number.directive'
 
 @Component({
-  selector: 'tcd-add-client',
+  selector: 'tcd-client-form',
   standalone: true,
   imports: [
     DialogModule,
@@ -25,16 +25,17 @@ import { PhoneNumberDirective } from '../../directives/phone-number.directive'
     DropdownModule,
     PhoneNumberDirective
   ],
-  templateUrl: './add-client.component.html',
-  styleUrl: './add-client.component.scss'
+  templateUrl: './client-form.component.html',
+  styleUrl: './client-form.component.scss'
 })
 
-export class AddClientDialog {
-  @Input() showAddClientModal = false
+export class ClientFormDialog {
+  @Input() type: string = ''
+  @Input() showClientFormDialog: boolean = false
   @Output() onClose = new EventEmitter<boolean>()
   @Output() onSubmit = new EventEmitter<any>()
   public sharedService = inject(SharedService)
-  public modalLoading = input<boolean>()
+  public dialogLoading = input<boolean>()
   public showUploadAvatarButton = signal<boolean>(false)
   public avatar: File | any = null
   public avatarUrl: any
@@ -85,14 +86,15 @@ export class AddClientDialog {
   }
 
   public closeModal() {
-    this.showAddClientModal = false
+    this.showClientFormDialog = false
     this.onClose.emit(false)
   }
 
-  public submitModal(): void {
+  public submitModal(type: string): void {
     const data = {
       formData: this.clientForm.value,
-      file: this.avatar
+      file: this.avatar,
+      type
     }
     this.onSubmit.emit(data)
   }

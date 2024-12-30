@@ -1,0 +1,12 @@
+<div class="startup-form">
+  <p-dialog header="Welcome!" [modal]="true" (onHide)="closeModal()" [(visible)]="showStartupFormDialog" [style]="{ width: '25rem' }">
+    <span class="p-text-secondary block mb-5">What is the name of your business?</span>
+    <form [formGroup]="startupForm" class="startup-form" (ngSubmit)="submitModal('add')">
+      <input type="text" pInputText variant="filled" placeholder="Business Name" formControlName="business_name" [class.disabled]="dialogLoading()"/>
+      <p-button label="Submit" type="submit" [class.disabled]="dialogLoading() || startupForm.invalid" [disabled]="dialogLoading() || startupForm.invalid"></p-button>
+      @if (dialogLoading()) {
+        <p-progressSpinner ariaLabel="loading" strokeWidth="3"/>
+      }
+    </form>
+  </p-dialog>
+</div>

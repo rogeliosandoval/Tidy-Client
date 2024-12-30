@@ -7,7 +7,7 @@ import { IconFieldModule } from 'primeng/iconfield'
 import { InputTextModule } from 'primeng/inputtext'
 
 @Component({
-  selector: 'tcd-add-business',
+  selector: 'tcd-startup-form',
   standalone: true,
   imports: [
     DialogModule,
@@ -18,15 +18,15 @@ import { InputTextModule } from 'primeng/inputtext'
     IconFieldModule,
     InputTextModule
   ],
-  templateUrl: './add-business.component.html',
-  styleUrl: './add-business.component.scss'
+  templateUrl: './startup-form.component.html',
+  styleUrl: './startup-form.component.scss'
 })
 
-export class AddBusinessDialog {
-  @Input() showStartupModal = false
+export class StartupFormDialog {
+  @Input() showStartupFormDialog = false
   @Output() onClose = new EventEmitter<boolean>()
-  @Output() onSubmit = new EventEmitter<string | null>()
-  public modalLoading = input<boolean>()
+  @Output() onSubmit = new EventEmitter<any | null>()
+  public dialogLoading = input<boolean>()
   public startupForm = new FormGroup({
     business_name: new FormControl('', Validators.required)
   })
@@ -36,12 +36,16 @@ export class AddBusinessDialog {
   }
 
   public closeModal() {
-    this.showStartupModal = false
+    this.showStartupFormDialog = false
     this.onClose.emit(false)
   }
 
-  public submitModal(): void {
+  public submitModal(type: string): void {
     const businessName = this.startupForm.get('business_name')?.value
-    this.onSubmit.emit(businessName)
+    const data = {
+      businessName,
+      type
+    }
+    this.onSubmit.emit(data)
   }
 }

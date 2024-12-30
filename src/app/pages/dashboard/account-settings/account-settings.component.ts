@@ -43,7 +43,7 @@ export class AccountSettings implements OnInit {
   public businessAvatar: File | any
   public businessAvatarUrl: any
   public showUploadBusinessAvatarButton = signal<boolean>(false)
-  public defaultForm: any
+  public defaultProfileForm: any
   public profileForm = new FormGroup({
     name: new FormControl(this.authService.coreUserData().name),
     email: new FormControl({ value: this.authService.coreUserData().email, disabled: true}),
@@ -52,12 +52,14 @@ export class AccountSettings implements OnInit {
     location: new FormControl(this.authService.coreUserData().location),
     message: new FormControl(this.authService.coreUserData().message)
   })
+  public defaultBusinessForm: any
   public businessForm = new FormGroup({
     name: new FormControl(this.authService.coreBusinessData().name)
   })
 
   ngOnInit(): void {
-    this.defaultForm = this.profileForm.value
+    this.defaultProfileForm = this.profileForm.value
+    this.defaultBusinessForm = this.businessForm.value
   }
 
   public avatarUpload(event: any): void {
@@ -86,18 +88,28 @@ export class AccountSettings implements OnInit {
     this.businessForm.markAsDirty()
   }
 
-  public cancelChanges(): void {
-    this.profileForm.get('name')?.setValue(this.defaultForm?.name)
-    this.profileForm.get('position')?.setValue(this.defaultForm?.position)
-    this.profileForm.get('phone')?.setValue(this.defaultForm?.phone)
-    this.profileForm.get('location')?.setValue(this.defaultForm?.location)
-    this.profileForm.get('message')?.setValue(this.defaultForm?.message)
+  public cancelProfileChanges(): void {
+    this.profileForm.get('name')?.setValue(this.defaultProfileForm?.name)
+    this.profileForm.get('position')?.setValue(this.defaultProfileForm?.position)
+    this.profileForm.get('phone')?.setValue(this.defaultProfileForm?.phone)
+    this.profileForm.get('location')?.setValue(this.defaultProfileForm?.location)
+    this.profileForm.get('message')?.setValue(this.defaultProfileForm?.message)
     this.avatarUrl = null
+    this.showUploadAvatarButton.set(false)
+    this.profileForm.markAsPristine()
+  }
+
+  public cancelBusinessChanges(): void {
+    this.businessForm.get('name')?.setValue(this.defaultBusinessForm?.name)
+    this.businessAvatarUrl = null
+    this.showUploadBusinessAvatarButton.set(false)
+    this.businessForm.markAsPristine()
   }
 
   public saveProfileChanges(): void {
     this.savingChanges.set(true)
     const formData = this.profileForm.value
+    let avatarUrl = ''
 
     setTimeout(() => {
       this.authService.user$
@@ -113,7 +125,10 @@ export class AccountSettings implements OnInit {
               const filePath = `users/${uid}/avatar`
               const storageRef = ref(this.storage, filePath)
               await uploadBytesResumable(storageRef, file)
-              await this.authService.fetchProfileAvatar()
+              avatarUrl = await getDownloadURL(storageRef)
+            } else {
+              await this.authService.deleteProfileAvatar()
+              avatarUrl = ''
             }
 
             await setDoc(userRef, {
@@ -121,11 +136,15 @@ export class AccountSettings implements OnInit {
               position: formData.position,
               phone: formData.phone,
               location: formData.location,
-              message: formData.message
+              message: formData.message,
+              avatarUrl: avatarUrl
             }, { merge: true })
 
             await this.authService.fetchCoreUserData()
             .then(() => {
+              if (!avatarUrl) {
+                this.showUploadAvatarButton.set(false)
+              }
               this.messageService.add({
                 severity: 'success',
                 summary: 'Success',
@@ -146,7 +165,7 @@ export class AccountSettings implements OnInit {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: 'There was an error updating your profile.',
+            detail: 'There was an error updating your profile. Try again',
             key: 'br',
             life: 6000,
           })
@@ -158,6 +177,7 @@ export class AccountSettings implements OnInit {
   public saveBusinessChanges(): void {
     this.savingChanges.set(true)
     const formData = this.businessForm.value
+    let avatarUrl = ''
 
     setTimeout(() => {
       this.authService.user$
@@ -165,21 +185,29 @@ export class AccountSettings implements OnInit {
       .subscribe({
         next: async (data: any) => {
           if (data && data.uid) {
-            const businessRef = doc(this.firestore, `businesses/${this.authService.coreUserData().business_id}`)
+            const businessRef = doc(this.firestore, `businesses/${this.authService.coreUserData().businessId}`)
 
             if (this.businessAvatarUrl) {
               const file = this.businessAvatar
-              const filePath = `businesses/${this.authService.coreUserData().business_id}/avatar`
+              const filePath = `businesses/${this.authService.coreUserData().businessId}/avatar`
               const storageRef = ref(this.storage, filePath)
               await uploadBytesResumable(storageRef, file)
+              avatarUrl = await getDownloadURL(storageRef)
+            } else {
+              await this.authService.deleteBusinessAvatar()
+              avatarUrl = ''
             }
 
             await setDoc(businessRef, {
-              name: formData.name
+              name: formData.name,
+              avatarUrl: avatarUrl
             }, { merge: true })
 
             await this.authService.fetchCoreBusinessData()
             .then(() => {
+              if (!avatarUrl) {
+                this.showUploadBusinessAvatarButton.set(false)
+              }
               this.messageService.add({
                 severity: 'success',
                 summary: 'Success',
@@ -197,6 +225,13 @@ export class AccountSettings implements OnInit {
         error: (err: any) => {
           console.log(err)
           this.savingChanges.set(false)
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'There was an error updating your profile. Try again.',
+            key: 'br',
+            life: 6000,
+          })
         }
       })
     }, 1000)

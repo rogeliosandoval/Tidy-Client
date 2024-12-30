@@ -10,7 +10,7 @@
           @if (avatarUrl) {
             <div class="avatar-container">
               <img class="avatar-preview" [src]="avatarUrl" alt="avatar image preview">
-              <i class="pi pi-trash" (click)="avatarUrl = null; "></i>
+              <i class="pi pi-trash" (click)="avatarUrl = null; this.profileForm.markAsDirty()"></i>
             </div>
           } @else {
             <div class="custom-id-input">
@@ -19,15 +19,15 @@
             </div>
           }
         } @else {
-          @if (authService.userAvatar() !== null) {
+          @if (authService.coreUserData().avatarUrl) {
             <div class="avatar-container">
-              <img class="avatar" [src]="authService.userAvatar()" alt="avatar">
-              <i class="pi pi-trash" (click)="showUploadAvatarButton.set(true)"></i>
+              <img class="avatar" [src]="authService.coreUserData().avatarUrl" alt="avatar">
+              <i class="pi pi-trash" (click)="showUploadAvatarButton.set(true); this.profileForm.markAsDirty()"></i>
             </div>
           } @else {
             <div class="avatar-container">
               <img class="avatar" src="assets/avatars/default-avatar.png" alt="avatar">
-              <i class="pi pi-trash" (click)="showUploadAvatarButton.set(true)"></i>
+              <i class="pi pi-trash" (click)="showUploadAvatarButton.set(true);"></i>
             </div>
           }
         }
@@ -57,7 +57,7 @@
         </div>
         <div class="button-container">
           <p-button label="Save Changes" type="submit" [disabled]="!profileForm.dirty || savingChanges()"></p-button>
-          <p-button label="Cancel" severity="secondary" (onClick)="cancelChanges()" [disabled]="!profileForm.dirty || savingChanges()"></p-button>
+          <p-button label="Cancel" severity="secondary" (onClick)="cancelProfileChanges()" [disabled]="!profileForm.dirty || savingChanges()"></p-button>
         </div>
       </form>
       @if (savingChanges()) {
@@ -69,7 +69,7 @@
           @if (businessAvatarUrl) {
             <div class="avatar-container">
               <img class="avatar-preview" [src]="businessAvatarUrl" alt="business avatar image preview">
-              <i class="pi pi-trash" (click)="businessAvatarUrl = null"></i>
+              <i class="pi pi-trash" (click)="businessAvatarUrl = null; this.businessForm.markAsDirty()"></i>
             </div>
           } @else {
             <div class="custom-id-input">
@@ -78,10 +78,10 @@
             </div>
           }
         } @else {
-          @if (authService.businessAvatar() !== null) {
+          @if (authService.coreBusinessData().avatarUrl) {
             <div class="avatar-container">
-              <img class="avatar" [src]="authService.businessAvatar()" alt="avatar">
-              <i class="pi pi-trash" (click)="showUploadBusinessAvatarButton.set(true)"></i>
+              <img class="avatar" [src]="authService.coreBusinessData().avatarUrl" alt="avatar">
+              <i class="pi pi-trash" (click)="showUploadBusinessAvatarButton.set(true); this.businessForm.markAsDirty()"></i>
             </div>
           } @else {
             <div class="avatar-container">
@@ -96,6 +96,7 @@
         </div>
         <div class="button-container">
           <p-button label="Save Changes" type="submit" [disabled]="!businessForm.dirty || savingChanges()"></p-button>
+          <p-button label="Cancel" severity="secondary" (onClick)="cancelBusinessChanges()" [disabled]="!businessForm.dirty || savingChanges()"></p-button>
         </div>
       </form>
     </div>

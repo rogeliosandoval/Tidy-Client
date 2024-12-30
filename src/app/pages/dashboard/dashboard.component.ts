@@ -18,8 +18,8 @@ import { ToastModule } from 'primeng/toast'
 import { MessageService } from 'primeng/api'
 import { take } from 'rxjs'
 import { v4 as uuidv4 } from 'uuid'
-import { AddBusinessDialog } from '../../dialogs/add-business/add-business.component'
-import { AddClientDialog } from '../../dialogs/add-client/add.client.component'
+import { StartupFormDialog } from '../../dialogs/startup-form/startup-form.component'
+import { ClientFormDialog } from '../../dialogs/client-form/client-form.component'
 import { Storage, getDownloadURL, ref, uploadBytesResumable } from '@angular/fire/storage'
 
 @Component({
@@ -38,8 +38,8 @@ import { Storage, getDownloadURL, ref, uploadBytesResumable } from '@angular/fir
     FormsModule,
     ReactiveFormsModule,
     ToastModule,
-    AddBusinessDialog,
-    AddClientDialog
+    StartupFormDialog,
+    ClientFormDialog
   ],
   providers: [
     MessageService
@@ -49,8 +49,8 @@ import { Storage, getDownloadURL, ref, uploadBytesResumable } from '@angular/fir
 })
 export class Dashboard implements OnInit {
   private storage = inject(Storage)
-  @ViewChild('addBusinessDialog') addBusinessDialog!: AddBusinessDialog
-  @ViewChild('addClientDialog') addClientDialog!: AddClientDialog
+  @ViewChild('addBusinessDialog') addBusinessDialog!: StartupFormDialog
+  @ViewChild('addClientDialog') addClientDialog!: ClientFormDialog
   private messageService = inject(MessageService)
   private firestore = inject(Firestore)
   private router = inject(Router)
@@ -61,8 +61,8 @@ export class Dashboard implements OnInit {
   public items: MenuItem[] | undefined
   public currentRoute = signal<string>('')
   public sidebarVisible = signal<boolean>(false)
-  public modalLoading = signal<boolean>(false)
-  public showStartupModal = signal<boolean>(false)
+  public dialogLoading = signal<boolean>(false)
+  public showStartupFormDialog = signal<boolean>(false)
 
   ngOnInit(): void {
     this.primengConfig.ripple = true
@@ -102,12 +102,12 @@ export class Dashboard implements OnInit {
   public async initializeApp(): Promise<void> {
     this.sharedService.loading.set(true)
     await this.authService.fetchCoreUserData()
-    await this.authService.fetchProfileAvatar()
-    await this.authService.fetchBusinessAvatar()
+    // await this.authService.fetchProfileAvatar()
+    // await this.authService.fetchBusinessAvatar()
     await this.authService.fetchCoreBusinessData()
     .then(() => {
-      if (!this.authService.coreUserData().business_id) {
-        this.showStartupModal.set(true)
+      if (!this.authService.coreUserData().businessId) {
+        this.showStartupFormDialog.set(true)
       }
     })
     .then(() => {
@@ -120,64 +120,92 @@ export class Dashboard implements OnInit {
   }
 
   public onModalClose(newState: boolean) {
-    this.showStartupModal.set(newState)
-    this.sharedService.showAddClientModal.set(newState)
+    this.showStartupFormDialog.set(newState)
+    this.sharedService.showClientFormDialog.set(newState)
     this.addBusinessDialog.resetForm()
     this.addClientDialog.resetForm()
   }
 
-  public async addClient(data: any) {
-    this.modalLoading.set(true)
-    const clientId = uuidv4()
-    const clientRef = doc(this.firestore, `businesses/${this.authService.coreUserData().business_id}/clients/${clientId}`)
-    let avatarUrl = ''
-  
-    if (data.file) {
-      const file = data.file
-      const filePath = `businesses/${this.authService.coreUserData().business_id}/clients/${clientId}/avatar`
-      const storageRef = ref(this.storage, filePath)
-      await uploadBytesResumable(storageRef, file)
-  
-      // Fetch the avatar URL after uploading
-      avatarUrl = await getDownloadURL(storageRef)
+  public clientFormTrigger(data: any): void {
+    if (data.type === 'add') {
+      this.addClient(data)
+    } else {
+      this.editClient()
     }
+  }
 
-    // Save the avatar URL in the client's Firestore document
-    await setDoc(clientRef, {
-      id: clientId,
-      name: data.formData.client_name,
-      email: data.formData.client_email,
-      phone: data.formData.client_phone,
-      createdAt: new Date().toISOString(),
-      avatarUrl: avatarUrl
-    }, { merge: true })
+  public async addClient(data: any) {
+    this.dialogLoading.set(true)
+    const clientId = uuidv4()
+    const clientRef = doc(this.firestore, `businesses/${this.authService.coreUserData().businessId}/clients/${clientId}`)
+    let avatarUrl = ''
+
+    try {
+      if (data.file) {
+        const file = data.file
+        const filePath = `businesses/${this.authService.coreUserData().businessId}/clients/${clientId}/avatar`
+        const storageRef = ref(this.storage, filePath)
+        await uploadBytesResumable(storageRef, file)
+    
+        // Fetch the avatar URL after uploading
+        avatarUrl = await getDownloadURL(storageRef)
+      }
   
-    await this.authService.fetchCoreBusinessData().catch(err => {
-      console.log(err)
+      // Save the avatar URL in the client's Firestore document
+      await setDoc(clientRef, {
+        id: clientId,
+        name: data.formData.client_name,
+        email: data.formData.client_email,
+        phone: data.formData.client_phone,
+        connectedBy: data.formData.connected_by,
+        note: data.formData.note,
+        createdAt: new Date().toISOString(),
+        avatarUrl: avatarUrl
+      }, { merge: true })
+    
+      await this.authService.fetchCoreBusinessData()
+  
       this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'There was an error adding a client.',
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Client has been added!',
         key: 'br',
         life: 6000,
       })
-    })
+      this.addClientDialog.resetForm()
+      this.dialogLoading.set(false)
+      this.sharedService.showClientFormDialog.set(false)
+      this.router.navigateByUrl('/dashboard/clients')
+      
+    } catch (err) {
+      setTimeout(() => {
+        this.dialogLoading.set(false)
+        console.log(err)
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'There was an error adding a client. Try again.',
+          key: 'br',
+          life: 6000,
+        })
+      }, 2000)
+    }
+  }
 
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Success',
-      detail: 'Client has been added!',
-      key: 'br',
-      life: 6000,
-    })
-    this.addClientDialog.resetForm()
-    this.modalLoading.set(false)
-    this.sharedService.showAddClientModal.set(false)
-    this.router.navigateByUrl('/dashboard/clients')
+  public editClient(): void {
+    console.log('EDIT CLIENT FUNCTION')
+  }
+
+  public startupFormTrigger(data: any): void {
+    if (data.type === 'add') {
+      this.saveBusinessName(data.businessName)
+    } else {
+      this.joinBusiness()
+    }
   }
 
   public async saveBusinessName(businessName: string | null) {
-    this.modalLoading.set(true)
+    this.dialogLoading.set(true)
     this.authService.user$
     .pipe(take(1))
     .subscribe({
@@ -202,11 +230,11 @@ export class Dashboard implements OnInit {
 
           await this.authService.fetchCoreBusinessData()
           .then(() => {
-            this.showStartupModal.set(false)
+            this.showStartupFormDialog.set(false)
           })
           .then(() => {
             this.addBusinessDialog.resetForm()
-            this.modalLoading.set(false)
+            this.dialogLoading.set(false)
             this.messageService.add({
               severity: 'success',
               summary: 'Success',
@@ -219,9 +247,13 @@ export class Dashboard implements OnInit {
       },
       error: (err: any) => {
         console.error(err)
-        this.modalLoading.set(false)
+        this.dialogLoading.set(false)
       },
     })
+  }
+
+  public joinBusiness(): void {
+    console.log('JOIN BUSINESS FUNCTION')
   }
 
   public signOff(): void {

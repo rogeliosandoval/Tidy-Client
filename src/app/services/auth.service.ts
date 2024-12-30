@@ -17,8 +17,6 @@ export class AuthService {
   currentUserSignal = signal<UserInterface | null | undefined>(undefined)
   coreUserData = signal<any>(undefined)
   coreBusinessData = signal<any>(undefined)
-  userAvatar = signal<string | null>('')
-  businessAvatar = signal<string | null>('')
   businessClientAvatars = signal<string[] | null>([])
 
   register(email: string, username: string, password: string): Observable<UserCredential> {
@@ -89,8 +87,8 @@ export class AuthService {
       if (userDocSnap.exists()) {
         const userData = userDocSnap.data()
   
-        if (userData['business_id']) {
-          const businessId = userData['business_id']
+        if (userData['businessId']) {
+          const businessId = userData['businessId']
           const businessRef = doc(this.firestore, `businesses/${businessId}`)
           const businessDocSnap = await getDoc(businessRef)
   
@@ -131,34 +129,34 @@ export class AuthService {
     } else {
       this.coreBusinessData.set(null)
     }
-  }  
-
-  async fetchProfileAvatar(): Promise<void> {
-    const filePath = `users/${this.coreUserData()?.uid}/avatar`
-    const storageRef = ref(this.storage, filePath)
+  }
+  
+  async deleteProfileAvatar(): Promise<void> {
+    const avatarPath = `users/${this.coreUserData()?.uid}/avatar`
+    const avatarRef = ref(this.storage, avatarPath)
 
     try {
-      const url = await getDownloadURL(storageRef)
-      this.userAvatar.set(url)
-    } catch {
-      this.userAvatar.set(null)
+      await deleteObject(avatarRef)
+      await this.fetchCoreUserData()
+    } catch (error) {
+      console.warn('Avatar not found or already deleted:', error)
     }
   }
 
-  async fetchBusinessAvatar(): Promise<void> {
-    const filePath = `businesses/${this.coreUserData()?.business_id}/avatar`
-    const storageRef = ref(this.storage, filePath)
+  async deleteBusinessAvatar(): Promise<void> {
+    const avatarPath = `businesses/${this.coreUserData()?.businessId}/avatar`
+    const avatarRef = ref(this.storage, avatarPath)
 
     try {
-      const url = await getDownloadURL(storageRef)
-      this.businessAvatar.set(url)
-    } catch {
-      this.businessAvatar.set(null)
+      await deleteObject(avatarRef)
+      await this.fetchCoreBusinessData()
+    } catch (error) {
+      console.warn('Avatar not found or already deleted:', error)
     }
   }
 
   async fetchBusinessClientAvatars(): Promise<void> {
-    const businessId = this.coreUserData()?.business_id
+    const businessId = this.coreUserData()?.businessId
     if (!businessId) {
       this.businessClientAvatars.set(null)
       return
@@ -195,7 +193,7 @@ export class AuthService {
 
   public async deleteClient(clientId: string): Promise<void> {
     try {
-      const businessId = this.coreUserData()?.business_id
+      const businessId = this.coreUserData()?.businessId
   
       // Path to the client's Firestore document
       const clientDocRef = doc(this.firestore, `businesses/${businessId}/clients/${clientId}`)

@@ -1,8 +1,8 @@
 <div class="route-container">
   <div class="profile-container" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()">
     <div class="main">
-      @if (authService.userAvatar() !== null) {
-        <img [src]="authService.userAvatar()" alt="avatar">
+      @if (authService.coreUserData().avatarUrl) {
+        <img [src]="authService.coreUserData().avatarUrl" alt="avatar">
       } @else {
         <img src="assets/avatars/default-avatar.png" alt="avatar">
       }

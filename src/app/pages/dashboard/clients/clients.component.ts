@@ -9,6 +9,8 @@ import { TooltipModule } from 'primeng/tooltip'
 import { ButtonModule } from 'primeng/button'
 import { Storage } from '@angular/fire/storage'
 import { MessageService } from 'primeng/api'
+import { UnformatPhonePipe } from '../../../pipes/unformat-phone.pipe'
+import { ProgressSpinnerModule } from 'primeng/progressspinner'
 
 @Component({
   selector: 'tc-clients',
@@ -18,7 +20,9 @@ import { MessageService } from 'primeng/api'
     ConfirmDialog,
     TruncatePipe,
     TooltipModule,
-    ButtonModule
+    ButtonModule,
+    UnformatPhonePipe,
+    ProgressSpinnerModule
   ],
   templateUrl: './clients.component.html',
   styleUrl: './clients.component.scss'
@@ -28,15 +32,19 @@ export class Clients implements OnInit {
   private storage = inject(Storage)
   public sharedService = inject(SharedService)
   public authService = inject(AuthService)
+  public loadingClients = signal<boolean>(true)
   public showConfirmModal = signal<boolean>(false)
   public clientOptions: MenuItem[] | undefined
   public modalMessage = signal<string>('')
   public modalType = signal<string>('')
   public modalClientName = signal<any>(null)
   public modalClientId = signal<string>('')
-  public modalLoading = signal<boolean>(false)
+  public dialogLoading = signal<boolean>(false)
 
   ngOnInit(): void {
+    setTimeout(() => {
+      this.loadingClients.set(false)
+    }, 700)
     this.clientOptions =  [
       {
         label: 'View Details',
@@ -44,7 +52,11 @@ export class Clients implements OnInit {
       },
       {
         label: 'Edit',
-        icon: 'pi pi-pencil'
+        icon: 'pi pi-pencil',
+        command: () => {
+          this.sharedService.clientFormType.set('edit')
+          this.sharedService.showClientFormDialog.set(true)
+        }
       },
       {
         label: 'Create Note',
@@ -75,25 +87,28 @@ export class Clients implements OnInit {
   }
 
   public async deleteClient(): Promise<void> {
-    this.modalLoading.set(true)
-    await this.authService.deleteClient(this.modalClientId()).catch(err => {
-      console.log(err)
+    this.dialogLoading.set(true)
+    try {
+      await this.authService.deleteClient(this.modalClientId())
       this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'There was an error adding a client.',
+        severity: 'success',
+        summary: 'Success',
+        detail: `Client (${this.modalClientName()}) has been deleted.`,
         key: 'br',
         life: 6000,
       })
-    })
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Success',
-      detail: `Client (${this.modalClientName()}) has been deleted.`,
-      key: 'br',
-      life: 6000,
-    })
-    this.modalLoading.set(false)
-    this.showConfirmModal.set(false)
+      this.dialogLoading.set(false)
+      this.showConfirmModal.set(false)
+    } catch (err) {
+      console.log(err)
+      this.dialogLoading.set(false)
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'There was an error deleting a client.',
+        key: 'br',
+        life: 6000,
+      })
+    }
   }
 }

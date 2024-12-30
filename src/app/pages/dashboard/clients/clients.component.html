@@ -1,15 +1,18 @@
 <div class="route-container">
   @if (authService.coreBusinessData()?.clients.length <= 0) {
-    <div class="no-clients">
+    <div class="no-clients" [class.disabled]="sharedService.loading()">
       <img src="assets/working.svg" alt="business owner working" [draggable]="false">
       <span>You currently have no clients. <br class="phone-break">Start adding some!</span>
-      <p-button label="Add Client +" (onClick)="sharedService.showAddClientModal.set(true)"></p-button>
+      <p-button label="Add Client +" (onClick)="sharedService.clientFormType.set('add') ;sharedService.showClientFormDialog.set(true)"></p-button>
     </div>
   } @else {
-    <div class="clients" [class.disabled]="sharedService.loading()">
+    <div class="clients" [class.disabled]="sharedService.loading() || loadingClients()">
       @for (client of authService.coreBusinessData()?.clients; track client.id) {
         <div class="client" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'">
           <div class="client-header">
+            @if(loadingClients()) {
+              <p-progressSpinner strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '50px', height: '50px' }" />
+            }
             <img class="client-logo" [src]="client.avatarUrl || 'assets/avatars/default-business-avatar.png'" alt="client logo" [draggable]="false">
             <div class="menu">
               <i class="pi pi-ellipsis-h" (click)="menu.toggle($event); modalClientName.set(client.name); modalClientId.set(client.id)"></i>
@@ -23,7 +26,9 @@
               @if (client.email.length >= 25) {
                 <span pTooltip="{{client.email}}" tooltipPosition="bottom" [autoHide]="false">{{ client.email | truncate: 25 }}</span>
               } @else {
-                {{ client.email }}
+                <a href="mailto:{{client.email}}" style="text-decoration: none; color: inherit;">
+                  {{ client.email }}
+                </a>
               }
             } @else {
               <div class="add-link" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">Add email</div>
@@ -32,11 +37,19 @@
           <div class="client-phone">
             <i class="pi pi-phone"></i>
             @if (client.phone) {
-              {{ client.phone }}
+              <a href="tel:+1{{client.phone | unformatPhone}}" style="text-decoration: none; color: inherit;">
+                {{ client.phone }}
+              </a>
             } @else {
               <div class="add-link" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">Add phone</div>
             }
           </div>
+          @if(client.connectedBy) {
+            <div class="client-connect">
+              <i class="pi pi-sitemap"></i>
+              {{ client.connectedBy }}
+            </div>
+          }
           <div class="client-contacts">
             <i class="pi pi-address-book"></i>
             @if (client.contacts) {
@@ -49,5 +62,5 @@
       }
     </div>
   }
-  <tcd-confirm [showConfirmModal]="showConfirmModal()" (onSubmit)="deleteClient()" (onClose)="onModalClose($event)" [modalLoading]="modalLoading()" [message]="modalMessage()" [type]="modalType()"/>
+  <tcd-confirm [showConfirmModal]="showConfirmModal()" (onSubmit)="deleteClient()" (onClose)="onModalClose($event)" [dialogLoading]="dialogLoading()" [message]="modalMessage()" [type]="modalType()"/>
 </div>

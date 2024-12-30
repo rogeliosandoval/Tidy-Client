@@ -11,7 +11,6 @@ import { FormsModule, ReactiveFormsModule, FormControl, FormGroup, Validators } 
 import { ProgressSpinnerModule } from 'primeng/progressspinner'
 import { take } from 'rxjs'
 import { doc, Firestore, setDoc } from '@angular/fire/firestore'
-import { ToastModule } from 'primeng/toast'
 import { MessageService } from 'primeng/api'
 
 @Component({
@@ -132,7 +131,7 @@ export class AccountSettings implements OnInit {
                 summary: 'Success',
                 detail: 'Profile has been updated!',
                 key: 'br',
-                life: 4000,
+                life: 6000,
               })
             })
             .then(() => {
@@ -149,7 +148,7 @@ export class AccountSettings implements OnInit {
             summary: 'Error',
             detail: 'There was an error updating your profile.',
             key: 'br',
-            life: 4000,
+            life: 6000,
           })
         }
       })
@@ -186,7 +185,7 @@ export class AccountSettings implements OnInit {
                 summary: 'Success',
                 detail: 'Business profile has been updated!',
                 key: 'br',
-                life: 4000,
+                life: 6000,
               })
             })
             .then(() => {

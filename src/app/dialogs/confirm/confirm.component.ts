@@ -18,8 +18,10 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner'
 export class ConfirmDialog {
   @Input() showConfirmModal = false
   @Input() message: string = ''
+  @Input() type: string = ''
   @Output() onClose = new EventEmitter<boolean>()
   @Output() onSubmit = new EventEmitter<any>()
+  public modalLoading = input<boolean>()
 
   public closeModal() {
     this.showConfirmModal = false

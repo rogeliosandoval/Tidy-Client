@@ -1,7 +1,11 @@
 <p-dialog header="Confirmation" [modal]="true" (onHide)="closeModal()" [(visible)]="showConfirmModal" [style]="{ width: '23rem' }">
   <span class="p-text-secondary block mb-5">{{ message }}</span>
   <div class="dialogactions">
-    <p-button label="Cancel" severity="secondary"/>
-    <p-button label="Confirm" severity="danger"/>
+    <p-button label="Cancel" (onClick)="closeModal()" severity="secondary" [disabled]="modalLoading()"/>
+    @if (type === 'delete') {
+      <p-button label="Delete" icon="pi pi-trash" (onClick)="submitModal()" severity="danger" [loading]="modalLoading()"/>
+    } @else if (type === 'confirm') {
+      <p-button label="Confirm" icon="pi pi-check" (onClick)="submitModal()" severity="success" [loading]="modalLoading()"/>
+    }
   </div>
 </p-dialog>

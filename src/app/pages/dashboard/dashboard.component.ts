@@ -20,7 +20,7 @@ import { take } from 'rxjs'
 import { v4 as uuidv4 } from 'uuid'
 import { AddBusinessDialog } from '../../dialogs/add-business/add-business.component'
 import { AddClientDialog } from '../../dialogs/add-client/add.client.component'
-import { Storage, ref, uploadBytesResumable } from '@angular/fire/storage'
+import { Storage, getDownloadURL, ref, uploadBytesResumable } from '@angular/fire/storage'
 
 @Component({
   selector: 'tc-dashboard',
@@ -67,7 +67,6 @@ export class Dashboard implements OnInit {
   ngOnInit(): void {
     this.primengConfig.ripple = true
     this.initializeApp()
-
     this.items = [
       {
         label: 'Profile',
@@ -130,25 +129,47 @@ export class Dashboard implements OnInit {
   public async addClient(data: any) {
     this.modalLoading.set(true)
     const clientId = uuidv4()
-    const clientRef = doc(this.firestore, `businesses/${this.authService.coreBusinessData().id}/clients/${clientId}`)
-
+    const clientRef = doc(this.firestore, `businesses/${this.authService.coreUserData().business_id}/clients/${clientId}`)
+    let avatarUrl = ''
+  
     if (data.file) {
       const file = data.file
       const filePath = `businesses/${this.authService.coreUserData().business_id}/clients/${clientId}/avatar`
       const storageRef = ref(this.storage, filePath)
       await uploadBytesResumable(storageRef, file)
+  
+      // Fetch the avatar URL after uploading
+      avatarUrl = await getDownloadURL(storageRef)
     }
 
+    // Save the avatar URL in the client's Firestore document
     await setDoc(clientRef, {
       id: clientId,
       name: data.formData.client_name,
       email: data.formData.client_email,
       phone: data.formData.client_phone,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      avatarUrl: avatarUrl
     }, { merge: true })
+  
+    await this.authService.fetchCoreBusinessData().catch(err => {
+      console.log(err)
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'There was an error adding a client.',
+        key: 'br',
+        life: 6000,
+      })
+    })
 
-    await this.authService.fetchCoreBusinessData()
-
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: 'Client has been added!',
+      key: 'br',
+      life: 6000,
+    })
     this.addClientDialog.resetForm()
     this.modalLoading.set(false)
     this.sharedService.showAddClientModal.set(false)
@@ -191,7 +212,7 @@ export class Dashboard implements OnInit {
               summary: 'Success',
               detail: 'Business name has been added!',
               key: 'br',
-              life: 4000,
+              life: 6000,
             })
           })
         }

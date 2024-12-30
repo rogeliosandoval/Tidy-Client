@@ -6,13 +6,13 @@
       <p-button label="Add Client +" (onClick)="sharedService.showAddClientModal.set(true)"></p-button>
     </div>
   } @else {
-    <div class="clients">
+    <div class="clients" [class.disabled]="sharedService.loading()">
       @for (client of authService.coreBusinessData()?.clients; track client.id) {
         <div class="client" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'">
           <div class="client-header">
-            <img class="client-logo" src="assets/avatars/default-business-avatar.png" alt="client logo" [draggable]="false">
+            <img class="client-logo" [src]="client.avatarUrl || 'assets/avatars/default-business-avatar.png'" alt="client logo" [draggable]="false">
             <div class="menu">
-              <i class="pi pi-ellipsis-h" (click)="menu.toggle($event); modalClientName.set(client.name)"></i>
+              <i class="pi pi-ellipsis-h" (click)="menu.toggle($event); modalClientName.set(client.name); modalClientId.set(client.id)"></i>
               <p-menu #menu [model]="clientOptions" [popup]="true"/>
             </div>
           </div>
@@ -49,5 +49,5 @@
       }
     </div>
   }
-  <tcd-confirm [showConfirmModal]="showConfirmModal()" (onClose)="onModalClose($event)" [message]="modalMessage()"/>
+  <tcd-confirm [showConfirmModal]="showConfirmModal()" (onSubmit)="deleteClient()" (onClose)="onModalClose($event)" [modalLoading]="modalLoading()" [message]="modalMessage()" [type]="modalType()"/>
 </div>

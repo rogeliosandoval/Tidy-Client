@@ -2,8 +2,8 @@ import { Injectable, inject, signal } from '@angular/core'
 import { Auth, UserCredential, browserLocalPersistence, browserSessionPersistence, createUserWithEmailAndPassword, setPersistence, signInWithEmailAndPassword, signOut, updateProfile, user } from '@angular/fire/auth'
 import { Observable, from } from 'rxjs'
 import { UserInterface } from '../interfaces/user.interface'
-import { collection, doc, Firestore, getDoc, getDocs } from '@angular/fire/firestore'
-import { Storage, getDownloadURL, ref } from '@angular/fire/storage'
+import { collection, deleteDoc, doc, Firestore, getDoc, getDocs } from '@angular/fire/firestore'
+import { Storage, deleteObject, getDownloadURL, listAll, ref } from '@angular/fire/storage'
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +19,7 @@ export class AuthService {
   coreBusinessData = signal<any>(undefined)
   userAvatar = signal<string | null>('')
   businessAvatar = signal<string | null>('')
+  businessClientAvatars = signal<string[] | null>([])
 
   register(email: string, username: string, password: string): Observable<UserCredential> {
     const promise = this.firebaseAuth.setPersistence(browserSessionPersistence)
@@ -110,6 +111,7 @@ export class AuthService {
                 ...businessData,
                 clients, // Include clients in the business data
               })
+              this.fetchBusinessClientAvatars()
             } catch (error) {
               console.error('Error fetching clients data:', error)
               this.coreBusinessData.set({
@@ -152,6 +154,70 @@ export class AuthService {
       this.businessAvatar.set(url)
     } catch {
       this.businessAvatar.set(null)
+    }
+  }
+
+  async fetchBusinessClientAvatars(): Promise<void> {
+    const businessId = this.coreUserData()?.business_id
+    if (!businessId) {
+      this.businessClientAvatars.set(null)
+      return
+    }
+  
+    const folderPath = `businesses/${businessId}/clients/`
+    const folderRef = ref(this.storage, folderPath)
+  
+    try {
+      // List all folders (prefixes) in the clients folder
+      const listResult = await listAll(folderRef)
+      const avatarUrls: string[] = []
+  
+      // Fetch download URLs for each folder's 'avatar' file
+      for (const prefixRef of listResult.prefixes) {
+        const avatarPath = `${prefixRef.fullPath}/avatar` // Append 'avatar' to the folder path
+        const avatarRef = ref(this.storage, avatarPath)
+  
+        try {
+          const url = await getDownloadURL(avatarRef)
+          avatarUrls.push(url)
+        } catch (error) {
+          console.error(`Failed to get URL for avatar in folder ${prefixRef.fullPath}:`, error)
+        }
+      }
+  
+      // Set the signal with the retrieved URLs
+      this.businessClientAvatars.set(avatarUrls)
+    } catch (error) {
+      console.error('Failed to fetch client avatars:', error)
+      this.businessClientAvatars.set(null)
+    }
+  }
+
+  public async deleteClient(clientId: string): Promise<void> {
+    try {
+      const businessId = this.coreUserData()?.business_id
+  
+      // Path to the client's Firestore document
+      const clientDocRef = doc(this.firestore, `businesses/${businessId}/clients/${clientId}`)
+  
+      // Path to the client's avatar in Firebase Storage
+      const avatarPath = `businesses/${businessId}/clients/${clientId}/avatar`
+      const avatarRef = ref(this.storage, avatarPath)
+  
+      // Delete the avatar if it exists
+      try {
+        await deleteObject(avatarRef)
+      } catch (error) {
+        console.warn('Avatar not found or already deleted:', error)
+      }
+  
+      // Delete the client document from Firestore
+      await deleteDoc(clientDocRef)
+  
+      // Fetch updated business data to refresh the client list
+      await this.fetchCoreBusinessData()
+    } catch (error) {
+      console.error('Error deleting client:', error)
     }
   }
 }

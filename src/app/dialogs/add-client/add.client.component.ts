@@ -79,6 +79,8 @@ export class AddClientDialog {
 
   public resetForm(): void {
     this.clientForm.reset()
+    this.avatarUrl = null
+    this.showUploadAvatarButton.set(false)
   }
 
   public closeModal() {

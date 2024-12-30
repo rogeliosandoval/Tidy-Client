@@ -36,7 +36,7 @@ export class AddClientDialog {
   public sharedService = inject(SharedService)
   public modalLoading = input<boolean>()
   public showUploadAvatarButton = signal<boolean>(false)
-  public avatar: File | any
+  public avatar: File | any = null
   public avatarUrl: any
   public connections = signal<string[]>([
     'Facebook',
@@ -79,6 +79,7 @@ export class AddClientDialog {
 
   public resetForm(): void {
     this.clientForm.reset()
+    this.avatar = null
     this.avatarUrl = null
     this.showUploadAvatarButton.set(false)
   }

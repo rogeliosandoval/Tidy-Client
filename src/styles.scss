@@ -14,6 +14,10 @@ body {
   background-color: #f9f9f9;
 }
 
+p-progressSpinner {
+  z-index: 5;
+}
+
 p-button .p-button {
   transition: none;
   min-width: 110px;
@@ -40,6 +44,12 @@ textarea,
 
 .p-dialog .p-dialog-header .p-dialog-header-icon {
   border-radius: 20%;
+}
+
+.startup-form {
+  .p-dialog .p-dialog-header-icons {
+    display: none;
+  }
 }
 
 .top-nav-search {

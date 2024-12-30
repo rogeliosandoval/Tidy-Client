@@ -21,7 +21,7 @@ export class ConfirmDialog {
   @Input() type: string = ''
   @Output() onClose = new EventEmitter<boolean>()
   @Output() onSubmit = new EventEmitter<any>()
-  public modalLoading = input<boolean>()
+  public dialogLoading = input<boolean>()
 
   public closeModal() {
     this.showConfirmModal = false

@@ -20,6 +20,11 @@
       <input type="tel" pInputText variant="filled" placeholder="Phone" formControlName="client_phone" phoneNumber/>
     </div>
 
+    <div class="input-group" [class.disabled]="dialogLoading()">
+      <label for="client_location">Client Location</label>
+      <input type="text" pInputText variant="filled" placeholder="Location" formControlName="client_location"/>
+    </div>
+
     @if (showUploadAvatarButton()) {
       @if (avatarUrl) {
         <div class="avatar-container" [class.disabled]="dialogLoading()">
@@ -63,7 +68,7 @@
       <label for="note">Note</label>
       <textarea rows="3" cols="30" pInputTextarea variant="filled" formControlName="note"  placeholder="Add a note or a description for this client" style="resize: none;"></textarea>
     </div>
-    <p-button label="{{ type === 'add' ? 'Add Client' : 'Edit Client' }}" type="submit" [disabled]="dialogLoading() || clientForm.invalid"></p-button>
+    <p-button label="{{ type === 'add' ? 'Add Client' : 'Update Client' }}" type="submit" [disabled]="dialogLoading() || clientForm.invalid"></p-button>
     @if (dialogLoading()) {
       <p-progressSpinner ariaLabel="loading" strokeWidth="3"/>
     }

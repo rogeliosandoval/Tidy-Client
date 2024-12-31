@@ -63,6 +63,7 @@ export class ClientFormDialog {
     connected_by: new FormControl(''),
     client_email: new FormControl(''),
     client_phone: new FormControl(''),
+    client_location: new FormControl(''),
     note: new FormControl('')
   })
 

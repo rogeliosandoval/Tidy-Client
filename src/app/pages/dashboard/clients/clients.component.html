@@ -20,6 +20,20 @@
             </div>
           </div>
           <div class="client-name">{{ client?.name }}</div>
+          <div class="client-location">
+            <i class="pi pi-map-marker"></i>
+            @if (client.location) {
+              @if (client.location.length >= 25) {
+                <span pTooltip="{{client.location}}" tooltipPosition="bottom" [autoHide]="false">{{ client.location | truncate: 25 }}</span>
+              } @else {
+                <a href="mailto:{{client.location}}" style="text-decoration: none; color: inherit;">
+                  {{ client.location }}
+                </a>
+              }
+            } @else {
+              <div class="add-link" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">Add location</div>
+            }
+          </div>
           <div class="client-email">
             <i class="pi pi-envelope"></i>
             @if (client.email) {

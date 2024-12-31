@@ -102,8 +102,6 @@ export class Dashboard implements OnInit {
   public async initializeApp(): Promise<void> {
     this.sharedService.loading.set(true)
     await this.authService.fetchCoreUserData()
-    // await this.authService.fetchProfileAvatar()
-    // await this.authService.fetchBusinessAvatar()
     await this.authService.fetchCoreBusinessData()
     .then(() => {
       if (!this.authService.coreUserData().businessId) {
@@ -157,6 +155,7 @@ export class Dashboard implements OnInit {
         name: data.formData.client_name,
         email: data.formData.client_email,
         phone: data.formData.client_phone,
+        location: data.formData.client_location,
         connectedBy: data.formData.connected_by,
         note: data.formData.note,
         createdAt: new Date().toISOString(),

@@ -9,4 +9,5 @@ export class SharedService {
   loading = signal<boolean>(false)
   showClientFormDialog = signal<boolean>(false)
   clientFormType = signal<string>('')
+  dialogClient = signal<any>(null)
 }

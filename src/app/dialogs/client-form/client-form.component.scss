@@ -2,7 +2,14 @@
 $breakpoints: variables.$breakpoints;
 @import 'include-media';
 
-p-progressSpinner {
+.first-load {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.second-load {
   position: absolute;
   top: 70%;
   left: 50%;

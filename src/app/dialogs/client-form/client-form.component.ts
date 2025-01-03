@@ -9,6 +9,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea'
 import { SharedService } from '../../services/shared.service'
 import { DropdownModule } from 'primeng/dropdown'
 import { PhoneNumberDirective } from '../../directives/phone-number.directive'
+import { AuthService } from '../../services/auth.service'
 
 @Component({
   selector: 'tcd-client-form',
@@ -34,8 +35,10 @@ export class ClientFormDialog {
   @Input() showClientFormDialog: boolean = false
   @Output() onClose = new EventEmitter<boolean>()
   @Output() onSubmit = new EventEmitter<any>()
+  private authService = inject(AuthService)
   public sharedService = inject(SharedService)
   public dialogLoading = input<boolean>()
+  public fillingForm = signal<boolean>(true)
   public showUploadAvatarButton = signal<boolean>(false)
   public avatar: File | any = null
   public avatarUrl: any
@@ -48,6 +51,7 @@ export class ClientFormDialog {
     'Craigslist Ad',
     'Referral',
     'Friend',
+    'Friend of a Friend',
     'Family Friend',
     'Flyer Ad',
     'Organic SEO',
@@ -57,7 +61,6 @@ export class ClientFormDialog {
     'Networking Event',
     'Other'
   ])
-  // public selectedConnection = signal<string>('')
   public clientForm = new FormGroup({
     client_name: new FormControl('', Validators.required),
     connected_by: new FormControl(''),
@@ -66,6 +69,27 @@ export class ClientFormDialog {
     client_location: new FormControl(''),
     note: new FormControl('')
   })
+
+  public aboutToEdit(): void {
+    console.log(this.sharedService.dialogClient())
+  }
+
+  public editCheck(): void {
+    if (this.type === 'edit') {
+      const formData = this.sharedService.dialogClient()
+      this.clientForm.get('client_name')?.setValue(formData.name)
+      this.clientForm.get('connected_by')?.setValue(formData.connectedBy)
+      this.clientForm.get('client_email')?.setValue(formData.email)
+      this.clientForm.get('client_phone')?.setValue(formData.phone)
+      this.clientForm.get('client_location')?.setValue(formData.location)
+      this.clientForm.get('note')?.setValue(formData.note)
+      setTimeout(() => {
+        this.fillingForm.set(false)
+      }, 500)
+    } else {
+      this.fillingForm.set(false)
+    }
+  }
 
   public avatarUpload(event: any): void {
     const file: File = event.target.files[0]
@@ -87,11 +111,12 @@ export class ClientFormDialog {
   }
 
   public closeModal() {
+    this.fillingForm.set(true)
     this.showClientFormDialog = false
     this.onClose.emit(false)
   }
 
-  public submitModal(type: string): void {
+  public submitDialog(type: string): void {
     const data = {
       formData: this.clientForm.value,
       file: this.avatar,

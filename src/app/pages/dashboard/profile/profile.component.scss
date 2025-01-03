@@ -37,6 +37,7 @@ $breakpoints: variables.$breakpoints;
   img {
     max-width: 200px;
     border-radius: 10px;
+    object-fit: contain;
 
     @include media('<phone') {
       max-width: 140px;

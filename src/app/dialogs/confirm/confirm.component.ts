@@ -28,7 +28,7 @@ export class ConfirmDialog {
     this.onClose.emit(false)
   }
 
-  public submitModal(): void {
+  public submitDialog(): void {
     this.onSubmit.emit(true)
   }
 }

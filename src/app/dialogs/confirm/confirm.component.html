@@ -3,9 +3,9 @@
   <div class="dialogactions">
     <p-button label="Cancel" (onClick)="closeModal()" severity="secondary" [disabled]="dialogLoading()"/>
     @if (type === 'delete') {
-      <p-button label="Delete" icon="pi pi-trash" (onClick)="submitModal()" severity="danger" [loading]="dialogLoading()"/>
+      <p-button label="Delete" icon="pi pi-trash" (onClick)="submitDialog()" severity="danger" [loading]="dialogLoading()"/>
     } @else if (type === 'confirm') {
-      <p-button label="Confirm" icon="pi pi-check" (onClick)="submitModal()" severity="success" [loading]="dialogLoading()"/>
+      <p-button label="Confirm" icon="pi pi-check" (onClick)="submitDialog()" severity="success" [loading]="dialogLoading()"/>
     }
   </div>
 </p-dialog>

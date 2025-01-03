@@ -40,7 +40,7 @@ export class StartupFormDialog {
     this.onClose.emit(false)
   }
 
-  public submitModal(type: string): void {
+  public submitDialog(type: string): void {
     const businessName = this.startupForm.get('business_name')?.value
     const data = {
       businessName,

@@ -50,7 +50,6 @@ export class Signup implements OnInit {
   public register(): void {
     this.sharedService.loading.set(true)
     const formData = this.registerForm.value
-    // Creates a collection under 'users'
 
     setTimeout(() => {
       lastValueFrom(this.authService.register(formData.email!, formData.name!, formData.password!))

@@ -2,34 +2,20 @@
   Loading...
 } @else {
   <div class="route-container">
-    <div class="title">Account Settings</div>
+    <div class="title" [class.disabled]="sharedService.loading()">Account Settings</div>
     <div class="form-container" [class.form-container-dark]="sharedService.darkMode()" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'">
-      <div class="form-label">Profile Info</div>
+      <div class="form-label" [class.disabled]="sharedService.loading() || savingChanges()">Profile Info</div>
       <form [formGroup]="profileForm" [class.disabled]="sharedService.loading() || savingChanges()" (ngSubmit)="saveProfileChanges()">
-        @if (showUploadAvatarButton()) {
-          @if (avatarUrl) {
-            <div class="avatar-container">
-              <img class="avatar-preview" [src]="avatarUrl" alt="avatar image preview">
-              <i class="pi pi-trash" (click)="avatarUrl = null; this.profileForm.markAsDirty()"></i>
-            </div>
-          } @else {
-            <div class="custom-id-input">
-              <input type="file" id="avatar" accept="image/*" (change)="avatarUpload($event)">
-              <label style="font-size: 0.9rem;" for="avatar" [style.border]="sharedService.darkMode() ? '2px dashed white' : '2px dashed black'"><i class="pi pi-upload"></i>Upload Avatar</label>
-            </div>
-          }
+        @if (authService.coreUserData().avatarUrl) {
+          <div class="avatar-container">
+            <img class="avatar" [src]="authService.coreUserData().avatarUrl" alt="avatar">
+            <i class="pi pi-pencil" (click)="triggerAvatarUpload('profile')"></i>
+          </div>
         } @else {
-          @if (authService.coreUserData().avatarUrl) {
-            <div class="avatar-container">
-              <img class="avatar" [src]="authService.coreUserData().avatarUrl" alt="avatar">
-              <i class="pi pi-trash" (click)="showUploadAvatarButton.set(true); this.profileForm.markAsDirty()"></i>
-            </div>
-          } @else {
-            <div class="avatar-container">
-              <img class="avatar" src="assets/avatars/default-avatar.png" alt="avatar">
-              <i class="pi pi-trash" (click)="showUploadAvatarButton.set(true);"></i>
-            </div>
-          }
+          <div class="avatar-container">
+            <img class="avatar" src="assets/avatars/default-avatar.png" alt="avatar">
+            <i class="pi pi-pencil" (click)="triggerAvatarUpload('profile')"></i>
+          </div>
         }
         <div class="input-container" [class.disabled]="sharedService.loading()">
           <label for="name">Your Name:</label>
@@ -63,32 +49,18 @@
       @if (savingChanges()) {
         <p-progressSpinner ariaLabel="loading" strokeWidth="3"/>
       }
-      <div class="form-label">Business Info</div>
+      <div class="form-label" [class.disabled]="sharedService.loading() || savingChanges()">Business Info</div>
       <form [formGroup]="businessForm" [class.disabled]="sharedService.loading() || savingChanges()" (ngSubmit)="saveBusinessChanges()">
-        @if (showUploadBusinessAvatarButton()) {
-          @if (businessAvatarUrl) {
-            <div class="avatar-container">
-              <img class="avatar-preview" [src]="businessAvatarUrl" alt="business avatar image preview">
-              <i class="pi pi-trash" (click)="businessAvatarUrl = null; this.businessForm.markAsDirty()"></i>
-            </div>
-          } @else {
-            <div class="custom-id-input">
-              <input type="file" id="business_avatar" accept="image/*" (change)="businessAvatarUpload($event)">
-              <label style="font-size: 0.9rem;" for="business_avatar" [style.border]="sharedService.darkMode() ? '2px dashed white' : '2px dashed black'"><i class="pi pi-upload"></i>Upload Business Logo</label>
-            </div>
-          }
+        @if (authService.coreBusinessData().avatarUrl) {
+          <div class="avatar-container">
+            <img class="avatar" [src]="authService.coreBusinessData().avatarUrl" alt="avatar">
+            <i class="pi pi-pencil" (click)="triggerAvatarUpload('business')"></i>
+          </div>
         } @else {
-          @if (authService.coreBusinessData().avatarUrl) {
-            <div class="avatar-container">
-              <img class="avatar" [src]="authService.coreBusinessData().avatarUrl" alt="avatar">
-              <i class="pi pi-trash" (click)="showUploadBusinessAvatarButton.set(true); this.businessForm.markAsDirty()"></i>
-            </div>
-          } @else {
-            <div class="avatar-container">
-              <img class="avatar" src="assets/avatars/default-business-avatar.png" alt="avatar">
-              <i class="pi pi-trash" (click)="showUploadBusinessAvatarButton.set(true)"></i>
-            </div>
-          }
+          <div class="avatar-container">
+            <img class="avatar" src="assets/avatars/default-business-avatar.png" alt="avatar">
+            <i class="pi pi-pencil" (click)="triggerAvatarUpload('business')"></i>
+          </div>
         }
         <div class="input-container" [class.disabled]="sharedService.loading()">
           <label for="name">Business Name:</label>
@@ -100,5 +72,6 @@
         </div>
       </form>
     </div>
+    <tcd-avatar-upload #avatarUploadDialog [showUploadAvatarDialog]="this.sharedService.showAvatarUploadDialog()" (onSubmit)="saveAvatar($event)" [dialogLoading]="dialogLoading()" [type]="uploadAvatarType()"/>
   </div>
 }

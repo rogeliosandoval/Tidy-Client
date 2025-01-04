@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core'
+import { Component, OnInit, ViewChild, inject, signal } from '@angular/core'
 import { InputTextModule } from 'primeng/inputtext'
 import { ButtonModule } from 'primeng/button'
 import { PrimeNGConfig } from 'primeng/api'
@@ -12,6 +12,8 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner'
 import { take } from 'rxjs'
 import { doc, Firestore, setDoc } from '@angular/fire/firestore'
 import { MessageService } from 'primeng/api'
+import { DialogModule } from 'primeng/dialog'
+import { AvatarUploadDialog } from '../../../dialogs/avatar-upload/avatar-upload.component'
 
 @Component({
   selector: 'app-account-settings',
@@ -23,13 +25,16 @@ import { MessageService } from 'primeng/api'
     InputTextareaModule,
     FormsModule,
     ReactiveFormsModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    DialogModule,
+    AvatarUploadDialog
   ],
   templateUrl: './account-settings.component.html',
   styleUrl: './account-settings.component.scss'
 })
 
 export class AccountSettings implements OnInit {
+  @ViewChild('avatarUploadDialog') avatarUploadDialog!: AvatarUploadDialog
   private messageService = inject(MessageService)
   private firestore = inject(Firestore)
   private storage = inject(Storage)
@@ -37,12 +42,8 @@ export class AccountSettings implements OnInit {
   public sharedService = inject(SharedService)
   public authService = inject(AuthService)
   public savingChanges = signal<boolean>(false)
-  public avatar: File | any
-  public avatarUrl: any
-  public showUploadAvatarButton = signal<boolean>(false)
-  public businessAvatar: File | any
-  public businessAvatarUrl: any
-  public showUploadBusinessAvatarButton = signal<boolean>(false)
+  public dialogLoading = signal<boolean>(false)
+  public uploadAvatarType = signal<string>('')
   public defaultProfileForm: any
   public profileForm = new FormGroup({
     name: new FormControl(this.authService.coreUserData().name),
@@ -62,30 +63,116 @@ export class AccountSettings implements OnInit {
     this.defaultBusinessForm = this.businessForm.value
   }
 
-  public avatarUpload(event: any): void {
-    const file: File = event.target.files[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onload = () => {
-        this.avatarUrl = reader.result
-      }
-      reader.readAsDataURL(file)
-      this.avatar = file
+  public triggerAvatarUpload(type: string): void {
+    if (type === 'profile') {
+      this.uploadAvatarType.set('profile')
+      this.sharedService.showAvatarUploadDialog.set(true)
+    } else {
+      this.uploadAvatarType.set('business')
+      this.sharedService.showAvatarUploadDialog.set(true)
     }
-    this.profileForm.markAsDirty()
   }
 
-  public businessAvatarUpload(event: any): void {
-    const file: File = event.target.files[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onload = () => {
-        this.businessAvatarUrl = reader.result
-      }
-      reader.readAsDataURL(file)
-      this.businessAvatar = file
+  public async saveAvatar(data: any): Promise<void> {
+    this.dialogLoading.set(true)
+    let avatarUrl = ''
+
+    if (data.file && data.type === 'profile') {
+      const userRef = doc(this.firestore, `users/${this.authService.coreUserData().uid}`)
+      const file = data.file
+      const filePath = `users/${this.authService.coreUserData().uid}/avatar`
+      const storageRef = ref(this.storage, filePath)
+      await uploadBytesResumable(storageRef, file)
+      avatarUrl = await getDownloadURL(storageRef)
+  
+      await setDoc(userRef, {
+        avatarUrl: avatarUrl
+      }, { merge: true })
+
+      await this.authService.fetchCoreUserData()
+
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Avatar has been saved!',
+        key: 'br',
+        life: 6000,
+      })
+
+      this.sharedService.showAvatarUploadDialog.set(false)
+    } else if (!data.file && data.type === 'profile') {
+      const userRef = doc(this.firestore, `users/${this.authService.coreUserData().uid}`)
+
+      await this.authService.deleteProfileAvatar()
+
+      await setDoc(userRef, {
+        avatarUrl: avatarUrl
+      }, { merge: true })
+
+      await this.authService.fetchCoreUserData()
+
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Avatar has been deleted!',
+        key: 'br',
+        life: 6000,
+      })
+
+      this.sharedService.showAvatarUploadDialog.set(false)
     }
-    this.businessForm.markAsDirty()
+
+    if (data.file && data.type !== 'profile') {
+      const businessRef = doc(this.firestore, `businesses/${this.authService.coreUserData().businessId}`)
+      const file = data.file
+      const filePath = `businesses/${this.authService.coreUserData().businessId}/avatar`
+      const storageRef = ref(this.storage, filePath)
+      await uploadBytesResumable(storageRef, file)
+      avatarUrl = await getDownloadURL(storageRef)
+
+      await setDoc(businessRef, {
+        avatarUrl: avatarUrl
+      }, { merge: true })
+
+      await this.authService.fetchCoreBusinessData()
+
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Logo has been saved!',
+        key: 'br',
+        life: 6000,
+      })
+
+      this.sharedService.showAvatarUploadDialog.set(false)
+    } else if (!data.file && data.type !== 'profile') {
+      const businessRef = doc(this.firestore, `businesses/${this.authService.coreUserData().businessId}`)
+
+      await this.authService.deleteBusinessAvatar()
+
+      await setDoc(businessRef, {
+        avatarUrl: avatarUrl
+      }, { merge: true })
+
+      await this.authService.fetchCoreBusinessData()
+
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Logo has been removed.',
+        key: 'br',
+        life: 6000,
+      })
+
+      this.sharedService.showAvatarUploadDialog.set(false)
+    }
+
+    setTimeout(() => {
+      this.avatarUploadDialog.avatar = null
+      this.avatarUploadDialog.avatarUrl = null
+      this.avatarUploadDialog.showUploadAvatarButton.set(false)
+      this.dialogLoading.set(false)
+    }, 1000)
   }
 
   public cancelProfileChanges(): void {
@@ -94,22 +181,17 @@ export class AccountSettings implements OnInit {
     this.profileForm.get('phone')?.setValue(this.defaultProfileForm?.phone)
     this.profileForm.get('location')?.setValue(this.defaultProfileForm?.location)
     this.profileForm.get('message')?.setValue(this.defaultProfileForm?.message)
-    this.avatarUrl = null
-    this.showUploadAvatarButton.set(false)
     this.profileForm.markAsPristine()
   }
 
   public cancelBusinessChanges(): void {
     this.businessForm.get('name')?.setValue(this.defaultBusinessForm?.name)
-    this.businessAvatarUrl = null
-    this.showUploadBusinessAvatarButton.set(false)
     this.businessForm.markAsPristine()
   }
 
   public saveProfileChanges(): void {
     this.savingChanges.set(true)
     const formData = this.profileForm.value
-    let avatarUrl = ''
 
     setTimeout(() => {
       this.authService.user$
@@ -120,31 +202,18 @@ export class AccountSettings implements OnInit {
             const uid = data.uid
             const userRef = doc(this.firestore, `users/${uid}`)
 
-            if (this.avatarUrl) {
-              const file = this.avatar
-              const filePath = `users/${uid}/avatar`
-              const storageRef = ref(this.storage, filePath)
-              await uploadBytesResumable(storageRef, file)
-              avatarUrl = await getDownloadURL(storageRef)
-            } else {
-              await this.authService.deleteProfileAvatar()
-              avatarUrl = ''
-            }
-
             await setDoc(userRef, {
               name: formData.name,
               position: formData.position,
               phone: formData.phone,
               location: formData.location,
-              message: formData.message,
-              avatarUrl: avatarUrl
+              message: formData.message
             }, { merge: true })
+
+            this.defaultProfileForm = formData
 
             await this.authService.fetchCoreUserData()
             .then(() => {
-              if (!avatarUrl) {
-                this.showUploadAvatarButton.set(false)
-              }
               this.messageService.add({
                 severity: 'success',
                 summary: 'Success',
@@ -177,7 +246,6 @@ export class AccountSettings implements OnInit {
   public saveBusinessChanges(): void {
     this.savingChanges.set(true)
     const formData = this.businessForm.value
-    let avatarUrl = ''
 
     setTimeout(() => {
       this.authService.user$
@@ -187,27 +255,14 @@ export class AccountSettings implements OnInit {
           if (data && data.uid) {
             const businessRef = doc(this.firestore, `businesses/${this.authService.coreUserData().businessId}`)
 
-            if (this.businessAvatarUrl) {
-              const file = this.businessAvatar
-              const filePath = `businesses/${this.authService.coreUserData().businessId}/avatar`
-              const storageRef = ref(this.storage, filePath)
-              await uploadBytesResumable(storageRef, file)
-              avatarUrl = await getDownloadURL(storageRef)
-            } else {
-              await this.authService.deleteBusinessAvatar()
-              avatarUrl = ''
-            }
-
             await setDoc(businessRef, {
-              name: formData.name,
-              avatarUrl: avatarUrl
+              name: formData.name
             }, { merge: true })
+
+            this.defaultBusinessForm = formData
 
             await this.authService.fetchCoreBusinessData()
             .then(() => {
-              if (!avatarUrl) {
-                this.showUploadBusinessAvatarButton.set(false)
-              }
               this.messageService.add({
                 severity: 'success',
                 summary: 'Success',

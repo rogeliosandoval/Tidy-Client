@@ -41,7 +41,7 @@ export class AvatarUploadDialog {
     }
   }
 
-  public closeModal() {
+  public closeDialog() {
     this.showUploadAvatarButton.set(false)
     this.sharedService.showAvatarUploadDialog.set(false)
   }

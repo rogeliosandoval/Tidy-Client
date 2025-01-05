@@ -107,7 +107,7 @@ export class ClientFormDialog {
     this.showUploadAvatarButton.set(false)
   }
 
-  public closeModal() {
+  public closeDialog() {
     this.fillingForm.set(true)
     this.showClientFormDialog = false
     this.onClose.emit(false)

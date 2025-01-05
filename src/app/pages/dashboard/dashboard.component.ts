@@ -117,7 +117,7 @@ export class Dashboard implements OnInit {
     return this.router.url
   }
 
-  public onModalClose(newState: boolean) {
+  public onDialogClose(newState: boolean) {
     this.showStartupFormDialog.set(newState)
     this.sharedService.showClientFormDialog.set(newState)
     this.addBusinessDialog.resetForm()

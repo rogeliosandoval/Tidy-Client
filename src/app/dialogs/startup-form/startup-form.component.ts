@@ -35,7 +35,7 @@ export class StartupFormDialog {
     this.startupForm.reset()
   }
 
-  public closeModal() {
+  public closeDialog() {
     this.showStartupFormDialog = false
     this.onClose.emit(false)
   }

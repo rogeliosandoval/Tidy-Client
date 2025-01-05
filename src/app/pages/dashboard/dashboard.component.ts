@@ -128,7 +128,7 @@ export class Dashboard implements OnInit {
     if (data.type === 'add') {
       this.addClient(data)
     } else {
-      this.editClient()
+      this.editClient(data)
     }
   }
 
@@ -175,7 +175,6 @@ export class Dashboard implements OnInit {
       this.dialogLoading.set(false)
       this.sharedService.showClientFormDialog.set(false)
       this.router.navigateByUrl('/dashboard/clients')
-      
     } catch (err) {
       setTimeout(() => {
         this.dialogLoading.set(false)
@@ -191,8 +190,62 @@ export class Dashboard implements OnInit {
     }
   }
 
-  public editClient(): void {
-    console.log('EDIT CLIENT FUNCTION')
+  public async editClient(data: any): Promise<any> {
+    this.dialogLoading.set(true)
+    const clientId = this.sharedService.dialogClient().id
+    const clientRef = doc(this.firestore, `businesses/${this.authService.coreUserData().businessId}/clients/${clientId}`)
+    let avatarUrl = this.sharedService.dialogClient().avatarUrl
+
+    try {
+      if (data.file) {
+        const file = data.file
+        const filePath = `businesses/${this.authService.coreUserData().businessId}/clients/${clientId}/avatar`
+        const storageRef = ref(this.storage, filePath)
+        await uploadBytesResumable(storageRef, file)
+        avatarUrl = await getDownloadURL(storageRef)
+      } else if (!data.file && this.sharedService.dialogClient().avatarUrl && data.avatarTouched) {
+        await this.authService.deleteClientAvatar(this.authService.coreBusinessData().id, this.sharedService.dialogClient().id)
+        avatarUrl = ''
+      }
+
+      await setDoc(clientRef, {
+        id: clientId,
+        name: data.formData.client_name,
+        email: data.formData.client_email,
+        phone: data.formData.client_phone,
+        location: data.formData.client_location,
+        connectedBy: data.formData.connected_by,
+        note: data.formData.note,
+        createdAt: new Date().toISOString(),
+        avatarUrl: avatarUrl
+      }, { merge: true })
+    
+      await this.authService.fetchCoreBusinessData()
+  
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Client has been updated!',
+        key: 'br',
+        life: 6000,
+      })
+      this.addClientDialog.resetForm()
+      this.dialogLoading.set(false)
+      this.sharedService.showClientFormDialog.set(false)
+      this.router.navigateByUrl('/dashboard/clients')
+    } catch (err) {
+      setTimeout(() => {
+        this.dialogLoading.set(false)
+        console.log(err)
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'There was an error adding a client. Try again.',
+          key: 'br',
+          life: 6000,
+        })
+      }, 2000)
+    }
   }
 
   public startupFormTrigger(data: any): void {

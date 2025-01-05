@@ -70,10 +70,6 @@ export class ClientFormDialog {
     note: new FormControl('')
   })
 
-  public aboutToEdit(): void {
-    console.log(this.sharedService.dialogClient())
-  }
-
   public editCheck(): void {
     if (this.type === 'edit') {
       const formData = this.sharedService.dialogClient()
@@ -92,6 +88,7 @@ export class ClientFormDialog {
   }
 
   public avatarUpload(event: any): void {
+    this.clientForm.markAsDirty()
     const file: File = event.target.files[0]
     if (file) {
       const reader = new FileReader()
@@ -118,6 +115,7 @@ export class ClientFormDialog {
 
   public submitDialog(type: string): void {
     const data = {
+      avatarTouched: this.showUploadAvatarButton(),
       formData: this.clientForm.value,
       file: this.avatar,
       type

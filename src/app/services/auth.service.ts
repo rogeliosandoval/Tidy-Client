@@ -218,4 +218,15 @@ export class AuthService {
       console.error('Error deleting client:', error)
     }
   }
+
+  public async deleteClientAvatar(businessId: string, clientId: string): Promise<any> {
+    const avatarPath = `businesses/${businessId}/clients/${clientId}/avatar`
+    const avatarRef = ref(this.storage, avatarPath)
+
+    try {
+      await deleteObject(avatarRef)
+    } catch (error) {
+      console.warn('Avatar not found or already deleted:', error)
+    }
+  }
 }

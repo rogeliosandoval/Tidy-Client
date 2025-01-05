@@ -11,11 +11,11 @@
         <div class="client" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'">
           <div class="client-header">
             @if(loadingClients()) {
-              <p-progressSpinner strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '50px', height: '50px' }" />
+              <p-progressSpinner strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '50px', height: '50px' }"/>
             }
             <img class="client-logo" [src]="client.avatarUrl || 'assets/avatars/default-business-avatar.png'" alt="client logo" [draggable]="false">
             <div class="menu">
-              <i class="pi pi-ellipsis-h" (click)="menu.toggle($event); modalClientName.set(client.name); modalClientId.set(client.id)"></i>
+              <i class="pi pi-ellipsis-h" (click)="menu.toggle($event); this.sharedService.dialogClient.set(client)"></i>
               <p-menu #menu [model]="clientOptions" [popup]="true"/>
             </div>
           </div>
@@ -31,7 +31,7 @@
                 </a>
               }
             } @else {
-              <div class="add-link" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">Add location</div>
+              <div class="add-link" (click)="editClient(); this.sharedService.dialogClient.set(client)" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">Add location</div>
             }
           </div>
           <div class="client-email">
@@ -45,7 +45,7 @@
                 </a>
               }
             } @else {
-              <div class="add-link" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">Add email</div>
+              <div class="add-link" (click)="editClient(); this.sharedService.dialogClient.set(client)" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">Add email</div>
             }
           </div>
           <div class="client-phone">
@@ -55,26 +55,28 @@
                 {{ client.phone }}
               </a>
             } @else {
-              <div class="add-link" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">Add phone</div>
+              <div class="add-link" (click)="editClient(); this.sharedService.dialogClient.set(client)" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">Add phone</div>
             }
           </div>
-          @if(client.connectedBy) {
-            <div class="client-connect">
-              <i class="pi pi-sitemap"></i>
+          <div class="client-connect">
+            <i class="pi pi-sitemap"></i>
+            @if (client.connectedBy) {
               {{ client.connectedBy }}
-            </div>
-          }
+            } @else {
+              <div class="add-link" (click)="editClient(); this.sharedService.dialogClient.set(client)" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">Add connection</div>
+            }
+          </div>
           <div class="client-contacts">
             <i class="pi pi-address-book"></i>
             @if (client.contacts) {
               Contact here
             } @else {
-              <div class="add-link" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">Add contact</div>
+              <div class="add-link" (click)="editClient(); this.sharedService.dialogClient.set(client)" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">Add contact</div>
             }
           </div>
         </div>
       }
     </div>
   }
-  <tcd-confirm [showConfirmModal]="showConfirmModal()" (onSubmit)="deleteClient()" (onClose)="onModalClose($event)" [dialogLoading]="dialogLoading()" [message]="modalMessage()" [type]="modalType()"/>
+  <tcd-confirm [showConfirmModal]="showConfirmModal()" (onSubmit)="deleteClient()" (onClose)="onModalClose($event)" [dialogLoading]="dialogLoading()" [message]="modalMessage()" [type]="dialogType()"/>
 </div>

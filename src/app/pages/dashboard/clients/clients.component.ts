@@ -36,9 +36,7 @@ export class Clients implements OnInit {
   public showConfirmModal = signal<boolean>(false)
   public clientOptions: MenuItem[] | undefined
   public modalMessage = signal<string>('')
-  public modalType = signal<string>('')
-  public modalClientName = signal<any>(null)
-  public modalClientId = signal<string>('')
+  public dialogType = signal<string>('')
   public dialogLoading = signal<boolean>(false)
 
   ngOnInit(): void {
@@ -70,10 +68,15 @@ export class Clients implements OnInit {
         label: 'Delete',
         icon: 'pi pi-trash',
         command: () => {
-          this.openConfirmModal(`Are you sure you want to delete this client? (${this.modalClientName()})`, 'delete')
+          this.openConfirmModal(`Are you sure you want to delete this client? (${this.sharedService.dialogClient().name})`, 'delete')
         }
       }
     ]
+  }
+
+  public editClient(): void {
+    this.sharedService.clientFormType.set('edit')
+    this.sharedService.showClientFormDialog.set(true)
   }
 
   public onModalClose(newState: boolean) {
@@ -82,18 +85,18 @@ export class Clients implements OnInit {
 
   public openConfirmModal(message: string, type: string): void {
     this.modalMessage.set(message)
-    this.modalType.set(type)
+    this.dialogType.set(type)
     this.showConfirmModal.set(true)
   }
 
   public async deleteClient(): Promise<void> {
     this.dialogLoading.set(true)
     try {
-      await this.authService.deleteClient(this.modalClientId())
+      await this.authService.deleteClient(this.sharedService.dialogClient().id)
       this.messageService.add({
         severity: 'success',
         summary: 'Success',
-        detail: `Client (${this.modalClientName()}) has been deleted.`,
+        detail: `Client (${this.sharedService.dialogClient().name}) has been deleted.`,
         key: 'br',
         life: 6000,
       })

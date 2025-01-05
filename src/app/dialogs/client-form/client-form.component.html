@@ -41,17 +41,24 @@
         </div>
       }
     } @else {
-      <div class="avatar-container" [class.disabled]="dialogLoading()">
-        <img class="avatar" src="assets/avatars/default-business-avatar.png" alt="avatar">
-        <i class="pi pi-trash" (click)="showUploadAvatarButton.set(true)"></i>
-      </div>
+      @if (type === 'add') {
+        <div class="avatar-container" [class.disabled]="dialogLoading()">
+          <img class="avatar" src="assets/avatars/default-business-avatar.png" alt="avatar">
+          <i class="pi pi-trash" (click)="showUploadAvatarButton.set(true); clientForm.markAsDirty()"></i>
+        </div>
+      } @else {
+        <div class="avatar-container" [class.disabled]="dialogLoading()">
+          <img class="avatar" [src]="sharedService.dialogClient()?.avatarUrl ? sharedService.dialogClient().avatarUrl : 'assets/avatars/default-business-avatar.png'" alt="avatar">
+          <i class="pi pi-trash" (click)="showUploadAvatarButton.set(true); sharedService.dialogClient()?.avatarUrl ? clientForm.markAsDirty() : ''"></i>
+        </div>
+      }
     }
 
     <div class="input-group" [class.disabled]="dialogLoading()">
       <label for="note">Note</label>
       <textarea id="note" rows="3" cols="30" pInputTextarea variant="filled" formControlName="note"  placeholder="Add a note or a description for this client" style="resize: none;" autocomplete="none"></textarea>
     </div>
-    <p-button label="{{ type === 'add' ? 'Add Client' : 'Update Client' }}" type="submit" [disabled]="dialogLoading() || clientForm.invalid"></p-button>
+    <p-button label="{{ type === 'add' ? 'Add Client' : 'Update Client' }}" type="submit" [disabled]="dialogLoading() || clientForm.invalid || !clientForm.dirty"></p-button>
     @if (dialogLoading()) {
       <p-progressSpinner class="second-load" ariaLabel="loading" strokeWidth="3"/>
     }

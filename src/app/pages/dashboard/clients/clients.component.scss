@@ -63,8 +63,10 @@ p-progressSpinner {
 }
 
 .client-logo {
-  max-width: 130px;
+  width: 160px;
+  height: 160px;
   border-radius: 10px;
+  object-fit: contain;
 }
 
 .menu {

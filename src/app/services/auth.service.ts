@@ -18,6 +18,7 @@ export class AuthService {
   coreUserData = signal<any>(undefined)
   coreBusinessData = signal<any>(undefined)
   businessClientAvatars = signal<string[] | null>([])
+  dialogClient = signal<any>(null)
 
   register(email: string, username: string, password: string): Observable<UserCredential> {
     const promise = this.firebaseAuth.setPersistence(browserSessionPersistence)
@@ -227,6 +228,17 @@ export class AuthService {
       await deleteObject(avatarRef)
     } catch (error) {
       console.warn('Avatar not found or already deleted:', error)
+    }
+  }
+
+  public async fetchClientDataById(id: string | null): Promise<void> {
+    const clientRef = doc(this.firestore, `businesses/${this.coreBusinessData().id}/clients/${id}`)
+    const clientDocSnap = await getDoc(clientRef)
+
+    if (clientDocSnap.exists()) {
+      this.dialogClient.set(clientDocSnap.data())
+    } else {
+      this.dialogClient.set(null)
     }
   }
 }

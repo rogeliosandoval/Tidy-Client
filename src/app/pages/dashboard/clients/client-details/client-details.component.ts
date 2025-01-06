@@ -33,4 +33,9 @@ export class ClientDetails implements OnInit {
       }
     })
   }
+
+  public editClient(): void {
+    this.sharedService.clientFormType.set('edit')
+    this.sharedService.showClientFormDialog.set(true)
+  }
 }

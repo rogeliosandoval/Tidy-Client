@@ -23,7 +23,7 @@ p-progressSpinner {
   animation: routeAnimation 0.2s linear;
 }
 
-.pi-user-edit {
+.pi-pencil {
   position: absolute;
   top: 20px;
   right: 20px;
@@ -47,12 +47,14 @@ p-progressSpinner {
   flex-wrap: wrap;
 
   img {
-    max-width: 200px;
+    width: 200px;
+    height: 200px;
     border-radius: 10px;
     object-fit: contain;
 
     @include media('<phone') {
-      max-width: 140px;
+      width: 140px;
+      height: 140px;
     }
   }
 }

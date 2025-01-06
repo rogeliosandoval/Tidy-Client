@@ -11,6 +11,7 @@ import { Storage } from '@angular/fire/storage'
 import { MessageService } from 'primeng/api'
 import { UnformatPhonePipe } from '../../../pipes/unformat-phone.pipe'
 import { ProgressSpinnerModule } from 'primeng/progressspinner'
+import { Router } from '@angular/router'
 
 @Component({
   selector: 'tc-clients',
@@ -28,14 +29,15 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner'
   styleUrl: './clients.component.scss'
 })
 export class Clients implements OnInit {
+  private router = inject(Router)
   private messageService = inject(MessageService)
   private storage = inject(Storage)
   public sharedService = inject(SharedService)
   public authService = inject(AuthService)
   public loadingClients = signal<boolean>(true)
-  public showConfirmModal = signal<boolean>(false)
+  public showConfirmDialog = signal<boolean>(false)
   public clientOptions: MenuItem[] | undefined
-  public modalMessage = signal<string>('')
+  public dialogMessage = signal<string>('')
   public dialogType = signal<string>('')
   public dialogLoading = signal<boolean>(false)
 
@@ -46,7 +48,10 @@ export class Clients implements OnInit {
     this.clientOptions =  [
       {
         label: 'View Details',
-        icon: 'pi pi-info-circle'
+        icon: 'pi pi-info-circle',
+        command: () => {
+          this.router.navigate(['/dashboard/clients/client-details', this.sharedService.dialogClient().id])
+        }
       },
       {
         label: 'Edit',
@@ -68,7 +73,7 @@ export class Clients implements OnInit {
         label: 'Delete',
         icon: 'pi pi-trash',
         command: () => {
-          this.openConfirmModal(`Are you sure you want to delete this client? (${this.sharedService.dialogClient().name})`, 'delete')
+          this.openConfirmDialog(`Are you sure you want to delete this client? (${this.sharedService.dialogClient().name})`, 'delete')
         }
       }
     ]
@@ -79,14 +84,14 @@ export class Clients implements OnInit {
     this.sharedService.showClientFormDialog.set(true)
   }
 
-  public onModalClose(newState: boolean) {
-    this.showConfirmModal.set(newState)
+  public onDialogClose(newState: boolean) {
+    this.showConfirmDialog.set(newState)
   }
 
-  public openConfirmModal(message: string, type: string): void {
-    this.modalMessage.set(message)
+  public openConfirmDialog(message: string, type: string): void {
+    this.dialogMessage.set(message)
     this.dialogType.set(type)
-    this.showConfirmModal.set(true)
+    this.showConfirmDialog.set(true)
   }
 
   public async deleteClient(): Promise<void> {
@@ -101,7 +106,7 @@ export class Clients implements OnInit {
         life: 6000,
       })
       this.dialogLoading.set(false)
-      this.showConfirmModal.set(false)
+      this.showConfirmDialog.set(false)
     } catch (err) {
       console.log(err)
       this.dialogLoading.set(false)

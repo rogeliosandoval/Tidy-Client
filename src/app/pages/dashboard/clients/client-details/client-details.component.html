@@ -17,7 +17,7 @@
           <div class="location"><i class="pi pi-map-marker"></i> {{ sharedService.dialogClient().location ? sharedService.dialogClient().location : 'N/A' }}</div>
         </div>
       </div>
-      <i class="pi pi-user-edit" routerLink="/dashboard/account-settings"></i>
+      <i class="pi pi-pencil" routerLink="/dashboard/account-settings" (click)="editClient()"></i>
       @if (sharedService.dialogClient().note) {
         <div class="public-note">
           <span class="note" [style.background-color]="sharedService.darkMode() ? '#181818' : 'whitesmoke'">{{ sharedService.dialogClient().note }}</span>

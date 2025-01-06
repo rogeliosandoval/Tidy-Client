@@ -221,6 +221,10 @@ export class Dashboard implements OnInit {
       }, { merge: true })
     
       await this.authService.fetchCoreBusinessData()
+
+      await this.authService.fetchClientDataById(clientId)
+
+      this.sharedService.dialogClient.set(this.authService.dialogClient())
   
       this.messageService.add({
         severity: 'success',
@@ -232,7 +236,6 @@ export class Dashboard implements OnInit {
       this.addClientDialog.resetForm()
       this.dialogLoading.set(false)
       this.sharedService.showClientFormDialog.set(false)
-      this.router.navigateByUrl('/dashboard/clients')
     } catch (err) {
       setTimeout(() => {
         this.dialogLoading.set(false)

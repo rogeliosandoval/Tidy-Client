@@ -38,7 +38,13 @@
             <i class="pi pi-envelope"></i>
             @if (client.email) {
               @if (client.email.length >= 25) {
-                <span pTooltip="{{client.email}}" tooltipPosition="bottom" [autoHide]="false">{{ client.email | truncate: 25 }}</span>
+                <a class="desktop-trunc" href="mailto:{{client.email}}" style="text-decoration: none; color: inherit;" pTooltip="{{client.email}}" tooltipPosition="top" [autoHide]="false">
+                  {{ client.email | truncate: 20 }}
+                </a>
+
+                <a class="phone-break" href="mailto:{{client.email}}" style="text-decoration: none; color: inherit;" pTooltip="{{client.email}}" tooltipPosition="top" [autoHide]="false">
+                  {{ client.email | truncate: 34 }}
+                </a>
               } @else {
                 <a href="mailto:{{client.email}}" style="text-decoration: none; color: inherit;">
                   {{ client.email }}
@@ -78,5 +84,5 @@
       }
     </div>
   }
-  <tcd-confirm [showConfirmModal]="showConfirmModal()" (onSubmit)="deleteClient()" (onClose)="onModalClose($event)" [dialogLoading]="dialogLoading()" [message]="modalMessage()" [type]="dialogType()"/>
+  <tcd-confirm [showConfirmDialog]="showConfirmDialog()" (onSubmit)="deleteClient()" (onClose)="onDialogClose($event)" [dialogLoading]="dialogLoading()" [message]="dialogMessage()" [type]="dialogType()"/>
 </div>

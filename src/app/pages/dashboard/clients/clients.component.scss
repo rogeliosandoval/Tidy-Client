@@ -38,6 +38,7 @@ p-progressSpinner {
 
   @include media('<phone') {
     justify-content: center;
+    gap: 20px;
   }
 }
 
@@ -67,6 +68,11 @@ p-progressSpinner {
   height: 160px;
   border-radius: 10px;
   object-fit: contain;
+
+  @include media('<phone') {
+    width: 130px;
+    height: 130px;
+  }
 }
 
 .menu {
@@ -89,12 +95,17 @@ p-progressSpinner {
   }
 }
 
+.desktop-trunc {
+  @include media('<phone') {
+    display: none;
+  }
+}
+
 .client-name {
   font-size: 1.2rem;
   font-weight: 500;
   font-family: "Outfit", sans-serif;
   margin: 15px 0 10px;
-  text-align: center;
 }
 
 .client-location,

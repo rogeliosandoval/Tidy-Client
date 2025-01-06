@@ -14,6 +14,7 @@ import { Notifications } from './pages/dashboard/notifications/notifications.com
 import { Profile } from './pages/dashboard/profile/profile.component'
 import { Inbox } from './pages/dashboard/inbox/inbox.component'
 import { AccountSettings } from './pages/dashboard/account-settings/account-settings.component'
+import { ClientDetails } from './pages/dashboard/clients/client-details/client-details.component'
 
 export const routes: Routes = [
   {
@@ -39,6 +40,7 @@ export const routes: Routes = [
     children: [
       { path: 'overview', component: Overview },
       { path: 'clients', component: Clients },
+      { path: 'clients/client-details/:id', component: ClientDetails },
       { path: 'team-members', component: TeamMembers },
       { path: 'profits', component: Profits },
       { path: 'task-manager', component: TaskManager },

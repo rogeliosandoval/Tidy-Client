@@ -1,0 +1,28 @@
+<div class="route-container" [style.position]="loadingClient() ? 'relative' : ''">
+  @if (loadingClient()) {
+    <p-progressSpinner ariaLabel="loading" strokeWidth="3"/>
+  } @else {
+    <div class="profile-container" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()">
+      <div class="main">
+        @if (sharedService.dialogClient().avatarUrl) {
+          <img [src]="sharedService.dialogClient().avatarUrl" alt="avatar">
+        } @else {
+          <img src="assets/avatars/default-business-avatar.png" alt="avatar">
+        }
+        <div class="main-info">
+          <div class="name">{{ sharedService.dialogClient().name }}</div>
+          <div class="connected" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">{{ sharedService.dialogClient().connectedBy ? 'Connected by: ' + sharedService.dialogClient().connectedBy : 'Connected By: N/A' }}</div>
+          <div class="phone"><i class="pi pi-phone"></i> {{ sharedService.dialogClient().phone ? sharedService.dialogClient().phone : 'N/A' }}</div>
+          <div class="email"><i class="pi pi-envelope"></i> {{ sharedService.dialogClient().email }}</div>
+          <div class="location"><i class="pi pi-map-marker"></i> {{ sharedService.dialogClient().location ? sharedService.dialogClient().location : 'N/A' }}</div>
+        </div>
+      </div>
+      <i class="pi pi-user-edit" routerLink="/dashboard/account-settings"></i>
+      @if (sharedService.dialogClient().note) {
+        <div class="public-note">
+          <span class="note" [style.background-color]="sharedService.darkMode() ? '#181818' : 'whitesmoke'">{{ sharedService.dialogClient().note }}</span>
+        </div>
+      }
+    </div>
+  }
+</div>

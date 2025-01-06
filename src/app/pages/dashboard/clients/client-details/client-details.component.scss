@@ -1,0 +1,138 @@
+@use '../../../../../variables.scss' as variables;
+$breakpoints: variables.$breakpoints;
+@import 'include-media';
+
+.route-container {
+  animation: none;
+}
+
+p-progressSpinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.profile-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 30px;
+  border-radius: 10px;
+  animation: routeAnimation 0.2s linear;
+}
+
+.pi-user-edit {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 2rem;
+  opacity: 0.5;
+
+  &:hover {
+    cursor: pointer;
+    opacity: 1;
+  }
+
+  @include media('<phone') {
+    font-size: 1.5rem;
+  }
+}
+
+.main {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  flex-wrap: wrap;
+
+  img {
+    max-width: 200px;
+    border-radius: 10px;
+    object-fit: contain;
+
+    @include media('<phone') {
+      max-width: 140px;
+    }
+  }
+}
+
+.main-info {
+  display: flex;
+  align-items: baseline;
+  flex-direction: column;
+  font-family: "Outfit", sans-serif;
+  padding-bottom: 13px;
+
+  .pi {
+    font-size: 1rem;
+  }
+}
+
+.name {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-size: 2rem;
+  font-weight: 500;
+  text-transform: capitalize;
+
+  @include media('<phone') {
+    font-size: 1.7rem;
+  }
+}
+
+.location, .phone, .email {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  gap: 7px;
+
+  @include media('<phone') {
+    font-size: 0.9rem;
+  }
+}
+
+.phone {
+  margin-top: auto;
+  margin-bottom: 12px;
+}
+
+.email {
+  margin-bottom: 12px;
+}
+
+.connected {
+  margin: 6px 0 6px;
+
+  @include media('<phone') {
+    margin-bottom: 14px;
+  }
+}
+
+.public-note {
+  display: flex;
+  align-items: baseline;;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+  font-family: "Outfit", sans-serif;
+
+  @include media('<phone') {
+    margin-top: 8px;
+  }
+}
+
+.note {
+  padding: 15px;
+  font-size: 1rem;
+  border-radius: 10px;
+  max-width: 700px;
+  line-height: 1.5rem;
+
+  @include media('<phone') {
+    font-size: 0.9rem;
+  }
+}

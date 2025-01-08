@@ -58,7 +58,7 @@
             <i class="pi pi-phone"></i>
             @if (client.phone) {
               <a href="tel:+1{{client.phone | unformatPhone}}" style="text-decoration: none; color: inherit;">
-                {{ client.phone }}
+                {{ client.phone | phone }}
               </a>
             } @else {
               <div class="add-link" (click)="editClient(); this.sharedService.dialogClient.set(client)" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">Add phone</div>
@@ -77,7 +77,7 @@
             @if (client.contacts) {
               Contact here
             } @else {
-              <div class="add-link" (click)="editClient(); this.sharedService.dialogClient.set(client)" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">Add contact</div>
+              <div class="add-link" (click)="this.sharedService.dialogClient.set(client); showContactFormDialog.set(true)" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">Add contact</div>
             }
           </div>
         </div>
@@ -85,4 +85,5 @@
     </div>
   }
   <tcd-confirm [showConfirmDialog]="showConfirmDialog()" (onSubmit)="deleteClient()" (onClose)="onDialogClose($event)" [dialogLoading]="dialogLoading()" [message]="dialogMessage()" [type]="dialogType()"/>
+  <tcd-contact-form [showContactFormDialog]="showContactFormDialog()" (onClose)="onDialogClose($event)"/>
 </div>

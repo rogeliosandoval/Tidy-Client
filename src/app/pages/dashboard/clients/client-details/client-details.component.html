@@ -13,7 +13,7 @@
           <div class="name">{{ sharedService.dialogClient().name }}</div>
           <div class="connected" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">{{ sharedService.dialogClient().connectedBy ? 'Connected by: ' + sharedService.dialogClient().connectedBy : 'Connected By: N/A' }}</div>
           <div class="phone"><i class="pi pi-phone"></i> {{ sharedService.dialogClient().phone ? sharedService.dialogClient().phone : 'N/A' }}</div>
-          <div class="email"><i class="pi pi-envelope"></i> {{ sharedService.dialogClient().email }}</div>
+          <div class="email"><i class="pi pi-envelope"></i> {{ sharedService.dialogClient().email ? sharedService.dialogClient().email : 'N/A' }}</div>
           <div class="location"><i class="pi pi-map-marker"></i> {{ sharedService.dialogClient().location ? sharedService.dialogClient().location : 'N/A' }}</div>
         </div>
       </div>

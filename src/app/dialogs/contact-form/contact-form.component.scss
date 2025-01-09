@@ -1,3 +1,33 @@
-h1 {
-  color: pink;
+@use '../../../variables.scss' as variables;
+$breakpoints: variables.$breakpoints;
+@import 'include-media';
+
+p-progressSpinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.contact-form {
+  position: relative;
+}
+
+.input-group {
+  display: flex;
+  align-items: baseline;
+  flex-direction: column;
+
+  label {
+    font-size: 1rem;
+    font-family: "Outfit", sans-serif;
+  }
+
+  input,
+  textarea,
+  p-dropdown {
+    margin: 7px auto 15px;
+    width: 100%;
+    font-family: "Outfit", sans-serif;
+  }
 }

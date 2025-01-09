@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core'
+import { Component, OnInit, ViewChild, inject, signal } from '@angular/core'
 import { SharedService } from '../../../services/shared.service'
 import { AuthService } from '../../../services/auth.service'
 import { MenuItem } from 'primeng/api'
@@ -33,6 +33,7 @@ import { FormatPhonePipe } from '../../../pipes/format-phone.pipe'
   styleUrl: './clients.component.scss'
 })
 export class Clients implements OnInit {
+  @ViewChild('contactFormDialog') contactFormDialog!: ContactFormDialog
   private router = inject(Router)
   private messageService = inject(MessageService)
   private storage = inject(Storage)
@@ -92,6 +93,7 @@ export class Clients implements OnInit {
   public onDialogClose(newState: boolean) {
     this.showConfirmDialog.set(newState)
     this.showContactFormDialog.set(newState)
+    this.contactFormDialog.resetForm()
   }
 
   public openConfirmDialog(message: string, type: string): void {
@@ -124,5 +126,14 @@ export class Clients implements OnInit {
         life: 6000,
       })
     }
+  }
+
+  public triggerContactForm(data: any): void {
+    this.dialogLoading.set(true)
+    
+    setTimeout(() => {
+      console.log(data)
+      this.dialogLoading.set(false)
+    }, 1000)
   }
 }

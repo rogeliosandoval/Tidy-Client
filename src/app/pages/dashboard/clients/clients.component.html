@@ -85,5 +85,5 @@
     </div>
   }
   <tcd-confirm [showConfirmDialog]="showConfirmDialog()" (onSubmit)="deleteClient()" (onClose)="onDialogClose($event)" [dialogLoading]="dialogLoading()" [message]="dialogMessage()" [type]="dialogType()"/>
-  <tcd-contact-form [showContactFormDialog]="showContactFormDialog()" (onClose)="onDialogClose($event)"/>
+  <tcd-contact-form #contactFormDialog [showContactFormDialog]="showContactFormDialog()" (onSubmit)="triggerContactForm($event)" (onClose)="onDialogClose($event)" [dialogLoading]="dialogLoading()"/>
 </div>

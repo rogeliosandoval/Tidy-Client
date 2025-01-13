@@ -2,8 +2,9 @@ import { Injectable, inject, signal } from '@angular/core'
 import { Auth, UserCredential, browserLocalPersistence, browserSessionPersistence, createUserWithEmailAndPassword, setPersistence, signInWithEmailAndPassword, signOut, updateProfile, user } from '@angular/fire/auth'
 import { Observable, from } from 'rxjs'
 import { UserInterface } from '../interfaces/user.interface'
-import { collection, deleteDoc, doc, Firestore, getDoc, getDocs } from '@angular/fire/firestore'
+import { collection, deleteDoc, doc, Firestore, getDoc, getDocs, setDoc } from '@angular/fire/firestore'
 import { Storage, deleteObject, getDownloadURL, listAll, ref } from '@angular/fire/storage'
+import { v4 as uuidv4 } from 'uuid'
 
 @Injectable({
   providedIn: 'root'
@@ -240,5 +241,20 @@ export class AuthService {
     } else {
       this.dialogClient.set(null)
     }
+  }
+
+  public async addContactToClient(formData: any, clientId: any): Promise<void> {
+    const contactId = uuidv4()
+    const contactRef = doc(this.firestore, `businesses/${this.coreUserData().businessId}/clients/${clientId}/contacts/${contactId}`)
+
+    await setDoc(contactRef, {
+      id: contactId,
+      name: formData.contact_name,
+      email: formData.contact_email,
+      position: formData.contact_position,
+      phone: formData.contact_phone,
+      note: formData.note,
+      createdAt: new Date().toISOString()
+    })
   }
 }

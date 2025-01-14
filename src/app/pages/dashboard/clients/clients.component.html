@@ -1,4 +1,5 @@
 <div class="route-container">
+  <button (click)="test()">TESTING</button>
   @if (authService.coreBusinessData()?.clients.length <= 0) {
     <div class="no-clients" [class.disabled]="sharedService.loading()">
       <img src="assets/working.svg" alt="business owner working" [draggable]="false">
@@ -74,8 +75,8 @@
           </div>
           <div class="client-contacts">
             <i class="pi pi-address-book"></i>
-            @if (client.contacts) {
-              Contact here
+            @if (client.contacts.length > 0) {
+              {{ client.contacts.length }} {{ client.contacts.length == 1 ? 'contact' : 'contacts' }}
             } @else {
               <div class="add-link" (click)="this.sharedService.dialogClient.set(client); showContactFormDialog.set(true)" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">Add contact</div>
             }

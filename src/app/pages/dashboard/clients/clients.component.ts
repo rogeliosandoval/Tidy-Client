@@ -68,6 +68,13 @@ export class Clients implements OnInit {
         }
       },
       {
+        label: 'Add Contact',
+        icon: 'pi pi-user-plus',
+        command: () => {
+          this.showContactFormDialog.set(true)
+        }
+      },
+      {
         label: 'Create Note',
         icon: 'pi pi-pen-to-square'
       },
@@ -128,12 +135,18 @@ export class Clients implements OnInit {
     }
   }
 
+  test() {
+    console.log(this.authService.dialogClient())
+  }
+
   public async triggerContactForm(data: any) {
     this.dialogLoading.set(true)
 
     if (data.type === 'add') {
       try {
         await this.authService.addContactToClient(data.formData, this.sharedService.dialogClient().id)
+
+        await this.authService.fetchCoreBusinessData()
   
         this.messageService.add({
           severity: 'success',
@@ -142,7 +155,7 @@ export class Clients implements OnInit {
           key: 'br',
           life: 6000,
         })
-
+        
         this.contactFormDialog.resetForm()
         this.dialogLoading.set(false)
         this.showContactFormDialog.set(false)

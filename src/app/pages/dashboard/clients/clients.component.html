@@ -1,5 +1,4 @@
 <div class="route-container">
-  <button (click)="test()">TESTING</button>
   @if (authService.coreBusinessData()?.clients.length <= 0) {
     <div class="no-clients" [class.disabled]="sharedService.loading()">
       <img src="assets/working.svg" alt="business owner working" [draggable]="false">

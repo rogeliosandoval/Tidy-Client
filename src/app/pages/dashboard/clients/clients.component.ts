@@ -135,10 +135,6 @@ export class Clients implements OnInit {
     }
   }
 
-  test() {
-    console.log(this.authService.dialogClient())
-  }
-
   public async triggerContactForm(data: any) {
     this.dialogLoading.set(true)
 

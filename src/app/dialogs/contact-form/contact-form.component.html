@@ -20,7 +20,7 @@
       <input id="contact_phone" type="tel" pInputText variant="filled" placeholder="Phone" formControlName="contact_phone" phoneNumber autocomplete="tel"/>
     </div>
 
-    <p-button label="{{ type === 'edit' ? 'Update Client' : 'Add Client' }}" type="submit" [disabled]="dialogLoading() || contactForm.invalid || !contactForm.dirty"></p-button>
+    <p-button label="{{ type === 'edit' ? 'Update Contact' : 'Add Contact' }}" type="submit" [disabled]="dialogLoading() || contactForm.invalid || !contactForm.dirty"></p-button>
     @if (dialogLoading()) {
       <p-progressSpinner ariaLabel="loading" strokeWidth="3"/>
     }

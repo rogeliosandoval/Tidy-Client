@@ -131,6 +131,21 @@ p-progressSpinner {
   overflow: hidden;
 }
 
+.client-email,
+.client-phone,
+.client-contacts {
+  a, span {
+    color: inherit
+  }
+
+  &:hover {
+    a, span {
+      cursor: pointer;
+      color: variables.$theme-color-main;
+    }
+  }
+}
+
 .add-link {
   font-size: 1rem;
   font-family: "Outfit", sans-serif;
@@ -139,5 +154,18 @@ p-progressSpinner {
   &:hover {
     cursor: pointer;
     opacity: 1;
+  }
+}
+
+.dark-client {
+  .client-email,
+  .client-phone,
+  .client-contacts {
+    &:hover {
+      span {
+        cursor: pointer;
+        color: variables.$theme-color-main-light;
+      }
+    }
   }
 }

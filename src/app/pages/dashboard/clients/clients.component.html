@@ -8,7 +8,7 @@
   } @else {
     <div class="clients" [class.disabled]="sharedService.loading() || loadingClients()">
       @for (client of authService.coreBusinessData()?.clients; track client.id) {
-        <div class="client" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'">
+        <div class="client" [class.dark-client]="sharedService.darkMode()" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'">
           <div class="client-header">
             @if(loadingClients()) {
               <p-progressSpinner strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '50px', height: '50px' }"/>
@@ -38,15 +38,15 @@
             <i class="pi pi-envelope"></i>
             @if (client.email) {
               @if (client.email.length >= 25) {
-                <a class="desktop-trunc" href="mailto:{{client.email}}" style="text-decoration: none; color: inherit;" pTooltip="{{client.email}}" tooltipPosition="top" [autoHide]="false">
+                <a class="desktop-trunc" href="mailto:{{client.email}}" style="text-decoration: none;" pTooltip="{{client.email}}" tooltipPosition="top" [autoHide]="false">
                   {{ client.email | truncate: 20 }}
                 </a>
 
-                <a class="phone-break" href="mailto:{{client.email}}" style="text-decoration: none; color: inherit;" pTooltip="{{client.email}}" tooltipPosition="top" [autoHide]="false">
+                <a class="phone-break" href="mailto:{{client.email}}" style="text-decoration: none;" pTooltip="{{client.email}}" tooltipPosition="top" [autoHide]="false">
                   {{ client.email | truncate: 34 }}
                 </a>
               } @else {
-                <a href="mailto:{{client.email}}" style="text-decoration: none; color: inherit;">
+                <a href="mailto:{{client.email}}" style="text-decoration: none;">
                   {{ client.email }}
                 </a>
               }
@@ -57,7 +57,7 @@
           <div class="client-phone">
             <i class="pi pi-phone"></i>
             @if (client.phone) {
-              <a href="tel:+1{{client.phone | unformatPhone}}" style="text-decoration: none; color: inherit;">
+              <a href="tel:+1{{client.phone | unformatPhone}}" style="text-decoration: none;">
                 {{ client.phone | phone }}
               </a>
             } @else {
@@ -75,7 +75,7 @@
           <div class="client-contacts">
             <i class="pi pi-address-book"></i>
             @if (client.contacts.length > 0) {
-              {{ client.contacts.length }} {{ client.contacts.length == 1 ? 'contact' : 'contacts' }}
+              <span (click)="showContactListDialog.set(true)">{{ client.contacts.length }} {{ client.contacts.length == 1 ? 'contact' : 'contacts' }}</span>
             } @else {
               <div class="add-link" (click)="this.sharedService.dialogClient.set(client); showContactFormDialog.set(true)" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">Add contact</div>
             }
@@ -86,4 +86,5 @@
   }
   <tcd-confirm [showConfirmDialog]="showConfirmDialog()" (onSubmit)="deleteClient()" (onClose)="onDialogClose($event)" [dialogLoading]="dialogLoading()" [message]="dialogMessage()" [type]="dialogType()"/>
   <tcd-contact-form #contactFormDialog [showContactFormDialog]="showContactFormDialog()" (onSubmit)="triggerContactForm($event)" (onClose)="onDialogClose($event)" [dialogLoading]="dialogLoading()"/>
+  <tcd-contact-list [showContactListDialog]="showContactListDialog()" (onClose)="onDialogClose($event)" [dialogLoading]="dialogLoading()"/>
 </div>

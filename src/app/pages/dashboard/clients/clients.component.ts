@@ -14,6 +14,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner'
 import { Router } from '@angular/router'
 import { ContactFormDialog } from '../../../dialogs/contact-form/contact-form.component'
 import { FormatPhonePipe } from '../../../pipes/format-phone.pipe'
+import { ContactListDialog } from '../../../dialogs/contact-list/contact-list.component'
 
 @Component({
   selector: 'tc-clients',
@@ -27,7 +28,8 @@ import { FormatPhonePipe } from '../../../pipes/format-phone.pipe'
     UnformatPhonePipe,
     ProgressSpinnerModule,
     ContactFormDialog,
-    FormatPhonePipe
+    FormatPhonePipe,
+    ContactListDialog
   ],
   templateUrl: './clients.component.html',
   styleUrl: './clients.component.scss'
@@ -46,6 +48,7 @@ export class Clients implements OnInit {
   public dialogType = signal<string>('')
   public dialogLoading = signal<boolean>(false)
   public showContactFormDialog = signal<boolean>(false)
+  public showContactListDialog = signal<boolean>(false)
 
   ngOnInit(): void {
     setTimeout(() => {
@@ -101,6 +104,7 @@ export class Clients implements OnInit {
     this.showConfirmDialog.set(newState)
     this.showContactFormDialog.set(newState)
     this.contactFormDialog.resetForm()
+    this.showContactListDialog.set(newState)
   }
 
   public openConfirmDialog(message: string, type: string): void {

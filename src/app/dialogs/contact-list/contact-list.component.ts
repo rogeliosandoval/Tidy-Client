@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, inject, input, signal }
 import { DialogModule } from 'primeng/dialog'
 import { ButtonModule } from 'primeng/button'
 import { ProgressSpinnerModule } from 'primeng/progressspinner'
+import { SharedService } from '../../services/shared.service'
 
 @Component({
   selector: 'tcd-contact-list',
@@ -19,6 +20,7 @@ export class ContactListDialog {
   @Input() showContactListDialog = false
   @Output() onClose = new EventEmitter<boolean>()
   @Output() onSubmit = new EventEmitter<any>()
+  public sharedService = inject(SharedService)
   public dialogLoading = input<boolean>()
 
   public closeDialog() {

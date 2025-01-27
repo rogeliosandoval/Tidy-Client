@@ -19,27 +19,27 @@
         }
         <div class="input-container" [class.disabled]="sharedService.loading()">
           <label for="name">Your Name:</label>
-          <input type="text" pInputText variant="filled" placeholder="Name" formControlName="name"/>
+          <input id="name" type="text" pInputText variant="filled" placeholder="Name" formControlName="name" autocomplete="name"/>
         </div>
         <div class="input-container" [class.disabled]="sharedService.loading()">
           <label for="email">Email:</label>
-          <input type="text" pInputText variant="filled" placeholder="Email" formControlName="email"/>
+          <input id="email" type="text" pInputText variant="filled" placeholder="Email" formControlName="email" autocomplete="email"/>
         </div>
         <div class="input-container" [class.disabled]="sharedService.loading()">
           <label for="position">Position:</label>
-          <input type="text" pInputText variant="filled" placeholder="Position" formControlName="position"/>
+          <input id="position" type="text" pInputText variant="filled" placeholder="Position" formControlName="position" autocomplete="none"/>
         </div>
         <div class="input-container" [class.disabled]="sharedService.loading()">
           <label for="phone">Phone:</label>
-          <input type="tel" pInputText variant="filled" placeholder="(xxx) xxx-xxxx" formControlName="phone" phoneNumber minlength="10"/>
+          <input id="phone" type="tel" pInputText variant="filled" placeholder="(xxx) xxx-xxxx" formControlName="phone" phoneNumber minlength="10" autocomplete="tel"/>
         </div>
         <div class="input-container" [class.disabled]="sharedService.loading()">
           <label for="location">Location:</label>
-          <input type="text" pInputText variant="filled" placeholder="Location" formControlName="location"/>
+          <input id="location" type="text" pInputText variant="filled" placeholder="Location" formControlName="location" autocomplete="none"/>
         </div>
         <div class="input-container" [class.disabled]="sharedService.loading()">
           <label for="message">Message:</label>
-          <textarea rows="3" cols="30" pInputTextarea variant="filled" formControlName="message"  placeholder="Message to display on your profile" style="resize: none;"></textarea>
+          <textarea id="message" rows="3" cols="30" pInputTextarea variant="filled" formControlName="message"  placeholder="Message to display on your profile" style="resize: none;" autocomplete="none"></textarea>
         </div>
         <div class="button-container">
           <p-button label="Save Changes" type="submit" [disabled]="!profileForm.dirty || savingChanges()"></p-button>
@@ -64,7 +64,7 @@
         }
         <div class="input-container" [class.disabled]="sharedService.loading()">
           <label for="name">Business Name:</label>
-          <input type="text" pInputText variant="filled" placeholder="Business Name" formControlName="name"/>
+          <input id="name" type="text" pInputText variant="filled" placeholder="Business Name" formControlName="name" autocomplete="name"/>
         </div>
         <div class="button-container">
           <p-button label="Save Changes" type="submit" [disabled]="!businessForm.dirty || savingChanges()"></p-button>

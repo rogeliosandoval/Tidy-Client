@@ -162,7 +162,7 @@ p-progressSpinner {
   .client-phone,
   .client-contacts {
     &:hover {
-      span {
+      a, span {
         cursor: pointer;
         color: variables.$theme-color-main-light;
       }

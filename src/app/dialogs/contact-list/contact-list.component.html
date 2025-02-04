@@ -1,3 +1,17 @@
-<p-dialog header="Contacts" [modal]="true" (onHide)="closeDialog()" [(visible)]="showContactListDialog" [style]="{ width: '25rem' }">
-  <span class="p-text-secondary block mb-5">Contacts for <strong>{{ sharedService.dialogClient().name }}</strong></span>
+<p-dialog header="Contacts" [modal]="true" (onHide)="closeDialog()" [(visible)]="showContactListDialog" [style]="{ width: '25rem', maxHeight: '31.5rem', height: 'auto' }">
+  <span class="p-text-secondary block mb-5">Contacts for <strong>{{ sharedService.dialogClient()?.name }}</strong></span>
+  @for (contact of sharedService.dialogClient()?.contacts; track contact.id) {
+    <div class="contact-card" [style.background-color]="sharedService.darkMode() ? 'rgb(30, 30, 30)' : 'rgb(245, 245, 237)'">
+      <div class="contact-card-info">
+        <div class="contact-card__name">Adrian Rocky</div>
+        <div class="contact-card__position">Senior Full Stack Engineer</div>
+        <div class="contact-card__email">test&#64;testing.com</div>
+        <div class="contact-card__phone">(210) 540-6838</div>
+      </div>
+      <div class="menu">
+        <i class="pi pi-ellipsis-h" (click)="menu.toggle($event)"></i>
+        <p-menu #menu [model]="contactOptions" [popup]="true" [appendTo]="'body'"/>
+      </div>
+    </div>
+  }
 </p-dialog>

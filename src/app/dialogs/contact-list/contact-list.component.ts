@@ -3,6 +3,8 @@ import { DialogModule } from 'primeng/dialog'
 import { ButtonModule } from 'primeng/button'
 import { ProgressSpinnerModule } from 'primeng/progressspinner'
 import { SharedService } from '../../services/shared.service'
+import { MenuItem } from 'primeng/api'
+import { MenuModule } from 'primeng/menu'
 
 @Component({
   selector: 'tcd-contact-list',
@@ -10,18 +12,47 @@ import { SharedService } from '../../services/shared.service'
   imports: [
     DialogModule,
     ButtonModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    MenuModule
   ],
   templateUrl: './contact-list.component.html',
   styleUrl: './contact-list.component.scss'
 })
 
-export class ContactListDialog {
+export class ContactListDialog implements OnInit {
   @Input() showContactListDialog = false
   @Output() onClose = new EventEmitter<boolean>()
   @Output() onSubmit = new EventEmitter<any>()
   public sharedService = inject(SharedService)
   public dialogLoading = input<boolean>()
+  public contactOptions: MenuItem[] | undefined
+
+  ngOnInit(): void {
+    this.contactOptions =  [
+      {
+        label: 'Edit Contact',
+        icon: 'pi pi-pencil',
+        command: () => {
+
+        }
+      },
+      {
+        label: 'Send Email',
+        icon: 'pi pi-envelope'
+      },
+      {
+        label: 'Delete Contact',
+        icon: 'pi pi-trash',
+        command: () => {
+
+        }
+      }
+    ]
+  }
+
+  public test(): void {
+    console.log(this.sharedService.dialogClient())
+  }
 
   public closeDialog() {
     this.showContactListDialog = false

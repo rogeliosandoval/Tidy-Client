@@ -6,9 +6,9 @@
     <div class="top-nav" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()">
       <div class="top-nav-logo" routerLink="/dashboard/">
         @if (sharedService.darkMode()) {
-          <img class="logo" src="assets/logo-light.svg" alt="logo" [draggable]="false">
+          <img class="logo" src="assets/logo-light.svg" alt="logo" draggable="false">
         } @else {
-          <img class="logo" src="assets/logo.svg" alt="logo" [draggable]="false">
+          <img class="logo" src="assets/logo.svg" alt="logo" draggable="false">
         }
       </div>
       <div class="top-nav-search">

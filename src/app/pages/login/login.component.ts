@@ -29,7 +29,7 @@ import { CheckboxModule } from 'primeng/checkbox';
   styleUrl: './login.component.scss'
 })
 
-export class Login {
+export class Login implements OnInit {
   private authService = inject(AuthService)
   private router = inject(Router)
   public sharedService = inject(SharedService)

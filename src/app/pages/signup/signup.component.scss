@@ -16,6 +16,33 @@ $breakpoints: variables.$breakpoints;
   }
 }
 
+.form-container-dark {
+  form {
+    .input-container, .checkbox-container {
+      label {
+        color: white;
+      }
+    }
+  }
+
+  .divider {
+    color: white;
+
+    &:before, &:after {
+      background-color: white;
+    }
+  }
+
+  .google-button {
+    color: white;
+    border: 1px solid variables.$theme-color-main-light;
+  }
+
+  .action {
+    color: variables.$theme-color-main-light;
+  }
+}
+
 .form-container {
   display: flex;
   justify-content: center;

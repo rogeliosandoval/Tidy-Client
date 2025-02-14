@@ -1,5 +1,5 @@
 <p-dialog header="{{ type === 'edit' ? 'Edit Contact' : 'Add Contact' }}" [modal]="true" (onHide)="closeDialog()" (onShow)="editCheck()" [(visible)]="showContactFormDialog" [style]="{ width: '26rem' }">
-  <form [formGroup]="contactForm" class="contact-form" [class.form-container-dark]="sharedService.darkMode()" (ngSubmit)="type === 'edit' ? submitDialog('edit') : submitDialog('add')">
+  <form [formGroup]="contactForm" class="contact-form" (ngSubmit)="type === 'edit' ? submitDialog('edit') : submitDialog('add')">
     <div class="input-group" [class.disabled]="dialogLoading()">
       <label for="contact_name">Contact Name*</label>
       <input id="contact_name" type="text" pInputText variant="filled" placeholder="Name" formControlName="contact_name" autocomplete="name"/>

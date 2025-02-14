@@ -1,4 +1,4 @@
-<div class="dashboard-container" [class.dashboard-container-dark]="sharedService.darkMode()" [style.background-color]="sharedService.darkMode() ? '' : '#f1f1f1'">
+<div class="dashboard-container" [style.background-color]="sharedService.darkMode() ? '' : '#f1f1f1'">
   @if (authService.coreUserData() === undefined || authService.coreBusinessData() === undefined) {
     <p-progressSpinner ariaLabel="loading" strokeWidth="3"/>
   } @else {
@@ -11,26 +11,17 @@
           <img class="logo" src="assets/logo.svg" alt="logo" [draggable]="false">
         }
       </div>
-      @if (sharedService.darkMode()) {
-        <div class="top-nav-search-dark">
-          <p-iconField iconPosition="left">
-            <p-inputIcon styleClass="pi pi-search" />
-            <input type="text" pInputText placeholder="Search" />
-          </p-iconField>
-        </div>
-      } @else {
-        <div class="top-nav-search">
-          <p-iconField iconPosition="left">
-            <p-inputIcon styleClass="pi pi-search" />
-            <input name="search" type="text" pInputText placeholder="Search" />
-          </p-iconField>
-        </div>
-      }
+      <div class="top-nav-search">
+        <p-iconField iconPosition="left">
+          <p-inputIcon styleClass="pi pi-search" />
+          <input name="search" type="text" pInputText placeholder="Search" />
+        </p-iconField>
+      </div>
       <div class="top-nav-avatar">
         @if (sharedService.darkMode() === false) {
-          <i class="pi pi-moon" (click)="sharedService.darkMode.set(true)"></i>
+          <i class="pi pi-moon" (click)="sharedService.toggleTheme()"></i>
         } @else {
-          <i class="pi pi-sun" (click)="sharedService.darkMode.set(false)"></i>
+          <i class="pi pi-sun" (click)="sharedService.toggleTheme()"></i>
         }
         <div class="top-nav-avatar__dropdown" (click)="menu.toggle($event)">
           @if (authService.coreUserData()?.avatarUrl) {

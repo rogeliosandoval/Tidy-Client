@@ -3,7 +3,7 @@
 } @else {
   <div class="route-container">
     <div class="title" [class.disabled]="sharedService.loading()">Account Settings</div>
-    <div class="form-container" [class.form-container-dark]="sharedService.darkMode()" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'">
+    <div class="form-container" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'">
       <div class="form-label" [class.disabled]="sharedService.loading() || savingChanges()">Profile Info</div>
       <form [formGroup]="profileForm" [class.disabled]="sharedService.loading() || savingChanges()" (ngSubmit)="saveProfileChanges()">
         @if (authService.coreUserData().avatarUrl) {

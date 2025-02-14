@@ -1,6 +1,10 @@
 <div class="login-container">
-  <div class="form-container">
-    <img src="assets/logo.svg" alt="logo" routerLink="/" [style.pointer-events]="sharedService.loading() ? 'none' : ''">
+  <div class="form-container" [class.form-container-dark]="sharedService.darkMode()" [style.background-color]="sharedService.darkMode() ? '#282828' : ''">
+    @if(sharedService.darkMode()) {
+      <img src="assets/logo-light.svg" alt="logo" routerLink="/" [style.pointer-events]="sharedService.loading() ? 'none' : ''">
+    } @else {
+      <img src="assets/logo.svg" alt="logo" routerLink="/" [style.pointer-events]="sharedService.loading() ? 'none' : ''">
+    }
     @if (forgotPassword()) {
       <form id="entry-form" [formGroup]="resetPasswordForm">
         @if (resetLinkSent()) {
@@ -12,7 +16,7 @@
             <label for="email">Your Email:</label>
             <input type="text" pInputText variant="filled" placeholder="Email" aria-label="your email" formControlName="email"/>
           </div>
-          <p-button label="Send Reset Link" ariaLabel="send reset link" (onClick)="sendResetLink()" [disabled]="resetPasswordForm.invalid || sharedService.loading()"></p-button>
+          <p-button type="submit" label="Send Reset Link" ariaLabel="send reset link" (onClick)="sendResetLink()" [disabled]="resetPasswordForm.invalid || sharedService.loading()"></p-button>
           @if (sharedService.loading()) {
             <p-progressSpinner ariaLabel="loading" strokeWidth="3"/>
           }
@@ -35,7 +39,7 @@
           <p-checkbox formControlName="checked" value="yes" inputId="checked" variant="filled"/>
           <label for="checked">Remember me</label>
         </div>
-        <p-button label="Login" ariaLabel="login" type="submit" [disabled]="loginForm.invalid || sharedService.loading()"></p-button>
+        <p-button type="submit" label="Login" ariaLabel="login" type="submit" [disabled]="loginForm.invalid || sharedService.loading()"></p-button>
         @if (sharedService.loading()) {
           <p-progressSpinner ariaLabel="loading" strokeWidth="3"/>
         }

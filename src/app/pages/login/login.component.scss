@@ -16,6 +16,37 @@ $breakpoints: variables.$breakpoints;
   }
 }
 
+.form-container-dark {
+  form {
+    .input-container, .checkbox-container {
+      label {
+        color: white;
+      }
+    }
+  }
+
+  .divider {
+    color: white;
+
+    &:before, &:after {
+      background-color: white;
+    }
+  }
+
+  .google-button {
+    color: white;
+    border: 1px solid variables.$theme-color-main-light;
+  }
+
+  .action {
+    color: variables.$theme-color-main-light;
+  }
+
+  .no-receive {
+    color: variables.$theme-color-main-light;
+  }
+}
+
 .form-container {
   display: flex;
   justify-content: center;
@@ -48,7 +79,6 @@ $breakpoints: variables.$breakpoints;
       line-height: 1.5rem;
       margin-bottom: 15px;
       text-align: center;
-      color: black;
     }
 
     p-progressSpinner {

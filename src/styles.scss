@@ -1,6 +1,5 @@
 @import "primeicons/primeicons.css"; /* PrimeIcons should be first */
 @import "primeng/resources/primeng.css"; /* PrimeNG component styles */
-@import "primeng/resources/themes/lara-light-blue/theme.css"; /* Theme styles */
 @import 'include-media';
 $breakpoints: (
   'phone': 460px,
@@ -59,15 +58,6 @@ textarea,
   }
 }
 
-.top-nav-search-dark {
-  p-iconField input {
-    width: 100%;
-    font-family: "Outfit", sans-serif;
-    background: transparent;
-    color: white;
-  }
-}
-
 .p-menu .p-menuitem > .p-menuitem-content .p-menuitem-link {
   font-family: "Outfit", sans-serif;
 }
@@ -83,45 +73,6 @@ textarea,
 
 .p-text-secondary {
   font-family: "Outfit", sans-serif;
-}
-
-.dashboard-container-dark {
-  .p-dialog .p-dialog-content:last-of-type,
-  .p-dialog-draggable .p-dialog-header {
-    background: rgb(42, 42, 42);
-    color: white;
-  }
-
-  .p-text-secondary {
-    color: white;
-  }
-
-  .startup-form {
-    input {
-      background: black;
-      color: white;
-    }
-  }
-
-  .p-toast .p-toast-message .p-toast-message-content {
-    background-color: rgb(22, 22, 22);
-  }
-
-  .p-toast .p-toast-message .p-toast-icon-close {
-    background-color: transparent;
-  }
-}
-
-.form-container-dark {
-  input, textarea, .p-dropdown {
-    background: rgb(28, 28, 28);
-    color: white;
-    transition: none;
-  }
-
-  .p-dropdown-label {
-    color: white;
-  }
 }
 
 .contact-container {

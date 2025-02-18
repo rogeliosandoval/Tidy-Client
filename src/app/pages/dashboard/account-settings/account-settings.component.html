@@ -27,7 +27,7 @@
         </div>
         <div class="input-container" [class.disabled]="sharedService.loading()">
           <label for="position">Position:</label>
-          <input id="position" type="text" pInputText variant="filled" placeholder="Position" formControlName="position" autocomplete="none"/>
+          <input id="position" type="text" pInputText variant="filled" placeholder="Position" formControlName="position" autocomplete="off"/>
         </div>
         <div class="input-container" [class.disabled]="sharedService.loading()">
           <label for="phone">Phone:</label>
@@ -35,11 +35,11 @@
         </div>
         <div class="input-container" [class.disabled]="sharedService.loading()">
           <label for="location">Location:</label>
-          <input id="location" type="text" pInputText variant="filled" placeholder="Location" formControlName="location" autocomplete="none"/>
+          <input id="location" type="text" pInputText variant="filled" placeholder="Location" formControlName="location" autocomplete="off"/>
         </div>
         <div class="input-container" [class.disabled]="sharedService.loading()">
           <label for="message">Message:</label>
-          <textarea id="message" rows="3" cols="30" pInputTextarea variant="filled" formControlName="message"  placeholder="Message to display on your profile" style="resize: none;" autocomplete="none"></textarea>
+          <textarea id="message" rows="3" cols="30" pInputTextarea variant="filled" formControlName="message"  placeholder="Message to display on your profile" style="resize: none;" autocomplete="off"></textarea>
         </div>
         <div class="button-container">
           <p-button label="Save Changes" type="submit" [disabled]="!profileForm.dirty || savingChanges()"></p-button>

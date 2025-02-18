@@ -1,22 +1,22 @@
 <div class="signup-container">
   <div class="form-container" [class.form-container-dark]="sharedService.darkMode()" [style.background-color]="sharedService.darkMode() ? '#282828' : ''">
     @if(sharedService.darkMode()) {
-      <img src="assets/logo-light.svg" alt="logo" routerLink="/" [style.pointer-events]="sharedService.loading() ? 'none' : ''">
+      <img src="assets/logo-light.svg" alt="logo" routerLink="/" draggable="false" [style.pointer-events]="sharedService.loading() ? 'none' : ''" width="317" height="75">
     } @else {
-      <img src="assets/logo.svg" alt="logo" routerLink="/" [style.pointer-events]="sharedService.loading() ? 'none' : ''">
+      <img src="assets/logo.svg" alt="logo" routerLink="/" draggable="false" [style.pointer-events]="sharedService.loading() ? 'none' : ''" width="317" height="75">
     }
     <form id="entry-form" [formGroup]="registerForm" (ngSubmit)="register()">
       <div class="input-container" [class.disabled]="sharedService.loading()">
         <label for="name">Your Name:</label>
-        <input type="text" pInputText variant="filled" placeholder="Name" formControlName="name"/>
+        <input id="name" type="text" pInputText variant="filled" placeholder="Name" formControlName="name" autocomplete="name"/>
       </div>
       <div class="input-container" [class.disabled]="sharedService.loading()">
         <label for="email">Your Email:</label>
-        <input type="text" pInputText variant="filled" placeholder="Email" formControlName="email"/>
+        <input id="email" type="text" pInputText variant="filled" placeholder="Email" formControlName="email" autocomplete="email"/>
       </div>
       <div class="input-container" [class.disabled]="sharedService.loading()">
         <label for="password">Create Password:</label>
-        <p-password [toggleMask]="true" variant="filled" placeholder="Password" feedback="false" formControlName="password" minlength="4"/>
+        <p-password inputId="password" [toggleMask]="true" variant="filled" placeholder="Password" feedback="false" formControlName="password" minlength="4" autocomplete="off"/>
       </div>
       <p-button label="Register" type="submit" [disabled]="registerForm.invalid || sharedService.loading()"></p-button>
       @if (sharedService.loading()) {

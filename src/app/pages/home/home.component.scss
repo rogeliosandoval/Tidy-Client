@@ -134,6 +134,7 @@ $breakpoints: variables.$breakpoints;
   margin: 80px 10px 40px;
 
   .counting {
+    height: auto;
     max-width: 450px;
 
     @include media('<tablet') {

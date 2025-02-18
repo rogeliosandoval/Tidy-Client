@@ -25,7 +25,7 @@
 
     <div class="input-group" [class.disabled]="dialogLoading()">
       <label for="client_location">Client Location</label>
-      <input id="client_location" type="text" pInputText variant="filled" placeholder="Location" formControlName="client_location" autocomplete="none"/>
+      <input id="client_location" type="text" pInputText variant="filled" placeholder="Location" formControlName="client_location" autocomplete="off"/>
     </div>
 
     @if (showUploadAvatarButton()) {
@@ -56,7 +56,7 @@
 
     <div class="input-group" [class.disabled]="dialogLoading()">
       <label for="note">Note</label>
-      <textarea id="note" rows="3" cols="30" pInputTextarea variant="filled" formControlName="note"  placeholder="Add a note or a description for this client" style="resize: none;" autocomplete="none"></textarea>
+      <textarea id="note" rows="3" cols="30" pInputTextarea variant="filled" formControlName="note"  placeholder="Add a note or a description for this client" style="resize: none;" autocomplete="off"></textarea>
     </div>
     <p-button label="{{ type === 'add' ? 'Add Client' : 'Update Client' }}" type="submit" [disabled]="dialogLoading() || clientForm.invalid || !clientForm.dirty"></p-button>
     @if (dialogLoading()) {

@@ -1,10 +1,10 @@
 import { Injectable, inject, signal } from '@angular/core'
 import { Auth, UserCredential, browserLocalPersistence, browserSessionPersistence, createUserWithEmailAndPassword, setPersistence, signInWithEmailAndPassword, signOut, updateProfile, user } from '@angular/fire/auth'
 import { Observable, from } from 'rxjs'
-import { UserInterface } from '../interfaces/user.interface'
 import { collection, deleteDoc, doc, Firestore, getDoc, getDocs, setDoc } from '@angular/fire/firestore'
 import { Storage, deleteObject, getDownloadURL, listAll, ref } from '@angular/fire/storage'
 import { v4 as uuidv4 } from 'uuid'
+import { UserData } from '../interfaces/user.interface'
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +15,8 @@ export class AuthService {
   firestore = inject(Firestore)
   firebaseAuth = inject(Auth)
   user$ = user(this.firebaseAuth)
-  currentUserSignal = signal<UserInterface | null | undefined>(undefined)
-  coreUserData = signal<any>(undefined)
+  currentUserSignal = signal<any>(undefined)
+  coreUserData = signal<UserData | null>(null)
   coreBusinessData = signal<any>(undefined)
   businessClientAvatars = signal<string[] | null>([])
   dialogClient = signal<any>(null)
@@ -68,7 +68,8 @@ export class AuthService {
       const userDocSnap = await getDoc(userRef)
 
       if (userDocSnap.exists()) {
-        const userData = userDocSnap.data()
+        // Type assertion to tell TypeScript that this data is of type UserData
+        const userData = userDocSnap.data() as UserData
         this.coreUserData.set(userData)
       } else {
         this.coreUserData.set(null)
@@ -276,7 +277,7 @@ export class AuthService {
 
   public async addContactToClient(formData: any, clientId: any): Promise<void> {
     const contactId = uuidv4()
-    const contactRef = doc(this.firestore, `businesses/${this.coreUserData().businessId}/clients/${clientId}/contacts/${contactId}`)
+    const contactRef = doc(this.firestore, `businesses/${this.coreUserData()?.businessId}/clients/${clientId}/contacts/${contactId}`)
 
     await setDoc(contactRef, {
       id: contactId,

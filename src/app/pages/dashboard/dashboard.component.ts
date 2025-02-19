@@ -104,7 +104,7 @@ export class Dashboard implements OnInit {
     await this.authService.fetchCoreUserData()
     await this.authService.fetchCoreBusinessData()
     .then(() => {
-      if (!this.authService.coreUserData().businessId) {
+      if (!this.authService.coreUserData()?.businessId) {
         this.showStartupFormDialog.set(true)
       }
     })
@@ -135,13 +135,13 @@ export class Dashboard implements OnInit {
   public async addClient(data: any) {
     this.dialogLoading.set(true)
     const clientId = uuidv4()
-    const clientRef = doc(this.firestore, `businesses/${this.authService.coreUserData().businessId}/clients/${clientId}`)
+    const clientRef = doc(this.firestore, `businesses/${this.authService.coreUserData()?.businessId}/clients/${clientId}`)
     let avatarUrl = ''
 
     try {
       if (data.file) {
         const file = data.file
-        const filePath = `businesses/${this.authService.coreUserData().businessId}/clients/${clientId}/avatar`
+        const filePath = `businesses/${this.authService.coreUserData()?.businessId}/clients/${clientId}/avatar`
         const storageRef = ref(this.storage, filePath)
         await uploadBytesResumable(storageRef, file)
     
@@ -193,13 +193,13 @@ export class Dashboard implements OnInit {
   public async editClient(data: any): Promise<any> {
     this.dialogLoading.set(true)
     const clientId = this.sharedService.dialogClient().id
-    const clientRef = doc(this.firestore, `businesses/${this.authService.coreUserData().businessId}/clients/${clientId}`)
+    const clientRef = doc(this.firestore, `businesses/${this.authService.coreUserData()?.businessId}/clients/${clientId}`)
     let avatarUrl = this.sharedService.dialogClient().avatarUrl
 
     try {
       if (data.file) {
         const file = data.file
-        const filePath = `businesses/${this.authService.coreUserData().businessId}/clients/${clientId}/avatar`
+        const filePath = `businesses/${this.authService.coreUserData()?.businessId}/clients/${clientId}/avatar`
         const storageRef = ref(this.storage, filePath)
         await uploadBytesResumable(storageRef, file)
         avatarUrl = await getDownloadURL(storageRef)

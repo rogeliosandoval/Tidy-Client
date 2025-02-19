@@ -1,10 +1,11 @@
-export interface UserInterface {
+export interface UserData {
+  avatarUrl: string
+  businessId: string
   email: string
+  location: string
+  message: string
   name: string
-}
-
-export interface CoreUserInterface {
-  name: string
-  email: string
-  business_name: string
+  phone: string
+  position: string
+  uid: string
 }

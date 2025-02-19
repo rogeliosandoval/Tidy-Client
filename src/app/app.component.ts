@@ -3,7 +3,6 @@ import { RouterOutlet } from '@angular/router'
 import { SharedService } from './services/shared.service'
 import { CommonModule } from '@angular/common'
 import { AuthService } from './services/auth.service'
-import { UserInterface } from './interfaces/user.interface'
 
 @Component({
   selector: 'app-root',
@@ -21,11 +20,11 @@ export class AppComponent implements OnInit {
   public loadApp = signal<boolean>(false)
   
   ngOnInit(): void {
-    this.authService.user$.subscribe((user: UserInterface) => {
+    this.authService.user$.subscribe((user: any) => {
       if (user) {
         this.authService.currentUserSignal.set({
           email: user.email!,
-          name: user.name!,
+          name: user.displayName!,
         })
         this.loadApp.set(true)
       } else {

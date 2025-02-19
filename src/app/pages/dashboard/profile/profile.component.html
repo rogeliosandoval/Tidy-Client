@@ -1,23 +1,23 @@
 <div class="route-container">
   <div class="profile-container" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()">
     <div class="main">
-      @if (authService.coreUserData().avatarUrl) {
-        <img [src]="authService.coreUserData().avatarUrl" alt="avatar">
+      @if (authService.coreUserData()?.avatarUrl) {
+        <img [src]="authService.coreUserData()?.avatarUrl" alt="avatar">
       } @else {
         <img src="assets/avatars/default-avatar.png" alt="avatar">
       }
       <div class="main-info">
-        <div class="name">{{ authService.coreUserData().name }}</div>
-        <div class="position" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">{{ authService.coreUserData().position ? authService.coreUserData().position : 'N/A' }}</div>
-        <div class="phone"><i class="pi pi-phone"></i> {{ authService.coreUserData().phone ? authService.coreUserData().phone : 'N/A' }}</div>
-        <div class="email"><i class="pi pi-envelope"></i> {{ authService.coreUserData().email }}</div>
-        <div class="location"><i class="pi pi-map-marker"></i> {{ authService.coreUserData().location ? authService.coreUserData().location : 'N/A' }}</div>
+        <div class="name">{{ authService.coreUserData()?.name }}</div>
+        <div class="position" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">{{ authService.coreUserData()?.position ? authService.coreUserData()?.position : 'N/A' }}</div>
+        <div class="phone"><i class="pi pi-phone"></i> {{ authService.coreUserData()?.phone ? authService.coreUserData()?.phone : 'N/A' }}</div>
+        <div class="email"><i class="pi pi-envelope"></i> {{ authService.coreUserData()?.email }}</div>
+        <div class="location"><i class="pi pi-map-marker"></i> {{ authService.coreUserData()?.location ? authService.coreUserData()?.location : 'N/A' }}</div>
       </div>
     </div>
     <i class="pi pi-user-edit" routerLink="/dashboard/account-settings"></i>
-    @if (authService.coreUserData().message) {
+    @if (authService.coreUserData()?.message) {
       <div class="public-note">
-        <span class="note" [style.background-color]="sharedService.darkMode() ? '#181818' : 'whitesmoke'">{{ authService.coreUserData().message }}</span>
+        <span class="note" [style.background-color]="sharedService.darkMode() ? '#181818' : 'whitesmoke'">{{ authService.coreUserData()?.message }}</span>
       </div>
     }
   </div>

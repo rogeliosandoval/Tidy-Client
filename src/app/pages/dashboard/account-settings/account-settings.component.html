@@ -6,9 +6,9 @@
     <div class="form-container" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'">
       <div class="form-label" [class.disabled]="sharedService.loading() || savingChanges()">Profile Info</div>
       <form [formGroup]="profileForm" [class.disabled]="sharedService.loading() || savingChanges()" (ngSubmit)="saveProfileChanges()">
-        @if (authService.coreUserData().avatarUrl) {
+        @if (authService.coreUserData()?.avatarUrl) {
           <div class="avatar-container">
-            <img class="avatar" [src]="authService.coreUserData().avatarUrl" alt="avatar">
+            <img class="avatar" [src]="authService.coreUserData()?.avatarUrl" alt="avatar">
             <i class="pi pi-pencil" (click)="triggerAvatarUpload('profile')"></i>
           </div>
         } @else {

@@ -46,12 +46,12 @@ export class AccountSettings implements OnInit {
   public uploadAvatarType = signal<string>('')
   public defaultProfileForm: any
   public profileForm = new FormGroup({
-    name: new FormControl(this.authService.coreUserData().name),
-    email: new FormControl({ value: this.authService.coreUserData().email, disabled: true}),
-    position: new FormControl(this.authService.coreUserData().position),
-    phone: new FormControl(this.authService.coreUserData().phone),
-    location: new FormControl(this.authService.coreUserData().location),
-    message: new FormControl(this.authService.coreUserData().message)
+    name: new FormControl(this.authService.coreUserData()?.name),
+    email: new FormControl({ value: this.authService.coreUserData()?.email, disabled: true}),
+    position: new FormControl(this.authService.coreUserData()?.position),
+    phone: new FormControl(this.authService.coreUserData()?.phone),
+    location: new FormControl(this.authService.coreUserData()?.location),
+    message: new FormControl(this.authService.coreUserData()?.message)
   })
   public defaultBusinessForm: any
   public businessForm = new FormGroup({
@@ -78,9 +78,9 @@ export class AccountSettings implements OnInit {
     let avatarUrl = ''
 
     if (data.file && data.type === 'profile') {
-      const userRef = doc(this.firestore, `users/${this.authService.coreUserData().uid}`)
+      const userRef = doc(this.firestore, `users/${this.authService.coreUserData()?.uid}`)
       const file = data.file
-      const filePath = `users/${this.authService.coreUserData().uid}/avatar`
+      const filePath = `users/${this.authService.coreUserData()?.uid}/avatar`
       const storageRef = ref(this.storage, filePath)
       await uploadBytesResumable(storageRef, file)
       avatarUrl = await getDownloadURL(storageRef)
@@ -101,7 +101,7 @@ export class AccountSettings implements OnInit {
 
       this.sharedService.showAvatarUploadDialog.set(false)
     } else if (!data.file && data.type === 'profile') {
-      const userRef = doc(this.firestore, `users/${this.authService.coreUserData().uid}`)
+      const userRef = doc(this.firestore, `users/${this.authService.coreUserData()?.uid}`)
 
       await this.authService.deleteProfileAvatar()
 
@@ -123,9 +123,9 @@ export class AccountSettings implements OnInit {
     }
 
     if (data.file && data.type !== 'profile') {
-      const businessRef = doc(this.firestore, `businesses/${this.authService.coreUserData().businessId}`)
+      const businessRef = doc(this.firestore, `businesses/${this.authService.coreUserData()?.businessId}`)
       const file = data.file
-      const filePath = `businesses/${this.authService.coreUserData().businessId}/avatar`
+      const filePath = `businesses/${this.authService.coreUserData()?.businessId}/avatar`
       const storageRef = ref(this.storage, filePath)
       await uploadBytesResumable(storageRef, file)
       avatarUrl = await getDownloadURL(storageRef)
@@ -146,7 +146,7 @@ export class AccountSettings implements OnInit {
 
       this.sharedService.showAvatarUploadDialog.set(false)
     } else if (!data.file && data.type !== 'profile') {
-      const businessRef = doc(this.firestore, `businesses/${this.authService.coreUserData().businessId}`)
+      const businessRef = doc(this.firestore, `businesses/${this.authService.coreUserData()?.businessId}`)
 
       await this.authService.deleteBusinessAvatar()
 
@@ -253,7 +253,7 @@ export class AccountSettings implements OnInit {
       .subscribe({
         next: async (data: any) => {
           if (data && data.uid) {
-            const businessRef = doc(this.firestore, `businesses/${this.authService.coreUserData().businessId}`)
+            const businessRef = doc(this.firestore, `businesses/${this.authService.coreUserData()?.businessId}`)
 
             await setDoc(businessRef, {
               name: formData.name

@@ -25,7 +25,7 @@
         }
         <div class="top-nav-avatar__dropdown" (click)="menu.toggle($event)">
           @if (authService.coreUserData()?.avatarUrl) {
-            <img class="avatar" [src]="authService.coreUserData().avatarUrl" alt="avatar" [class.avatar-hover-dark]="sharedService.darkMode()" width="40" height="40" loading="lazy">
+            <img class="avatar" [src]="authService.coreUserData()?.avatarUrl" alt="avatar" [class.avatar-hover-dark]="sharedService.darkMode()" width="40" height="40" loading="lazy">
           } @else {
             <img class="avatar" src="assets/avatars/default-avatar.png" alt="avatar" [class.avatar-hover-dark]="sharedService.darkMode()" width="40" height="40" loading="lazy">
           }
@@ -51,7 +51,7 @@
      <div class="main-container" [class.p-sidebar-dark]="sharedService.darkMode()">
       <div class="side-nav" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()">
         <div class="side-nav-head">
-          <span [style.color]="sharedService.darkMode() ? 'white' : 'black'"><i class="pi pi-briefcase"></i>{{ authService.coreUserData().businessId ? authService.coreBusinessData()?.name : 'Your Business Name' }}</span>
+          <span [style.color]="sharedService.darkMode() ? 'white' : 'black'"><i class="pi pi-briefcase"></i>{{ authService.coreUserData()?.businessId ? authService.coreBusinessData()?.name : 'Your Business Name' }}</span>
           <button class="add-client-button" (click)="sharedService.clientFormType.set('add'); sharedService.showClientFormDialog.set(true)">Add Client <i class="pi pi-plus"></i></button>
         </div>
         <div class="side-nav-main">

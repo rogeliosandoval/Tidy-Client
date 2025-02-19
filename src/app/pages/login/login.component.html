@@ -6,7 +6,7 @@
       <img src="assets/logo.svg" alt="logo" routerLink="/" draggable="false" [style.pointer-events]="sharedService.loading() ? 'none' : ''" width="317" height="75">
     }
     @if (forgotPassword()) {
-      <form id="entry-form" [formGroup]="resetPasswordForm">
+      <form id="entry-form" [formGroup]="resetPasswordForm" (ngSubmit)="sendResetLink()">
         @if (resetLinkSent()) {
           <p style="margin: 0;">A link has been sent. Please check your email for further instruction. Thank you!</p>
           <span class="no-receive" aria-label="resend link" (click)="resetLinkSent.set(false)">Didn't receive it? Try resending it.</span>
@@ -16,7 +16,7 @@
             <label for="email">Your Email:</label>
             <input id="email" type="text" pInputText variant="filled" placeholder="Email" aria-label="your email" formControlName="email" autocomplete="email"/>
           </div>
-          <p-button type="submit" label="Send Reset Link" ariaLabel="send reset link" (onClick)="sendResetLink()" [disabled]="resetPasswordForm.invalid || sharedService.loading()"></p-button>
+          <p-button type="submit" label="Send Reset Link" ariaLabel="send reset link" [disabled]="resetPasswordForm.invalid || sharedService.loading()"></p-button>
           @if (sharedService.loading()) {
             <p-progressSpinner ariaLabel="loading" strokeWidth="3"/>
           }

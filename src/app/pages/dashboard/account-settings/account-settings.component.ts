@@ -16,7 +16,7 @@ import { DialogModule } from 'primeng/dialog'
 import { AvatarUploadDialog } from '../../../dialogs/avatar-upload/avatar-upload.component'
 
 @Component({
-  selector: 'app-account-settings',
+  selector: 'tc-account-settings',
   standalone: true,
   imports: [
     InputTextModule,

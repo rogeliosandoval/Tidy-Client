@@ -1,5 +1,5 @@
 <div class="dashboard-container" [style.background-color]="sharedService.darkMode() ? '' : '#f1f1f1'">
-  @if (authService.coreUserData() === undefined || authService.coreBusinessData() === undefined) {
+  @if (authService.coreUserData() === null || authService.coreBusinessData() === undefined) {
     <p-progressSpinner ariaLabel="loading" strokeWidth="3"/>
   } @else {
     <!-- Top Navbar -->

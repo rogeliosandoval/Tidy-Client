@@ -17,7 +17,7 @@ export class AuthService {
   user$ = user(this.firebaseAuth)
   currentUserSignal = signal<any>(undefined)
   coreUserData = signal<UserData | null>(null)
-  coreBusinessData = signal<any>(undefined)
+  coreBusinessData = signal<any>(undefined) // TODO: create interface and typecheck like user data
   businessClientAvatars = signal<string[] | null>([])
   dialogClient = signal<any>(null)
 

@@ -23,7 +23,7 @@
         </div>
       } @else {
         <div class="avatar-container" [class.disabled]="dialogLoading()">
-          <img class="avatar" src="assets/avatars/default-avatar.png" [src]="type === 'profile' ? 'assets/avatars/default-avatar.png' : 'assets/avatars/default-business-avatar.png'" alt="avatar">
+          <img class="avatar" [src]="type === 'profile' ? 'assets/avatars/default-avatar.png' : 'assets/avatars/default-business-avatar.png'" alt="avatar">
           <i class="pi pi-trash" (click)="showUploadAvatarButton.set(true); avatar = null; avatarUrl = null"></i>
         </div>
       }

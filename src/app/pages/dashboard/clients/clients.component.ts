@@ -34,6 +34,7 @@ import { ContactListDialog } from '../../../dialogs/contact-list/contact-list.co
   templateUrl: './clients.component.html',
   styleUrl: './clients.component.scss'
 })
+
 export class Clients implements OnInit {
   @ViewChild('contactFormDialog') contactFormDialog!: ContactFormDialog
   private router = inject(Router)

@@ -47,6 +47,7 @@ import { Storage, getDownloadURL, ref, uploadBytesResumable } from '@angular/fir
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
+
 export class Dashboard implements OnInit {
   private storage = inject(Storage)
   @ViewChild('addBusinessDialog') addBusinessDialog!: StartupFormDialog

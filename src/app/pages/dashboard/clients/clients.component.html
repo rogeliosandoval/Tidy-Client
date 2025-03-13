@@ -38,11 +38,11 @@
             <i class="pi pi-envelope"></i>
             @if (client.email) {
               @if (client.email.length >= 25) {
-                <a class="desktop-trunc" href="mailto:{{client.email}}" style="text-decoration: none;" pTooltip="{{client.email}}" tooltipPosition="top" [autoHide]="false">
+                <a class="desktop-trunc" href="mailto:{{client.email}}" style="text-decoration: none;" pTooltip="{{client.email}}" tooltipPosition="top" autoHide="false" showDelay="500">
                   {{ client.email | truncate: 20 }}
                 </a>
 
-                <a class="phone-break" href="mailto:{{client.email}}" style="text-decoration: none;" pTooltip="{{client.email}}" tooltipPosition="top" [autoHide]="false">
+                <a class="phone-break" href="mailto:{{client.email}}" style="text-decoration: none;">
                   {{ client.email | truncate: 34 }}
                 </a>
               } @else {

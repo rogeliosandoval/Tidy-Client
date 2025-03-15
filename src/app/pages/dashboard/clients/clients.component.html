@@ -26,9 +26,7 @@
               @if (client.location.length >= 25) {
                 <span pTooltip="{{client.location}}" tooltipPosition="bottom" [autoHide]="false">{{ client.location | truncate: 25 }}</span>
               } @else {
-                <a href="mailto:{{client.location}}" style="text-decoration: none; color: inherit;">
-                  {{ client.location }}
-                </a>
+                <span>{{ client.location }}</span>
               }
             } @else {
               <div class="add-link" (click)="editClient(); this.sharedService.dialogClient.set(client)" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">Add location</div>
